@@ -1,0 +1,42 @@
+package jon.sharp.metabolism.simulator.model.organ.intestine
+
+import jon.sharp.metabolism.simulator.model.Metabolite
+import jon.sharp.metabolism.simulator.model.MetaboliteMap
+import jon.sharp.metabolism.simulator.model.MetaboliteType
+import jon.sharp.metabolism.simulator.model.Metabolizer
+import jon.sharp.metabolism.simulator.model.PhysicalConstants
+import kotlin.math.exp
+import kotlin.math.roundToInt
+
+class PancreaticAmylase: Metabolizer {
+
+    val reactionRateConstantMinutes = 0.03f
+
+    override fun processSubstrates(inputs: MetaboliteMap): MetaboliteMap {
+        val updatedMap = inputs.copy()
+        processStarch(updatedMap)
+        return updatedMap
+    }
+
+    private fun processStarch(map: MetaboliteMap) {
+        if (map.contains(MetaboliteType.STARCH)) {
+            val starchMilliMoles = map.get(MetaboliteType.STARCH)!!.amountMilliMoles
+            val starchGrams = PhysicalConstants.millimolesToGrams(starchMilliMoles.toDouble(), PhysicalConstants.Starch.MOLAR_MASS)
+            val maltoseGrams = starchGrams * (1 - exp(reactionRateConstantMinutes * -1))
+            map.putOrAdd(
+                Metabolite(MetaboliteType.MALTOSE,
+                    PhysicalConstants.gramsToMillimoles(maltoseGrams, PhysicalConstants.Maltose.MOLAR_MASS).toFloat(),
+                )
+            )
+            map.updateQuantities(
+                Metabolite(
+                    MetaboliteType.STARCH,
+                    PhysicalConstants.gramsToMillimoles(starchGrams - maltoseGrams, PhysicalConstants.Starch.MOLAR_MASS).toFloat(),
+                )
+            )
+        }
+
+
+
+    }
+}
