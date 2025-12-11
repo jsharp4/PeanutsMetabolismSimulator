@@ -9,16 +9,19 @@ import jon.sharp.metabolism.simulator.model.organ.cells.Cytosol
 import jon.sharp.metabolism.simulator.model.organ.cells.mitochondria.MitochondrialInnerMembrane
 import jon.sharp.metabolism.simulator.model.organ.cells.mitochondria.MitochondrialMatrix
 import jon.sharp.metabolism.simulator.model.organ.intestine.SmallIntestine
+import jon.sharp.metabolism.simulator.model.organ.mouth.Mouth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.random.Random
 
 actual class SimulationEngine {
     private val bloodOrgan = Blood()
 
     private val body = Body(
         listOf(
+            "Mouth" to Mouth(),
             "Small Intestine" to SmallIntestine(),
             "Cytosol" to Cytosol(),
             "Mitochondrial Matrix" to MitochondrialMatrix(),
@@ -43,11 +46,16 @@ actual class SimulationEngine {
                 )
             )
             iterations++
-
+            delay(1000L)
             // Continue simulation
             while (true) {
                 delay(100L)
-                body.metabolizeTimeStep(MetaboliteMap())
+                body.metabolizeTimeStep(MetaboliteMap(
+                    Metabolite(
+                        MetaboliteType.STARCH,
+                        Random.nextFloat() / 2
+                    )
+                ))
                 iterations++
             }
         }

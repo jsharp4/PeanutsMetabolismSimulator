@@ -1,5 +1,7 @@
 package jon.sharp.metabolism.simulator.model
 
+import kotlinx.coroutines.delay
+
 actual class Body(
     private val organs: List<Pair<String, Organ>>
 ) {
@@ -7,10 +9,11 @@ actual class Body(
      * Executes a metabolism time step by passing outputs through the organ pipeline.
      * Each organ processes metabolites and passes its outputs to the next organ in sequence.
      */
-    actual fun metabolizeTimeStep(initialInputs: MetaboliteMap) {
+    actual suspend fun metabolizeTimeStep(initialInputs: MetaboliteMap) {
         var currentInputs = initialInputs
         organs.forEach { (_, organ) ->
             currentInputs = organ.metabolizeTimeStep(currentInputs)
+            delay(500L)
         }
     }
 

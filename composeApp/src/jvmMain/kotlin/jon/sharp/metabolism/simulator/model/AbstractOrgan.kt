@@ -11,12 +11,13 @@ abstract class AbstractOrgan(
     }
 
     override fun metabolizeTimeStep(inputs: MetaboliteMap): MetaboliteMap {
+        val outputs = pushOutputs()
         addMetabolitesToPool(inputs)
         metabolizers.forEach { metabolizer ->
             val updatedSubstrates = metabolizer.processSubstrates(metabolitesMap)
             metabolitesMap.updateQuantities(updatedSubstrates)
         }
-        return pushOutputs()
+        return outputs
     }
     private fun addMetabolitesToPool(inputs: MetaboliteMap) {
         metabolitesMap.putOrAdd(inputs)

@@ -8,7 +8,7 @@ import jon.sharp.metabolism.simulator.model.PhysicalConstants
 import kotlin.math.exp
 import kotlin.math.roundToInt
 
-class PancreaticAmylase: Metabolizer {
+open class PancreaticAmylase: Metabolizer {
 
     val reactionRateConstantMinutes = 0.03f
 
@@ -18,7 +18,7 @@ class PancreaticAmylase: Metabolizer {
         return updatedMap
     }
 
-    private fun processStarch(map: MetaboliteMap) {
+    protected open fun processStarch(map: MetaboliteMap) {
         if (map.contains(MetaboliteType.STARCH)) {
             val starchMilliMoles = map.get(MetaboliteType.STARCH)!!.amountMilliMoles
             val starchGrams = PhysicalConstants.millimolesToGrams(starchMilliMoles.toDouble(), PhysicalConstants.Starch.MOLAR_MASS)
