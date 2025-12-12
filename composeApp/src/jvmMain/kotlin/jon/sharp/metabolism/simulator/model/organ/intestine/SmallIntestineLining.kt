@@ -4,11 +4,11 @@ import jon.sharp.metabolism.simulator.model.AbstractOrgan
 import jon.sharp.metabolism.simulator.model.MetaboliteType
 import jon.sharp.metabolism.simulator.model.PercentToOutput
 
-class SmallIntestine: AbstractOrgan(
+class SmallIntestineLining: AbstractOrgan(
     setOf(
-        PancreaticAmylase()
+        MembraneMaltoseHydrolysis()
     ),
     mapOf(
-        MetaboliteType.MALTOSE to PercentToOutput(50f)
+        MetaboliteType.GLUCOSE to PercentToOutput(50f)
     )
 )
