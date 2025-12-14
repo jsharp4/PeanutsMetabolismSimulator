@@ -1,6 +1,6 @@
 package jon.sharp.metabolism.simulator.simulation
 
-import jon.sharp.metabolism.simulator.model.Body
+import jon.sharp.metabolism.simulator.model.body.Body
 
 expect class SimulationEngine() {
     fun runSimulation()

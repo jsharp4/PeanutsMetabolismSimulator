@@ -4,7 +4,7 @@ import jon.sharp.metabolism.simulator.model.AbstractMetabolizer
 import jon.sharp.metabolism.simulator.model.MetaboliteType
 
 class Pepsin: AbstractMetabolizer(
-    PepsinODESolver(),
+    jon.sharp.metabolism.simulator.model.AbstractODESolver(PepsinODE()),
     listOf(
         MetaboliteType.ARACHIN,
         MetaboliteType.POLYPEPTIDE

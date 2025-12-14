@@ -7,18 +7,13 @@ import jon.sharp.metabolism.simulator.model.PhysicalConstants
 import org.apache.commons.math3.ode.FirstOrderDifferentialEquations
 
 class Trypsin: AbstractMetabolizer(
-    TrypsinODESolver(),
+    AbstractODESolver(TrypsinODE()),
     listOf(
         MetaboliteType.POLYPEPTIDE,
         MetaboliteType.PEPTIDE_CHAIN
     )
 ) {
 
-}
-
-class TrypsinODESolver: AbstractODESolver() {
-    val ode = TrypsinODE()
-    override fun getODE() = ode
 }
 
 class TrypsinODE: FirstOrderDifferentialEquations {

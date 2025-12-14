@@ -1,20 +1,22 @@
 package jon.sharp.metabolism.simulator.model
 
+import org.apache.commons.math3.ode.FirstOrderDifferentialEquations
 import org.apache.commons.math3.ode.nonstiff.DormandPrince853Integrator
 import kotlin.math.max
 
 /**
- * Abstract base class for ODE solvers that provides common integration logic.
+ * Concrete ODE solver that provides common integration logic.
  *
  * This class handles:
  * - Integrator initialization with standard parameters
  * - Common integration workflow via stepForwardOneMinute
  * - Ensuring non-negative values after integration
  *
- * Subclasses must implement getODE() to provide their differential equations.
- * Subclasses can override stepForwardOneMinute for custom behavior.
+ * @param ode The differential equations to solve
  */
-abstract class AbstractODESolver : ODESolver {
+open class AbstractODESolver(
+    private val ode: FirstOrderDifferentialEquations
+) : ODESolver {
 
     /**
      * The integrator used for solving the differential equations.
@@ -26,6 +28,11 @@ abstract class AbstractODESolver : ODESolver {
         1e-10,  // absoluteTolerance
         1e-10   // relativeTolerance
     )
+
+    /**
+     * Returns the differential equations being solved by this solver.
+     */
+    override fun getODE() = ode
 
     /**
      * Steps the system forward by one minute using the ODE integrator.

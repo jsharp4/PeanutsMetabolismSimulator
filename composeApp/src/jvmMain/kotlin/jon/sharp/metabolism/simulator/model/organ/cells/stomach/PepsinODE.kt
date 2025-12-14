@@ -1,14 +1,7 @@
 package jon.sharp.metabolism.simulator.model.organ.cells.stomach
 
-import jon.sharp.metabolism.simulator.model.AbstractODESolver
 import jon.sharp.metabolism.simulator.model.PhysicalConstants
 import org.apache.commons.math3.ode.FirstOrderDifferentialEquations
-
-class PepsinODESolver: AbstractODESolver() {
-    val ode = PepsinODE()
-
-    override fun getODE() = ode
-}
 
 class PepsinODE: FirstOrderDifferentialEquations {
     override fun getDimension() = 2

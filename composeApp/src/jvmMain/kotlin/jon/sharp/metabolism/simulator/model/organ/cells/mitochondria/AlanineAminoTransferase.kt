@@ -6,7 +6,7 @@ import jon.sharp.metabolism.simulator.model.MetaboliteType
 import org.apache.commons.math3.ode.FirstOrderDifferentialEquations
 
 class AlanineAminoTransferase: AbstractMetabolizer(
-    AminoTransferaseODESolver(),
+    AbstractODESolver(AminoTransferaseODE()),
     listOf(
         MetaboliteType.GLUTAMIC_ACID,
         MetaboliteType.PYRUVATE,
@@ -14,12 +14,6 @@ class AlanineAminoTransferase: AbstractMetabolizer(
         MetaboliteType.ALANINE
     )
 )
-
-class AminoTransferaseODESolver: AbstractODESolver() {
-    val ode = AminoTransferaseODE()
-
-    override fun getODE() = ode
-}
 
 class AminoTransferaseODE: FirstOrderDifferentialEquations {
     override fun getDimension() = 4

@@ -4,7 +4,7 @@ import jon.sharp.metabolism.simulator.model.AbstractMetabolizer
 import jon.sharp.metabolism.simulator.model.MetaboliteType
 
 class ElectronTransportChain: AbstractMetabolizer(
-    EtcODESolver(),
+    jon.sharp.metabolism.simulator.model.AbstractODESolver(EtcODE()),
     listOf(
         MetaboliteType.NADH,
         MetaboliteType.FADH2,

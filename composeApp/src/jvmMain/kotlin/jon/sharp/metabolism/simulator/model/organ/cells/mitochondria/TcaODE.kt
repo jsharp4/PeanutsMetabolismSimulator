@@ -1,13 +1,6 @@
 package jon.sharp.metabolism.simulator.model.organ.cells.mitochondria
 
-import jon.sharp.metabolism.simulator.model.AbstractODESolver
-import jon.sharp.metabolism.simulator.model.ODESolver
 import org.apache.commons.math3.ode.FirstOrderDifferentialEquations
-
-class TcaODESolver: AbstractODESolver() {
-    val ode = TcaODE()
-    override fun getODE() = ode
-}
 
 class TcaODE: FirstOrderDifferentialEquations {
     override fun getDimension() = 5

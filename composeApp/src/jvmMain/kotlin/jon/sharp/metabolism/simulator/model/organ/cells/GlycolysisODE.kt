@@ -29,10 +29,7 @@ import jon.sharp.metabolism.simulator.model.PhysicalConstants.Glucose.Glycolysis
 import jon.sharp.metabolism.simulator.model.PhysicalConstants.Glucose.Glycolysis.MICHAELIS_CONSTANT_URIDYLYLTRANSFERASE
 import org.apache.commons.math3.ode.nonstiff.DormandPrince853Integrator
 
-class GlycolysisODESolver : jon.sharp.metabolism.simulator.model.AbstractODESolver() {
-    private val ode = GlycolysisODE()
-
-    override fun getODE() = ode
+class GlycolysisODESolver : jon.sharp.metabolism.simulator.model.AbstractODESolver(GlycolysisODE()) {
 
     /**
      * Conversion factor for cellular metabolites: total cellular volume in liters.

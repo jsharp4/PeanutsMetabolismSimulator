@@ -7,19 +7,13 @@ import jon.sharp.metabolism.simulator.model.PhysicalConstants
 import org.apache.commons.math3.ode.FirstOrderDifferentialEquations
 
 class Peptidase: AbstractMetabolizer(
-    PeptidaseODESolver(),
+    AbstractODESolver(PeptidaseODE()),
     listOf(
         MetaboliteType.PEPTIDE_CHAIN,
         MetaboliteType.GLUTAMIC_ACID
     )
 ) {
 
-}
-
-class PeptidaseODESolver: AbstractODESolver() {
-    val ode = PeptidaseODE()
-
-    override fun getODE() = ode
 }
 
 class PeptidaseODE: FirstOrderDifferentialEquations {

@@ -1,5 +1,7 @@
-package jon.sharp.metabolism.simulator.model
+package jon.sharp.metabolism.simulator.model.body
 
+import jon.sharp.metabolism.simulator.model.MetaboliteMap
+import jon.sharp.metabolism.simulator.model.Organ
 import kotlinx.coroutines.delay
 
 actual class Body(

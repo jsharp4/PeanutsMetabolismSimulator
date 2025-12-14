@@ -17,7 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import jon.sharp.metabolism.simulator.model.Body
+import jon.sharp.metabolism.simulator.model.body.Body
 import jon.sharp.metabolism.simulator.model.Metabolite
 
 @Composable

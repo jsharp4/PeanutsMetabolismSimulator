@@ -1,7 +1,8 @@
 package jon.sharp.metabolism.simulator.model.organ.intestine
 
 import jon.sharp.metabolism.simulator.model.AbstractMetabolizer
-import jon.sharp.metabolism.simulator.model.MaltoseHydrolysisODESolver
+import jon.sharp.metabolism.simulator.model.AbstractODESolver
+import jon.sharp.metabolism.simulator.model.MaltoseHydrolysisODE
 import jon.sharp.metabolism.simulator.model.Metabolite
 import jon.sharp.metabolism.simulator.model.MetaboliteMap
 import jon.sharp.metabolism.simulator.model.MetaboliteType
@@ -20,11 +21,13 @@ import jon.sharp.metabolism.simulator.model.PhysicalConstants.Maltose.Hydrolysis
  * All values are in mmol.
  */
 class MembraneMaltoseHydrolysis : AbstractMetabolizer(
-    odeSolver = MaltoseHydrolysisODESolver(
-        MAX_HYDROLYSIS_RATE,
-        LUMEN_VOLUME_LITERS,
-        JEJUNUM_LENGTH_CM,
-        MICHAELIS_CONSTANT
+    odeSolver = AbstractODESolver(
+        MaltoseHydrolysisODE(
+            MAX_HYDROLYSIS_RATE,
+            LUMEN_VOLUME_LITERS,
+            JEJUNUM_LENGTH_CM,
+            MICHAELIS_CONSTANT
+        )
     ),
     metaboliteTypes = listOf(
         MetaboliteType.MALTOSE,

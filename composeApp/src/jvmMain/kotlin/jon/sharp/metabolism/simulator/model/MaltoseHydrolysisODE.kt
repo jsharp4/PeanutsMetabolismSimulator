@@ -1,7 +1,6 @@
 package jon.sharp.metabolism.simulator.model
 
 import org.apache.commons.math3.ode.FirstOrderDifferentialEquations
-import org.apache.commons.math3.ode.nonstiff.DormandPrince853Integrator
 import kotlin.math.max
 
 /**
@@ -37,21 +36,4 @@ class MaltoseHydrolysisODE(
         // d[Glucose]/dt - produced by hydrolysis (2 glucose per maltose)
         yDot[1] = 2.0 * hydrolysisRate
     }
-}
-
-class MaltoseHydrolysisODESolver(
-    val maxHydrolysisRate: Double,
-    val lumenVolume: Double,
-    val jejenumSegmentLength: Double,
-    val machaelisConstant: Double,
-) : AbstractODESolver() {
-
-    private val ode = MaltoseHydrolysisODE(
-        maxHydrolysisRate,
-        lumenVolume,
-        jejenumSegmentLength,
-        machaelisConstant
-    )
-
-    override fun getODE() = ode
 }

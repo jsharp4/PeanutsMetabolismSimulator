@@ -1,14 +1,8 @@
 package jon.sharp.metabolism.simulator.model.organ.cells.mitochondria
 
-import jon.sharp.metabolism.simulator.model.AbstractODESolver
 import jon.sharp.metabolism.simulator.model.PhysicalConstants
 import jon.sharp.metabolism.simulator.model.PhysicalConstants.AVOGADRO
 import org.apache.commons.math3.ode.FirstOrderDifferentialEquations
-
-class EtcODESolver: AbstractODESolver() {
-    val ode = EtcODE()
-    override fun getODE() = ode
-}
 
 class EtcODE: FirstOrderDifferentialEquations {
     override fun getDimension() = 3
