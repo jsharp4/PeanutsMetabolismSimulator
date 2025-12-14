@@ -1,7 +1,7 @@
 package jon.sharp.metabolism.simulator
 
-class JVMPlatform: Platform {
+class JVMPlatform: IPlatform {
     override val name: String = "Java ${System.getProperty("java.version")}"
 }
 
-actual fun getPlatform(): Platform = JVMPlatform()
+actual fun getPlatform(): IPlatform = JVMPlatform()

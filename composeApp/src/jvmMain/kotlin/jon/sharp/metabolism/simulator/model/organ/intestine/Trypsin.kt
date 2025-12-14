@@ -1,13 +1,13 @@
 package jon.sharp.metabolism.simulator.model.organ.intestine
 
-import jon.sharp.metabolism.simulator.model.AbstractMetabolizer
-import jon.sharp.metabolism.simulator.model.AbstractODESolver
+import jon.sharp.metabolism.simulator.model.Metabolizer
+import jon.sharp.metabolism.simulator.model.ODESolver
 import jon.sharp.metabolism.simulator.model.MetaboliteType
 import jon.sharp.metabolism.simulator.model.PhysicalConstants
 import org.apache.commons.math3.ode.FirstOrderDifferentialEquations
 
-class Trypsin: AbstractMetabolizer(
-    AbstractODESolver(TrypsinODE()),
+class Trypsin: Metabolizer(
+    ODESolver(TrypsinODE()),
     listOf(
         MetaboliteType.POLYPEPTIDE,
         MetaboliteType.PEPTIDE_CHAIN

@@ -1,7 +1,7 @@
 package jon.sharp.metabolism.simulator
 
-class JsPlatform: Platform {
+class JsPlatform: IPlatform {
     override val name: String = "Web with Kotlin/JS"
 }
 
-actual fun getPlatform(): Platform = JsPlatform()
+actual fun getPlatform(): IPlatform = JsPlatform()

@@ -1,10 +1,10 @@
 package jon.sharp.metabolism.simulator.model.organ.intestine
 
-import jon.sharp.metabolism.simulator.model.AbstractOrgan
+import jon.sharp.metabolism.simulator.model.Organ
 import jon.sharp.metabolism.simulator.model.MetaboliteType
 import jon.sharp.metabolism.simulator.model.PercentToOutput
 
-class SmallIntestineLining: AbstractOrgan(
+class SmallIntestineLining: Organ(
     setOf(
         MembraneMaltoseHydrolysis(),
         Peptidase()

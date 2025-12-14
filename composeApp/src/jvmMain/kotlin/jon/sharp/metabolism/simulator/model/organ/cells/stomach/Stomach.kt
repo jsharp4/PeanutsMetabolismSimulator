@@ -1,10 +1,10 @@
 package jon.sharp.metabolism.simulator.model.organ.cells.stomach
 
-import jon.sharp.metabolism.simulator.model.AbstractOrgan
+import jon.sharp.metabolism.simulator.model.Organ
 import jon.sharp.metabolism.simulator.model.MetaboliteType
 import jon.sharp.metabolism.simulator.model.PercentToOutput
 
-class Stomach: AbstractOrgan(
+class Stomach: Organ(
     setOf(
         GastricAmylase(),
         Pepsin(),

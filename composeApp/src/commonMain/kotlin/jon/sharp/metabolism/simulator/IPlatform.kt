@@ -1,7 +1,7 @@
 package jon.sharp.metabolism.simulator
 
-interface Platform {
+interface IPlatform {
     val name: String
 }
 
-expect fun getPlatform(): Platform
+expect fun getPlatform(): IPlatform

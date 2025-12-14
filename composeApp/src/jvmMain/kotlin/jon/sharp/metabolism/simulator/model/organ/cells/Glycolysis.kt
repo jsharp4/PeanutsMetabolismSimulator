@@ -1,6 +1,6 @@
 package jon.sharp.metabolism.simulator.model.organ.cells
 
-import jon.sharp.metabolism.simulator.model.AbstractMetabolizer
+import jon.sharp.metabolism.simulator.model.Metabolizer
 import jon.sharp.metabolism.simulator.model.MetaboliteType
 
 /**
@@ -18,7 +18,7 @@ import jon.sharp.metabolism.simulator.model.MetaboliteType
  *
  * The solver handles all unit conversions internally, working with masses in mmol.
  */
-class Glycolysis : AbstractMetabolizer(
+class Glycolysis : Metabolizer(
     odeSolver = GlycolysisODESolver(),
     metaboliteTypes = listOf(
         MetaboliteType.GLUCOSE,

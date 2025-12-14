@@ -1,12 +1,12 @@
 package jon.sharp.metabolism.simulator.model.organ.cells.mitochondria
 
-import jon.sharp.metabolism.simulator.model.AbstractMetabolizer
-import jon.sharp.metabolism.simulator.model.AbstractODESolver
+import jon.sharp.metabolism.simulator.model.Metabolizer
+import jon.sharp.metabolism.simulator.model.ODESolver
 import jon.sharp.metabolism.simulator.model.MetaboliteType
 import org.apache.commons.math3.ode.FirstOrderDifferentialEquations
 
-class AlanineAminoTransferase: AbstractMetabolizer(
-    AbstractODESolver(AminoTransferaseODE()),
+class AlanineAminoTransferase: Metabolizer(
+    ODESolver(AminoTransferaseODE()),
     listOf(
         MetaboliteType.GLUTAMIC_ACID,
         MetaboliteType.PYRUVATE,

@@ -1,7 +1,7 @@
 package jon.sharp.metabolism.simulator
 
-class WasmPlatform: Platform {
+class WasmPlatform: IPlatform {
     override val name: String = "Web with Kotlin/Wasm"
 }
 
-actual fun getPlatform(): Platform = WasmPlatform()
+actual fun getPlatform(): IPlatform = WasmPlatform()

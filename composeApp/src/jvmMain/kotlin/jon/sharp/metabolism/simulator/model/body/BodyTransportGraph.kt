@@ -38,6 +38,48 @@ class BodyTransportGraph {
     val mouth = Mouth()
 
 
-    val mito
+    val mitochondrialMembraneNode = OrganNode(
+        mitochondrialInnerMembrane,
+        setOf()
+    )
+
+    val mitochondrialMatrixNode = OrganNode(
+        mitochondrialMatrix,
+        setOf(
+            DirectionalOrganEdge(
+                mitochondrialMembraneNode,
+                setOf(
+                    QuantifiedMetabolite(
+                    MetaboliteType.NADH,
+                    100.0
+                    )
+                )
+            )
+        )
+    )
+
+    val cytosolNode = OrganNode(
+        cytosol,
+        setOf(
+            DirectionalOrganEdge(
+                mitochondrialMatrixNode,
+                setOf(
+                    QuantifiedMetabolite(
+                        MetaboliteType.GLUCOSE,
+                        100.0
+                    ),
+                    QuantifiedMetabolite(
+                        MetaboliteType.PYRUVATE,
+                        100.0
+                    ),
+                    QuantifiedMetabolite(
+                        MetaboliteType.GLUTAMIC_ACID,
+                        100.0
+                    )
+                )
+            )
+
+        )
+    )
 
 }

@@ -1,6 +1,6 @@
 package jon.sharp.metabolism.simulator.model.organ.cells
 
-import jon.sharp.metabolism.simulator.model.AbstractOrgan
+import jon.sharp.metabolism.simulator.model.Organ
 import jon.sharp.metabolism.simulator.model.Metabolite
 import jon.sharp.metabolism.simulator.model.MetaboliteType
 import jon.sharp.metabolism.simulator.model.PhysicalConstants
@@ -15,7 +15,7 @@ import jon.sharp.metabolism.simulator.model.PhysicalConstants
  * Initial glucose concentration (5 mmol/L) is set in GlycolysisODESolver.
  * Performs no metabolism itself - purely for storage and passthrough.
  */
-class Blood: AbstractOrgan(
+class Blood: Organ(
     metabolizers = setOf(),
     outputs = mapOf(),  // Outputs glucose to next organ in pipeline
 )
