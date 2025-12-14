@@ -42,7 +42,7 @@ fun App() {
                 // The loop continues as long as the coroutine is active
                 // and isSimulating is true
                 while (isSimulating) {
-                    delay(10L) // Wait first to let simulation update
+                    delay(100L) // Wait first to let simulation update
                     iterationCount = engine.iterationCount()
                     updateCount++ // Force recomposition
                 }

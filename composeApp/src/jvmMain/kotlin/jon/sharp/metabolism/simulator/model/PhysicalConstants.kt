@@ -24,11 +24,27 @@ object PhysicalConstants {
     }
 
     object Starch {
-        val MOLAR_MASS = 200000.0  // g/mol - Average for starch polymer
+        val MOLAR_MASS = 200000000.0  // g/mol - Average for starch polymer
+    }
+
+    object ARARCHIN_POLYPEPTIDE {
+        val MOLAR_MASS = 68000.0
+    }
+
+    object SMALL_PEPTIDE_CHAIN {
+        val MOLAR_MASS_UNSOURCED = 680.0
+    }
+
+    object GLUTAMIC_ACID {
+        val MOLAR_MASS = 147.13
     }
 
     object ATP {
         val MOLAR_MASS = 1014.4
+    }
+
+    object ARACHIN {
+        val MOLAR_MASS = 21000.0
     }
 
     object Maltose {

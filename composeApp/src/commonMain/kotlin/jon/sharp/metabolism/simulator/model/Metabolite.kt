@@ -14,7 +14,13 @@ enum class MetaboliteType {
     GTP,
     NADH,
     FADH2,
-    ATP
+    ATP,
+    ARACHIN,
+    POLYPEPTIDE,
+    PEPTIDE_CHAIN,
+    GLUTAMIC_ACID,
+    ALANINE,
+    KETOGLUTARATE
 }
 data class Metabolite(
     val type: MetaboliteType,

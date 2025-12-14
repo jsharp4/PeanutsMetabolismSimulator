@@ -20,6 +20,7 @@ class TCACycle : AbstractMetabolizer(
         MetaboliteType.PYRUVATE,
         MetaboliteType.NADH,
         MetaboliteType.FADH2,
-        MetaboliteType.GTP
+        MetaboliteType.GTP,
+        MetaboliteType.KETOGLUTARATE
     )
 )

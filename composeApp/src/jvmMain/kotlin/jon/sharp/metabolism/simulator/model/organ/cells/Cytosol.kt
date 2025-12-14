@@ -2,6 +2,7 @@ package jon.sharp.metabolism.simulator.model.organ.cells
 
 import jon.sharp.metabolism.simulator.model.AbstractOrgan
 import jon.sharp.metabolism.simulator.model.MetaboliteType
+import jon.sharp.metabolism.simulator.model.PercentToOutput
 
 /**
  * Cytosol organ manages intracellular glucose metabolism through glycolysis.
@@ -13,7 +14,9 @@ import jon.sharp.metabolism.simulator.model.MetaboliteType
  */
 class Cytosol: AbstractOrgan(
     metabolizers = setOf(Glycolysis()),
-    outputs = setOf(MetaboliteType.GLUCOSE,
-        MetaboliteType.PYRUVATE
+    outputs = mapOf(
+        MetaboliteType.GLUCOSE to PercentToOutput(100f),
+        MetaboliteType.PYRUVATE to PercentToOutput(100f),
+        MetaboliteType.GLUTAMIC_ACID to PercentToOutput(100f),
     ),
 )

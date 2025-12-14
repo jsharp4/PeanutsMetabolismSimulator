@@ -6,9 +6,11 @@ import jon.sharp.metabolism.simulator.model.PercentToOutput
 
 class SmallIntestineLining: AbstractOrgan(
     setOf(
-        MembraneMaltoseHydrolysis()
+        MembraneMaltoseHydrolysis(),
+        Peptidase()
     ),
     mapOf(
-        MetaboliteType.GLUCOSE to PercentToOutput(50f)
+        MetaboliteType.GLUCOSE to PercentToOutput(50f),
+        MetaboliteType.GLUTAMIC_ACID to PercentToOutput(50f)
     )
 )

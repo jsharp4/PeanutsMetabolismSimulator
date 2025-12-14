@@ -4,6 +4,7 @@ import jon.sharp.metabolism.simulator.model.Body
 import jon.sharp.metabolism.simulator.model.Metabolite
 import jon.sharp.metabolism.simulator.model.MetaboliteMap
 import jon.sharp.metabolism.simulator.model.MetaboliteType
+import jon.sharp.metabolism.simulator.model.PhysicalConstants
 import jon.sharp.metabolism.simulator.model.organ.cells.Blood
 import jon.sharp.metabolism.simulator.model.organ.cells.Cytosol
 import jon.sharp.metabolism.simulator.model.organ.cells.mitochondria.MitochondrialInnerMembrane
@@ -46,6 +47,13 @@ actual class SimulationEngine {
                     Metabolite(
                         MetaboliteType.STARCH,
                         0.5f
+                    ),
+                    Metabolite(
+                        MetaboliteType.ARACHIN,
+                        amountMilliMoles = PhysicalConstants.gramsToMillimoles(
+                            50.0,
+                            PhysicalConstants.ARACHIN.MOLAR_MASS
+                        ).toFloat()
                     )
                 )
             )

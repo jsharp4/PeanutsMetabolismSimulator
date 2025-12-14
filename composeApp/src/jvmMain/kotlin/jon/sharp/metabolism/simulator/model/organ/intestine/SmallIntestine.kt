@@ -6,9 +6,11 @@ import jon.sharp.metabolism.simulator.model.PercentToOutput
 
 class SmallIntestine: AbstractOrgan(
     setOf(
-        PancreaticAmylase()
+        PancreaticAmylase(),
+        Trypsin()
     ),
     mapOf(
-        MetaboliteType.MALTOSE to PercentToOutput(50f)
+        MetaboliteType.MALTOSE to PercentToOutput(50f),
+        MetaboliteType.PEPTIDE_CHAIN to PercentToOutput(50f)
     )
 )

@@ -1,4 +1,6 @@
 package jon.sharp.metabolism.simulator.model.organ.cells.stomach
 
-class GastricAmylase {
+import jon.sharp.metabolism.simulator.model.organ.intestine.PancreaticAmylase
+
+class GastricAmylase: PancreaticAmylase() {
 }

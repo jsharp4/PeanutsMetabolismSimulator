@@ -17,5 +17,5 @@ import jon.sharp.metabolism.simulator.model.PhysicalConstants
  */
 class Blood: AbstractOrgan(
     metabolizers = setOf(),
-    outputs = setOf(),  // Outputs glucose to next organ in pipeline
+    outputs = mapOf(),  // Outputs glucose to next organ in pipeline
 )
