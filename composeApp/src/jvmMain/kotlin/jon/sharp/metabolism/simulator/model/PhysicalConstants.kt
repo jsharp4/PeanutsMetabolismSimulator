@@ -23,33 +23,21 @@ object PhysicalConstants {
         return (millimoles / 1000) * molarMass
     }
 
-    object Starch {
-        val MOLAR_MASS = 200000000.0  // g/mol - Average for starch polymer
-    }
-
-    object ARARCHIN_POLYPEPTIDE {
-        val MOLAR_MASS = 68000.0
-    }
-
-    object SMALL_PEPTIDE_CHAIN {
-        val MOLAR_MASS_UNSOURCED = 680.0
-    }
-
-    object GLUTAMIC_ACID {
-        val MOLAR_MASS = 147.13
-    }
-
-    object ATP {
-        val MOLAR_MASS = 1014.4
-    }
-
-    object ARACHIN {
-        val MOLAR_MASS = 21000.0
+    /**
+     * Consolidated molar mass values for all molecules (in g/mol)
+     */
+    object MolarMass {
+        val STARCH = 200000000.0  // Average for starch polymer
+        val ARARCHIN_POLYPEPTIDE = 68000.0
+        val SMALL_PEPTIDE_CHAIN = 680.0  // Unsourced
+        val GLUTAMIC_ACID = 147.13
+        val ATP = 1014.4
+        val ARACHIN = 21000.0
+        val MALTOSE = 342.30
+        val GLUCOSE = 180.16
     }
 
     object Maltose {
-        val MOLAR_MASS = 342.30
-
         object Hydrolysis {
             val MAX_HYDROLYSIS_RATE = 0.69
             val MICHAELIS_CONSTANT = 3.7
@@ -59,8 +47,6 @@ object PhysicalConstants {
     }
 
     object Glucose {
-
-        val MOLAR_MASS = 180.16
         object Glycolysis {
             // --- Activation Constants (k_a) ---
             val ACTIVATION_CONSTANT_PYRUVATE_KINASE = 6.56e-1 // Unit: mmol^2 / L^2

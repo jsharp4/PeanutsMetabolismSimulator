@@ -11,11 +11,11 @@ class PepsinODE: FirstOrderDifferentialEquations {
         yDot!![0] = -y!![0] * 0.2
         val yDot1Grams = PhysicalConstants.millimolesToGrams(
             y[0] * 0.2,
-            PhysicalConstants.ARACHIN.MOLAR_MASS
+            PhysicalConstants.MolarMass.ARACHIN
         )
         yDot[1] = PhysicalConstants.gramsToMillimoles(
             yDot1Grams,
-            PhysicalConstants.ARARCHIN_POLYPEPTIDE.MOLAR_MASS
+            PhysicalConstants.MolarMass.ARARCHIN_POLYPEPTIDE
         )
     }
 

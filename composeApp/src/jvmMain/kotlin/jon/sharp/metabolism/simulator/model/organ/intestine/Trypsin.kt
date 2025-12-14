@@ -24,11 +24,11 @@ class TrypsinODE: FirstOrderDifferentialEquations {
         yDot!![0] = -y!![0] * 0.2
         val yDot1Grams = PhysicalConstants.millimolesToGrams(
             y[0] * 0.2,
-            PhysicalConstants.ARARCHIN_POLYPEPTIDE.MOLAR_MASS
+            PhysicalConstants.MolarMass.ARARCHIN_POLYPEPTIDE
         )
         yDot[1] = PhysicalConstants.gramsToMillimoles(
             yDot1Grams,
-            PhysicalConstants.SMALL_PEPTIDE_CHAIN.MOLAR_MASS_UNSOURCED
+            PhysicalConstants.MolarMass.SMALL_PEPTIDE_CHAIN
         )
     }
 }

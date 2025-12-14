@@ -52,7 +52,7 @@ actual class SimulationEngine {
                         MetaboliteType.ARACHIN,
                         amountMilliMoles = PhysicalConstants.gramsToMillimoles(
                             50.0,
-                            PhysicalConstants.ARACHIN.MOLAR_MASS
+                            PhysicalConstants.MolarMass.ARACHIN
                         ).toFloat()
                     )
                 )

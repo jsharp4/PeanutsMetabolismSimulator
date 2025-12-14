@@ -17,18 +17,18 @@ class SalivaryAmylase: PancreaticAmylase() {
         if (map.contains(MetaboliteType.STARCH)) {
             val starchMilliMoles = map[MetaboliteType.STARCH]!!.amountMilliMoles
             val starchGrams =
-                PhysicalConstants.millimolesToGrams(starchMilliMoles.toDouble(), PhysicalConstants.Starch.MOLAR_MASS)
+                PhysicalConstants.millimolesToGrams(starchMilliMoles.toDouble(), PhysicalConstants.MolarMass.STARCH)
             val maltoseGrams = starchGrams * (1 - exp(reactionRateConstantMinutes * -1 * timeInMouthMinutes))
             map.putOrAdd(
                 Metabolite(
                     MetaboliteType.MALTOSE,
-                    PhysicalConstants.gramsToMillimoles(maltoseGrams, PhysicalConstants.Maltose.MOLAR_MASS).toFloat(),
+                    PhysicalConstants.gramsToMillimoles(maltoseGrams, PhysicalConstants.MolarMass.MALTOSE).toFloat(),
                 )
             )
             map.updateQuantities(
                 Metabolite(
                     MetaboliteType.STARCH,
-                    PhysicalConstants.gramsToMillimoles(starchGrams - maltoseGrams, PhysicalConstants.Starch.MOLAR_MASS)
+                    PhysicalConstants.gramsToMillimoles(starchGrams - maltoseGrams, PhysicalConstants.MolarMass.STARCH)
                         .toFloat(),
                 )
             )
