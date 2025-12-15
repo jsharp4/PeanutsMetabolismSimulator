@@ -16,6 +16,5 @@ import jon.sharp.metabolism.simulator.model.PhysicalConstants
  * Performs no metabolism itself - purely for storage and passthrough.
  */
 class Blood: Organ(
-    metabolizers = setOf(),
-    outputs = mapOf(),  // Outputs glucose to next organ in pipeline
+    metabolizers = setOf()
 )

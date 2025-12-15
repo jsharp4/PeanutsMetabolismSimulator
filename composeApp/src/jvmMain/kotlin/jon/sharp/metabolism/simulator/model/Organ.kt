@@ -2,13 +2,8 @@ package jon.sharp.metabolism.simulator.model
 
 import jon.sharp.metabolism.simulator.model.organ.IOrgan
 
-data class PercentToOutput(
-    val percent: Float,
-)
-
 abstract class Organ(
-    val metabolizers: Set<IMetabolizer>,
-    val outputs: Map<MetaboliteType, PercentToOutput>
+    val metabolizers: Set<IMetabolizer>
 ): IOrgan {
     val metabolitesMap = MetaboliteMap()
 
@@ -29,20 +24,5 @@ abstract class Organ(
     }
     private fun addMetabolitesToPool(inputs: MetaboliteMap) {
         metabolitesMap.putOrAdd(inputs)
-    }
-
-    private fun pushOutputs(): MetaboliteMap {
-        val itemsToOutput = metabolitesMap.pop(outputs.keys)
-        val quantitiesToOutput = itemsToOutput.getAll().map { it ->
-            val outputAmount = it.amountMilliMoles * outputs[it.type]!!.percent / 100
-            it.amountMilliMoles = it.amountMilliMoles - outputAmount
-
-            Metabolite(
-                it.type,
-                outputAmount,
-            )
-        }
-        metabolitesMap.updateQuantities(itemsToOutput)
-        return MetaboliteMap(quantitiesToOutput.toSet())
     }
 }
