@@ -1,6 +1,7 @@
 package jon.sharp.metabolism.simulator.model
 
 import java.util.concurrent.ConcurrentHashMap
+import kotlin.math.max
 
 class MetaboliteMap(
     set: Set<Metabolite>  = setOf()
@@ -29,6 +30,16 @@ class MetaboliteMap(
 
     fun putOrAdd(vararg metabolites: Metabolite) {
         putOrAdd(MetaboliteMap(*metabolites))
+    }
+
+    fun removeIfPresent(metabolites: MetaboliteMap) {
+        metabolites.getAll().forEach { metabolite ->
+            if (map.containsKey(metabolite.type)) {
+                map[metabolite.type]!!.amountMilliMoles = max(
+                    map[metabolite.type]!!.amountMilliMoles - metabolite.amountMilliMoles, 0.0f
+                )
+            }
+        }
     }
 
     operator fun get(metaboliteType: MetaboliteType): Metabolite? {

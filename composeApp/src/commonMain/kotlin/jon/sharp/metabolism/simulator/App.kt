@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import jon.sharp.metabolism.simulator.simulation.SimulationEngine
+import jon.sharp.metabolism.simulator.ui.GraphVisualization
 import jon.sharp.metabolism.simulator.ui.OrganDisplay
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -72,12 +73,17 @@ fun App() {
                 style = MaterialTheme.typography.headlineMedium
             )
 
+            // Graph visualization
+            GraphVisualization(
+                transportGraph = body.getTransportGraph()
+            )
+
             // Display organs programmatically from Body
-            body.getOrganNames().forEach { organName ->
-                key(organName, updateCount) {
+            body.getTransportGraph().getAllOrgans().forEach { organ ->
+                key(organ.getName(), updateCount) {
                     OrganDisplay(
                         body = body,
-                        organName = organName
+                        organName = organ.getName()
                     )
                 }
             }

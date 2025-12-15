@@ -20,7 +20,8 @@ enum class MetaboliteType {
     PEPTIDE_CHAIN,
     GLUTAMIC_ACID,
     ALANINE,
-    KETOGLUTARATE
+    KETOGLUTARATE,
+    BILE_SALT
 }
 data class Metabolite(
     val type: MetaboliteType,

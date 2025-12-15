@@ -2,7 +2,6 @@ package jon.sharp.metabolism.simulator.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -27,7 +26,7 @@ fun OrganDisplay(
     imagePainter: Painter? = null,
     modifier: Modifier = Modifier
 ) {
-    val metabolites = body.getOrganMetabolites(organName).getAll().toList()
+    val metabolites = body.organNameMap[organName]!!.getMetabolites().getAll().toList()
     Card(
         modifier = modifier
             .padding(8.dp)

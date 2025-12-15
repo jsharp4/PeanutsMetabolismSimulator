@@ -5,6 +5,7 @@ import jon.sharp.metabolism.simulator.model.Metabolite
 import jon.sharp.metabolism.simulator.model.MetaboliteMap
 import jon.sharp.metabolism.simulator.model.MetaboliteType
 import jon.sharp.metabolism.simulator.model.PhysicalConstants
+import jon.sharp.metabolism.simulator.model.body.BodyTransportGraph
 import jon.sharp.metabolism.simulator.model.organ.cells.Blood
 import jon.sharp.metabolism.simulator.model.organ.cells.Cytosol
 import jon.sharp.metabolism.simulator.model.organ.cells.mitochondria.MitochondrialInnerMembrane
@@ -20,20 +21,11 @@ import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 actual class SimulationEngine {
-    private val bloodOrgan = Blood()
 
     private val body = Body(
-        listOf(
-            "Mouth" to Mouth(),
-            "Stomach" to Stomach(),
-            "Small Intestine" to SmallIntestine(),
-            "Small Intestine Lining" to SmallIntestineLining(),
-            "Cytosol" to Cytosol(),
-            "Mitochondrial Matrix" to MitochondrialMatrix(),
-            "Inner Matrix Membrane" to MitochondrialInnerMembrane(),
-            "Blood" to bloodOrgan
-        )
+        BodyTransportGraph()
     )
+
 
     private var iterations = 0
 
