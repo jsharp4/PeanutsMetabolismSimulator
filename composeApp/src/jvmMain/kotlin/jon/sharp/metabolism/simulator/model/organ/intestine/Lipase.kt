@@ -6,11 +6,11 @@ import jon.sharp.metabolism.simulator.model.ODESolver
 import org.apache.commons.math3.ode.FirstOrderDifferentialEquations
 
 class Lipase: Metabolizer(
-    ODESolver(LipaseODE()),
-    listOf(
+    ode = LipaseODE(),
+    metaboliteTypes = listOf(
         MetaboliteType.TRIOLEIN,
-        MetaboliteType.OLEIC_ACID,
-        MetaboliteType.GLYCEROL
+        MetaboliteType.MAG,
+        MetaboliteType.OLEIC_ACID
     )
 ) {
 }
@@ -19,11 +19,11 @@ class LipaseODE: FirstOrderDifferentialEquations {
     override fun getDimension() = 3
 
     override fun computeDerivatives(t: Double, y: DoubleArray?, yDot: DoubleArray?) {
-        // triolein, oleic acid, glycerol
+        // triolein, MAG, oleic acid
         yDot!![0] = -0.1 * y!![0]
 
-        yDot[1] = 3 * yDot[0] * -1
+        yDot[1] = yDot[0] * -0.1
 
-        yDot[2] = yDot[0] * -1
+        yDot[2] = 2 * yDot[1]
     }
 }

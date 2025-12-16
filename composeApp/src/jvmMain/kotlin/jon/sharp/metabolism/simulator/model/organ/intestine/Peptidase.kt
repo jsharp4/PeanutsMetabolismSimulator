@@ -7,8 +7,8 @@ import jon.sharp.metabolism.simulator.model.PhysicalConstants
 import org.apache.commons.math3.ode.FirstOrderDifferentialEquations
 
 class Peptidase: Metabolizer(
-    ODESolver(PeptidaseODE()),
-    listOf(
+    ode = PeptidaseODE(),
+    metaboliteTypes = listOf(
         MetaboliteType.PEPTIDE_CHAIN,
         MetaboliteType.GLUTAMIC_ACID
     )

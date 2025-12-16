@@ -6,8 +6,8 @@ import jon.sharp.metabolism.simulator.model.MetaboliteType
 import org.apache.commons.math3.ode.FirstOrderDifferentialEquations
 
 class AlanineAminoTransferase: Metabolizer(
-    ODESolver(AminoTransferaseODE()),
-    listOf(
+    ode = AminoTransferaseODE(),
+    metaboliteTypes = listOf(
         MetaboliteType.GLUTAMIC_ACID,
         MetaboliteType.PYRUVATE,
         MetaboliteType.KETOGLUTARATE,

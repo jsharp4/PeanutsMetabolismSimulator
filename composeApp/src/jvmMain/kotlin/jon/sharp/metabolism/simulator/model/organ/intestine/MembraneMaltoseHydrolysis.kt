@@ -21,13 +21,11 @@ import jon.sharp.metabolism.simulator.model.PhysicalConstants.Maltose.Hydrolysis
  * All values are in mmol.
  */
 class MembraneMaltoseHydrolysis : Metabolizer(
-    odeSolver = ODESolver(
-        MaltoseHydrolysisODE(
-            MAX_HYDROLYSIS_RATE,
-            LUMEN_VOLUME_LITERS,
-            JEJUNUM_LENGTH_CM,
-            MICHAELIS_CONSTANT
-        )
+    ode = MaltoseHydrolysisODE(
+        MAX_HYDROLYSIS_RATE,
+        LUMEN_VOLUME_LITERS,
+        JEJUNUM_LENGTH_CM,
+        MICHAELIS_CONSTANT
     ),
     metaboliteTypes = listOf(
         MetaboliteType.MALTOSE,

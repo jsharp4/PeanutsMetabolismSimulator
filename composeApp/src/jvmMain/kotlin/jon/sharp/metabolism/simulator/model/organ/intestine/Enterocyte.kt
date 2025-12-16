@@ -1,4 +1,4 @@
-package jon.sharp.metabolism.simulator.model.organ.liver
+package jon.sharp.metabolism.simulator.model.organ.intestine
 
 import jon.sharp.metabolism.simulator.model.MetaboliteType
 import jon.sharp.metabolism.simulator.model.Metabolizer
@@ -6,24 +6,27 @@ import jon.sharp.metabolism.simulator.model.ODESolver
 import jon.sharp.metabolism.simulator.model.Organ
 import org.apache.commons.math3.ode.FirstOrderDifferentialEquations
 
-class Liver: Organ(
+class Enterocytes: Organ(
     setOf(
-        BileSaltProducer()
+        Golgi()
     )
 )
 
-class BileSaltProducer: Metabolizer(
-    ode = LiverBileSaltODE(),
+class Golgi: Metabolizer(
+    ode = ChylomicronProducerODE(),
     metaboliteTypes = listOf(
-        MetaboliteType.BILE_SALT
+        MetaboliteType.MICELLE,
+        MetaboliteType.CHYLOMICRON
     )
 )
 
-class LiverBileSaltODE: FirstOrderDifferentialEquations {
-    override fun getDimension() = 1
+class ChylomicronProducerODE: FirstOrderDifferentialEquations {
+    override fun getDimension() = 2
 
     override fun computeDerivatives(t: Double, y: DoubleArray?, yDot: DoubleArray?) {
-        yDot!![0] = 1.0
+        //mixed micelles, chylomicrons
+        yDot!![0] = -0.5 * y!![0]
+        yDot[1] = -yDot[0]
     }
 
 }

@@ -1,5 +1,7 @@
 package jon.sharp.metabolism.simulator.model
 
+import org.apache.commons.math3.ode.FirstOrderDifferentialEquations
+
 /**
  * Abstract base class for ODE-based metabolizers that provides common processing logic.
  *
@@ -11,13 +13,31 @@ package jon.sharp.metabolism.simulator.model
  * Subclasses can override template methods for custom behavior while maintaining
  * the overall structure.
  *
- * @param odeSolver The ODE solver that implements the metabolic equations
+ * @param ode The differential equations that define the metabolic process
  * @param metaboliteTypes Ordered list of metabolite types corresponding to the solver's state vector
  */
 abstract class Metabolizer(
-    protected val odeSolver: ODESolver,
+    ode: FirstOrderDifferentialEquations,
     protected val metaboliteTypes: List<MetaboliteType>
 ) : IMetabolizer {
+
+    /**
+     * The ODE solver that implements the metabolic equations.
+     * Created by calling createSolver() with the provided differential equations.
+     */
+    protected val odeSolver: ODESolver = createSolver(ode)
+
+    /**
+     * Creates the ODE solver for this metabolizer.
+     * Default implementation creates a standard ODESolver.
+     * Override this method to provide a custom solver implementation.
+     *
+     * @param ode The differential equations to solve
+     * @return An ODESolver instance
+     */
+    protected open fun createSolver(ode: FirstOrderDifferentialEquations): ODESolver {
+        return ODESolver(ode)
+    }
 
     override fun processSubstrates(inputs: MetaboliteMap): MetaboliteMap {
         val newSubstrates = inputs.copy()

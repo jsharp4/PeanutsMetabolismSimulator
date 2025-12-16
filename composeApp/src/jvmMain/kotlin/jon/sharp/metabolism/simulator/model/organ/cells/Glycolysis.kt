@@ -2,6 +2,8 @@ package jon.sharp.metabolism.simulator.model.organ.cells
 
 import jon.sharp.metabolism.simulator.model.Metabolizer
 import jon.sharp.metabolism.simulator.model.MetaboliteType
+import jon.sharp.metabolism.simulator.model.ODESolver
+import org.apache.commons.math3.ode.FirstOrderDifferentialEquations
 
 /**
  * Glycolysis metabolizer that breaks down glucose into pyruvate.
@@ -19,7 +21,7 @@ import jon.sharp.metabolism.simulator.model.MetaboliteType
  * The solver handles all unit conversions internally, working with masses in mmol.
  */
 class Glycolysis : Metabolizer(
-    odeSolver = GlycolysisODESolver(),
+    ode = GlycolysisODE(),
     metaboliteTypes = listOf(
         MetaboliteType.GLUCOSE,
         MetaboliteType.CELL_GLUCOSE,
@@ -30,4 +32,12 @@ class Glycolysis : Metabolizer(
         MetaboliteType.PEP,
         MetaboliteType.PYRUVATE
     )
-)
+) {
+    /**
+     * Creates a custom GlycolysisODESolver that handles unit conversions between
+     * masses and concentrations.
+     */
+    override fun createSolver(ode: FirstOrderDifferentialEquations): ODESolver {
+        return GlycolysisODESolver(ode)
+    }
+}

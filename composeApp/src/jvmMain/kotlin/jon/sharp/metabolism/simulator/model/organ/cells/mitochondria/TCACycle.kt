@@ -15,12 +15,13 @@ import jon.sharp.metabolism.simulator.model.MetaboliteType
  * All values are in mmol.
  */
 class TCACycle : Metabolizer(
-    odeSolver = jon.sharp.metabolism.simulator.model.ODESolver(TcaODE()),
+    ode = TcaODE(),
     metaboliteTypes = listOf(
         MetaboliteType.PYRUVATE,
         MetaboliteType.NADH,
         MetaboliteType.FADH2,
         MetaboliteType.GTP,
-        MetaboliteType.KETOGLUTARATE
+        MetaboliteType.KETOGLUTARATE,
+        MetaboliteType.ACETYL_COA
     )
 )

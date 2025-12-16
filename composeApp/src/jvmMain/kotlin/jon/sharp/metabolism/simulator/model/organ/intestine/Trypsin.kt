@@ -7,8 +7,8 @@ import jon.sharp.metabolism.simulator.model.PhysicalConstants
 import org.apache.commons.math3.ode.FirstOrderDifferentialEquations
 
 class Trypsin: Metabolizer(
-    ODESolver(TrypsinODE()),
-    listOf(
+    ode = TrypsinODE(),
+    metaboliteTypes = listOf(
         MetaboliteType.POLYPEPTIDE,
         MetaboliteType.PEPTIDE_CHAIN
     )
