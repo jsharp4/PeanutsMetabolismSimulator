@@ -23,6 +23,12 @@ class DirectionalOrganEdge(
     val destination: OrganNode,
     val metabolitesToSend: Set<QuantifiedMetabolite>
 ) {
+    // Varargs constructor for convenience
+    constructor(
+        destination: OrganNode,
+        vararg metabolitesToSend: QuantifiedMetabolite
+    ) : this(destination, metabolitesToSend.toSet())
+
     // Use object identity to avoid infinite recursion in circular graphs
     override fun hashCode(): Int = System.identityHashCode(this)
     override fun equals(other: Any?): Boolean = this === other
@@ -32,6 +38,12 @@ class OrganNode(
     val organ: Organ,
     var edges: Set<DirectionalOrganEdge>
 ) {
+    // Varargs constructor for convenience
+    constructor(
+        organ: Organ,
+        vararg edges: DirectionalOrganEdge
+    ) : this(organ, edges.toSet())
+
     // Use organ's identity for hashCode to avoid infinite recursion in circular graphs
     override fun hashCode(): Int = System.identityHashCode(organ)
     override fun equals(other: Any?): Boolean = other is OrganNode && other.organ === this.organ
@@ -63,197 +75,89 @@ actual class BodyTransportGraph {
     )
 
     init {
-        val bloodNode: OrganNode = OrganNode(
-            blood,
-            setOf()
-        )
+        val bloodNode: OrganNode = OrganNode(blood)
 
-        val mitochondrialMembraneNode = OrganNode(
-            mitochondrialInnerMembrane,
-            setOf()
-        )
+        val mitochondrialMembraneNode = OrganNode(mitochondrialInnerMembrane)
 
         val mitochondrialMatrixNode = OrganNode(
             mitochondrialMatrix,
-            setOf(
-                DirectionalOrganEdge(
-                    mitochondrialMembraneNode,
-                    setOf(
-                        QuantifiedMetabolite(
-                            MetaboliteType.NADH,
-                            100.0f
-                        ),
-                        QuantifiedMetabolite(
-                            MetaboliteType.FADH2,
-                            100.0f
-                        ),
-                    )
-                )
+            DirectionalOrganEdge(
+                mitochondrialMembraneNode,
+                QuantifiedMetabolite(MetaboliteType.NADH, 100.0f),
+                QuantifiedMetabolite(MetaboliteType.FADH2, 100.0f)
             )
         )
 
         val cytosolNode: OrganNode = OrganNode(
             cytosol,
-            setOf(
-                DirectionalOrganEdge(
-                    mitochondrialMatrixNode,
-                    setOf(
-                        QuantifiedMetabolite(
-                            MetaboliteType.PYRUVATE,
-                            100.0f
-                        ),
-                        QuantifiedMetabolite(
-                            MetaboliteType.GLUTAMIC_ACID,
-                            100.0f
-                        )
-                    )
-                ),
-                DirectionalOrganEdge(
-                    bloodNode,
-                    setOf(
-                        QuantifiedMetabolite(
-                            MetaboliteType.GLUCOSE,
-                            100.0f
-                        ),
-                    )
-                )
+            DirectionalOrganEdge(
+                mitochondrialMatrixNode,
+                QuantifiedMetabolite(MetaboliteType.PYRUVATE, 100.0f),
+                QuantifiedMetabolite(MetaboliteType.GLUTAMIC_ACID, 100.0f)
+            ),
+            DirectionalOrganEdge(
+                bloodNode,
+                QuantifiedMetabolite(MetaboliteType.GLUCOSE, 100.0f)
             )
         )
 
         val intestineLiningNode = OrganNode(
             intestineLining,
-            setOf(
-                DirectionalOrganEdge(
-                    bloodNode,
-                    setOf(
-                        QuantifiedMetabolite(
-                            MetaboliteType.GLUTAMIC_ACID,
-                            50.0f
-                        ),
-                        QuantifiedMetabolite(
-                            MetaboliteType.GLUCOSE,
-                        50.0f
-                        ),
-                    )
-                )
+            DirectionalOrganEdge(
+                bloodNode,
+                QuantifiedMetabolite(MetaboliteType.GLUTAMIC_ACID, 50.0f),
+                QuantifiedMetabolite(MetaboliteType.GLUCOSE, 50.0f)
             )
         )
 
         val smallIntestineNode = OrganNode(
             smallIntestine,
-            setOf(
-                DirectionalOrganEdge(
-                    intestineLiningNode,
-                    setOf(
-                        QuantifiedMetabolite(
-                            MetaboliteType.MALTOSE,
-                            50.0f
-                        ),
-                        QuantifiedMetabolite(
-                            MetaboliteType.PEPTIDE_CHAIN,
-                            50.0f
-                        ),
-                        QuantifiedMetabolite(
-                            MetaboliteType.OLEIC_ACID,
-                            50f
-                        ),
-                        QuantifiedMetabolite(
-                            MetaboliteType.GLYCEROL,
-                            50f
-                        )
-
-                    )
-                )
+            DirectionalOrganEdge(
+                intestineLiningNode,
+                QuantifiedMetabolite(MetaboliteType.MALTOSE, 50.0f),
+                QuantifiedMetabolite(MetaboliteType.PEPTIDE_CHAIN, 50.0f),
+                QuantifiedMetabolite(MetaboliteType.OLEIC_ACID, 50f),
+                QuantifiedMetabolite(MetaboliteType.GLYCEROL, 50f)
             )
         )
 
         val liverNode = OrganNode(
             liver,
-            setOf(
-                DirectionalOrganEdge(
-                    smallIntestineNode,
-                    setOf(
-                        QuantifiedMetabolite(
-                            MetaboliteType.BILE_SALT,
-                            30f
-                        )
-                    )
-                )
+            DirectionalOrganEdge(
+                smallIntestineNode,
+                QuantifiedMetabolite(MetaboliteType.BILE_SALT, 30f)
             )
         )
 
 
         val stomachNode = OrganNode(
             stomach,
-            setOf(
-                DirectionalOrganEdge(
-                    smallIntestineNode,
-                    setOf(
-                        QuantifiedMetabolite(
-                            MetaboliteType.STARCH,
-                            30.0f
-                        ),
-                        QuantifiedMetabolite(
-                            MetaboliteType.MALTOSE,
-                            30.0f
-                        ),
-                        QuantifiedMetabolite(
-                            MetaboliteType.POLYPEPTIDE,
-                            100.0f
-                        ),
-                        QuantifiedMetabolite(
-                            MetaboliteType.TRIOLEIN,
-                            100f
-                        )
-                    )
-                )
+            DirectionalOrganEdge(
+                smallIntestineNode,
+                QuantifiedMetabolite(MetaboliteType.STARCH, 30.0f),
+                QuantifiedMetabolite(MetaboliteType.MALTOSE, 30.0f),
+                QuantifiedMetabolite(MetaboliteType.POLYPEPTIDE, 100.0f),
+                QuantifiedMetabolite(MetaboliteType.TRIOLEIN, 100f)
             )
         )
 
         mouthNode = OrganNode(
             mouth,
-            setOf(
-                DirectionalOrganEdge(
-                    stomachNode,
-                    setOf(
-                        QuantifiedMetabolite(
-                            MetaboliteType.STARCH,
-                            100.0f
-                        ),
-                        QuantifiedMetabolite(
-                            MetaboliteType.MALTOSE,
-                            100.0f
-                        ),
-                        QuantifiedMetabolite(
-                            MetaboliteType.ARACHIN,
-                            100.0f
-                        ),
-                        QuantifiedMetabolite(
-                            MetaboliteType.TRIOLEIN,
-                            100f
-                        )
-                    )
-                )
+            DirectionalOrganEdge(
+                stomachNode,
+                QuantifiedMetabolite(MetaboliteType.STARCH, 100.0f),
+                QuantifiedMetabolite(MetaboliteType.MALTOSE, 100.0f),
+                QuantifiedMetabolite(MetaboliteType.ARACHIN, 100.0f),
+                QuantifiedMetabolite(MetaboliteType.TRIOLEIN, 100f)
             )
         )
         bloodNode.edges = setOf(
             DirectionalOrganEdge(
                 cytosolNode,
-                setOf(
-                    QuantifiedMetabolite(
-                        MetaboliteType.GLUCOSE,
-                        100f
-                    ),
-                    QuantifiedMetabolite(
-                        MetaboliteType.GLUTAMIC_ACID,
-                        100f
-                    )
-                )
+                QuantifiedMetabolite(MetaboliteType.GLUCOSE, 100f),
+                QuantifiedMetabolite(MetaboliteType.GLUTAMIC_ACID, 100f)
             ),
-            DirectionalOrganEdge(
-                    liverNode,
-                    setOf()
-            )
+            DirectionalOrganEdge(liverNode)
         )
     }
 
