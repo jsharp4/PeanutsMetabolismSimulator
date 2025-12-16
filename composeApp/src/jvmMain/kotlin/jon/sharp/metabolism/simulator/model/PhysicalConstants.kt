@@ -30,11 +30,12 @@ object PhysicalConstants {
         val STARCH = 200000000.0  // Average for starch polymer
         val ARARCHIN_POLYPEPTIDE = 68000.0
         val SMALL_PEPTIDE_CHAIN = 680.0  // Unsourced
-        val GLUTAMIC_ACID = 147.13
+        val GLUTAMIC_ACID = 147.134
         val ATP = 1014.4
         val ARACHIN = 21000.0
         val MALTOSE = 342.30
         val GLUCOSE = 180.16
+        val OLEIC_ACID = 282.5
     }
 
     object Maltose {

@@ -46,6 +46,10 @@ actual class SimulationEngine {
                             50.0,
                             PhysicalConstants.MolarMass.ARACHIN
                         ).toFloat()
+                    ),
+                    Metabolite(
+                        MetaboliteType.TRIOLEIN,
+                        50.0f
                     )
                 )
             )

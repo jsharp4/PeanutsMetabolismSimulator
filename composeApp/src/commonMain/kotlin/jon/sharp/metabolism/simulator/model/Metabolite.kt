@@ -21,7 +21,10 @@ enum class MetaboliteType {
     GLUTAMIC_ACID,
     ALANINE,
     KETOGLUTARATE,
-    BILE_SALT
+    BILE_SALT,
+    TRIOLEIN,
+    GLYCEROL,
+    OLEIC_ACID
 }
 data class Metabolite(
     val type: MetaboliteType,

@@ -63,6 +63,8 @@ actual class Body(
                     }
                 }
                 currNodePair.first.organ.metabolitesMap.removeIfPresent(toRemoveFromCurrentNode)
+            } else {
+                currNodePair.first.organ.metabolitesMap.putOrAdd(currNodePair.second)
             }
 
 

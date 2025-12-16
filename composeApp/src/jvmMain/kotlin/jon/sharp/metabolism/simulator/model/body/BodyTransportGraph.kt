@@ -11,6 +11,7 @@ import jon.sharp.metabolism.simulator.model.organ.cells.mitochondria.Mitochondri
 import jon.sharp.metabolism.simulator.model.organ.cells.stomach.Stomach
 import jon.sharp.metabolism.simulator.model.organ.intestine.SmallIntestine
 import jon.sharp.metabolism.simulator.model.organ.intestine.SmallIntestineLining
+import jon.sharp.metabolism.simulator.model.organ.liver.Liver
 import jon.sharp.metabolism.simulator.model.organ.mouth.Mouth
 
 data class QuantifiedMetabolite(
@@ -45,6 +46,7 @@ actual class BodyTransportGraph {
     val smallIntestine = SmallIntestine()
     val stomach = Stomach()
     val mouth = Mouth()
+    val liver = Liver()
 
     val mouthNode: OrganNode
 
@@ -52,6 +54,7 @@ actual class BodyTransportGraph {
         mouth,
         stomach,
         smallIntestine,
+        liver,
         intestineLining,
         blood,
         cytosol,
@@ -149,11 +152,36 @@ actual class BodyTransportGraph {
                         QuantifiedMetabolite(
                             MetaboliteType.PEPTIDE_CHAIN,
                             50.0f
+                        ),
+                        QuantifiedMetabolite(
+                            MetaboliteType.OLEIC_ACID,
+                            50f
+                        ),
+                        QuantifiedMetabolite(
+                            MetaboliteType.GLYCEROL,
+                            50f
+                        )
+
+                    )
+                )
+            )
+        )
+
+        val liverNode = OrganNode(
+            liver,
+            setOf(
+                DirectionalOrganEdge(
+                    smallIntestineNode,
+                    setOf(
+                        QuantifiedMetabolite(
+                            MetaboliteType.BILE_SALT,
+                            30f
                         )
                     )
                 )
             )
         )
+
 
         val stomachNode = OrganNode(
             stomach,
@@ -172,6 +200,10 @@ actual class BodyTransportGraph {
                         QuantifiedMetabolite(
                             MetaboliteType.POLYPEPTIDE,
                             100.0f
+                        ),
+                        QuantifiedMetabolite(
+                            MetaboliteType.TRIOLEIN,
+                            100f
                         )
                     )
                 )
@@ -195,6 +227,10 @@ actual class BodyTransportGraph {
                         QuantifiedMetabolite(
                             MetaboliteType.ARACHIN,
                             100.0f
+                        ),
+                        QuantifiedMetabolite(
+                            MetaboliteType.TRIOLEIN,
+                            100f
                         )
                     )
                 )
@@ -213,6 +249,10 @@ actual class BodyTransportGraph {
                         100f
                     )
                 )
+            ),
+            DirectionalOrganEdge(
+                    liverNode,
+                    setOf()
             )
         )
     }
