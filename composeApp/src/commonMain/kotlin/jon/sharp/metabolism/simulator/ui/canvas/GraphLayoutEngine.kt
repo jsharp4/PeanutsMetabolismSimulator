@@ -183,13 +183,26 @@ class GraphLayoutEngine(
 
     /**
      * Calculates edge paths between positioned nodes using orthogonal routing.
+     * Handles parallel routing for edges that would otherwise overlap.
      */
     private fun calculateEdgePaths(
         nodePositions: Map<String, NodePosition>,
         layerMap: Map<String, Int>,
         nodeColorMap: Map<String, Color>
     ): List<EdgePath> {
-        val edgePaths = mutableListOf<EdgePath>()
+        // First, collect all edges and group them by source-destination pair
+        data class EdgeInfo(
+            val fromNode: String,
+            val toNode: String,
+            val fromPosition: NodePosition,
+            val toPosition: NodePosition,
+            val fromLayer: Int,
+            val toLayer: Int,
+            val isBackEdge: Boolean,
+            val color: Color
+        )
+
+        val allEdges = mutableListOf<EdgeInfo>()
 
         nodes.forEach { node ->
             val fromPosition = nodePositions[node.organName] ?: return@forEach
@@ -199,24 +212,55 @@ class GraphLayoutEngine(
             node.edges.forEach { edge ->
                 val toPosition = nodePositions[edge.destinationName] ?: return@forEach
                 val toLayer = layerMap[edge.destinationName] ?: 0
-
-                // Determine if this is a back edge (goes to earlier or same layer)
                 val isBackEdge = toLayer <= fromLayer
 
-                // Calculate orthogonal waypoints
+                allEdges.add(EdgeInfo(
+                    fromNode = node.organName,
+                    toNode = edge.destinationName,
+                    fromPosition = fromPosition,
+                    toPosition = toPosition,
+                    fromLayer = fromLayer,
+                    toLayer = toLayer,
+                    isBackEdge = isBackEdge,
+                    color = nodeColor
+                ))
+            }
+        }
+
+        // Group edges by routing signature (same source and destination Y positions)
+        val edgeGroups = allEdges.groupBy { edge ->
+            "${edge.fromPosition.y.toInt()}_${edge.toPosition.y.toInt()}_${edge.isBackEdge}"
+        }
+
+        val edgePaths = mutableListOf<EdgePath>()
+
+        edgeGroups.forEach { (_, group) ->
+            val groupSize = group.size
+            val parallelOffset = 15f // Horizontal offset for parallel edges
+
+            group.forEachIndexed { index, edgeInfo ->
+                // Calculate offset from center for this edge in the group
+                val offset = if (groupSize > 1) {
+                    (index - (groupSize - 1) / 2.0f) * parallelOffset
+                } else {
+                    0f
+                }
+
+                // Calculate orthogonal waypoints with parallel offset
                 val waypoints = calculateOrthogonalWaypoints(
-                    fromPosition,
-                    toPosition,
-                    isBackEdge
+                    edgeInfo.fromPosition,
+                    edgeInfo.toPosition,
+                    edgeInfo.isBackEdge,
+                    offset
                 )
 
                 edgePaths.add(
                     EdgePath(
-                        fromNode = node.organName,
-                        toNode = edge.destinationName,
-                        isBackEdge = isBackEdge,
+                        fromNode = edgeInfo.fromNode,
+                        toNode = edgeInfo.toNode,
+                        isBackEdge = edgeInfo.isBackEdge,
                         waypoints = waypoints,
-                        color = nodeColor // Edge color matches source node color
+                        color = edgeInfo.color
                     )
                 )
             }
@@ -227,26 +271,28 @@ class GraphLayoutEngine(
 
     /**
      * Calculates orthogonal waypoints (right-angle routing) between two nodes for vertical layout.
+     * @param offset Horizontal offset for parallel edge routing
      */
     private fun calculateOrthogonalWaypoints(
         fromPosition: NodePosition,
         toPosition: NodePosition,
-        isBackEdge: Boolean
+        isBackEdge: Boolean,
+        offset: Float = 0f
     ): List<Offset> {
         val waypoints = mutableListOf<Offset>()
 
-        // Start from bottom-center of source node
-        val startX = fromPosition.x + (fromPosition.width / 2)
+        // Start from bottom-center of source node (with offset)
+        val startX = fromPosition.x + (fromPosition.width / 2) + offset
         val startY = fromPosition.y + fromPosition.height
         waypoints.add(Offset(startX, startY))
 
-        // End at top-center of destination node
-        val endX = toPosition.x + (toPosition.width / 2)
+        // End at top-center of destination node (with offset)
+        val endX = toPosition.x + (toPosition.width / 2) + offset
         val endY = toPosition.y
 
         if (isBackEdge) {
             // For back edges, route around to the side to avoid overlapping nodes
-            val routeOffset = 60f
+            val routeOffset = 60f + kotlin.math.abs(offset)
             val sideX = max(fromPosition.x + fromPosition.width, toPosition.x + toPosition.width) + routeOffset
 
             // Go down, then to the side, then up to destination
@@ -258,10 +304,10 @@ class GraphLayoutEngine(
         } else {
             // For forward edges, use simple vertical routing
             if (kotlin.math.abs(endX - startX) < 10f) {
-                // Nearly vertical - direct line
+                // Nearly vertical - direct line (with offset applied)
                 waypoints.add(Offset(endX, endY))
             } else {
-                // Use midpoint for right-angle routing
+                // Use midpoint for right-angle routing (offset maintains parallel paths)
                 val midY = (startY + endY) / 2
                 waypoints.add(Offset(startX, midY))
                 waypoints.add(Offset(endX, midY))
