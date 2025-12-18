@@ -36,15 +36,15 @@ class MembraneMaltoseHydrolysis : Metabolizer(
      * Custom update to handle adding glucose to existing pool rather than replacing it,
      * since glucose may come from multiple sources.
      */
-    override fun updateSubstrates(substrates: MetaboliteMap, state: DoubleArray) {
-        // Update maltose (replace existing value)
-        substrates.updateQuantities(
-            Metabolite(MetaboliteType.MALTOSE, state[0].toFloat())
-        )
-
-        // Add produced glucose to existing pool
-        substrates.putOrAdd(
-            Metabolite(MetaboliteType.GLUCOSE, state[1].toFloat())
-        )
-    }
+//    override fun updateSubstrates(substrates: MetaboliteMap, state: DoubleArray) {
+//        // Update maltose (replace existing value)
+//        substrates.updateQuantities(
+//            Metabolite(MetaboliteType.MALTOSE, state[0].toFloat())
+//        )
+//
+//        // Add produced glucose to existing pool
+//        substrates.putOrAdd(
+//            Metabolite(MetaboliteType.GLUCOSE, state[1].toFloat())
+//        )
+//    }
 }

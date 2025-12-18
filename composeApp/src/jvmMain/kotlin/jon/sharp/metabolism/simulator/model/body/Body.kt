@@ -72,10 +72,25 @@ actual class Body(
                 // Create MetaboliteMap to capture transported amounts for visualization
                 val transportedMetabolites = MetaboliteMap()
 
+                val rateLimitedRetainedMetabolites = currentNode.organ.metabolitesMap.copy()
+                edge.rateLimiter.forEach {
+                    rateLimitedRetainedMetabolites.updateQuantities(
+                        it.processSubstrates(rateLimitedRetainedMetabolites)
+                    )
+                }
+
+                val rateLimitedOutputMetabolites = currentNode.organ.metabolitesMap.copy()
+                if (edge.rateLimiter.isNotEmpty()) {
+                    rateLimitedOutputMetabolites.removeIfPresent(rateLimitedRetainedMetabolites)
+                }
+
                 val metabolitesToQueue = MetaboliteMap(
                     edge.metabolitesToSend.map { metabolite ->
+
                         val actualAmount = metabolite.percentageOfOutput / 100 *
-                                getMetaboliteFromOrganOrZero(currentNode.organ, metabolite.type)
+                                getMetaboliteFromMapOrZero(
+                                    rateLimitedOutputMetabolites,
+                                    metabolite.type)
 
                         val transportedMetabolite = Metabolite(metabolite.type, actualAmount)
 
@@ -107,8 +122,8 @@ actual class Body(
         return previouslyVisited
     }
 
-    private fun getMetaboliteFromOrganOrZero(organ: Organ, type: MetaboliteType): Float {
-        return organ.getMetabolites()[type]?.amountMilliMoles ?: 0f
+    private fun getMetaboliteFromMapOrZero(map: MetaboliteMap, type: MetaboliteType): Float {
+        return map[type]?.amountMilliMoles ?: 0f
     }
 
     /**

@@ -1,4 +1,4 @@
-package jon.sharp.metabolism.simulator.model.organ.cells.stomach
+package jon.sharp.metabolism.simulator.model.organ.stomach
 
 import jon.sharp.metabolism.simulator.model.organ.intestine.PancreaticAmylase
 

@@ -30,7 +30,8 @@ enum class MetaboliteType {
     MICELLE,
     CHYLOMICRON,
     CHYLOMICRON_REMNANT,
-    FATTY_ACYL_COA
+    FATTY_ACYL_COA,
+    INSULIN
 }
 data class Metabolite(
     val type: MetaboliteType,

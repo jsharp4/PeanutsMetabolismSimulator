@@ -2,18 +2,23 @@ package jon.sharp.metabolism.simulator.model.body
 
 import jon.sharp.metabolism.simulator.model.MetaboliteMap
 import jon.sharp.metabolism.simulator.model.MetaboliteType
+import jon.sharp.metabolism.simulator.model.Metabolizer
+import jon.sharp.metabolism.simulator.model.ODESolver
 import jon.sharp.metabolism.simulator.model.Organ
 import jon.sharp.metabolism.simulator.model.organ.IOrgan
 import jon.sharp.metabolism.simulator.model.organ.blood.Blood
 import jon.sharp.metabolism.simulator.model.organ.cells.Cytosol
 import jon.sharp.metabolism.simulator.model.organ.cells.mitochondria.MitochondrialInnerMembrane
 import jon.sharp.metabolism.simulator.model.organ.cells.mitochondria.MitochondrialMatrix
-import jon.sharp.metabolism.simulator.model.organ.cells.stomach.Stomach
+import jon.sharp.metabolism.simulator.model.organ.stomach.Stomach
 import jon.sharp.metabolism.simulator.model.organ.intestine.Enterocytes
 import jon.sharp.metabolism.simulator.model.organ.intestine.SmallIntestine
 import jon.sharp.metabolism.simulator.model.organ.intestine.SmallIntestineLining
 import jon.sharp.metabolism.simulator.model.organ.liver.Liver
 import jon.sharp.metabolism.simulator.model.organ.mouth.Mouth
+import jon.sharp.metabolism.simulator.model.organ.pancreas.Pancreas
+import jon.sharp.metabolism.simulator.model.organ.stomach.StomachEmptyingODE
+import jon.sharp.metabolism.simulator.model.organ.stomach.StomachEmptyingRegulator
 
 data class QuantifiedMetabolite(
     val type: MetaboliteType,
@@ -22,13 +27,15 @@ data class QuantifiedMetabolite(
 
 class DirectionalOrganEdge(
     val destination: OrganNode,
-    val metabolitesToSend: Set<QuantifiedMetabolite>
+    val metabolitesToSend: Set<QuantifiedMetabolite>,
+    val rateLimiter: List<Metabolizer> = listOf()
 ) {
     // Varargs constructor for convenience
     constructor(
         destination: OrganNode,
-        vararg metabolitesToSend: QuantifiedMetabolite
-    ) : this(destination, metabolitesToSend.toSet())
+        vararg metabolitesToSend: QuantifiedMetabolite,
+        rateLimiter: List<Metabolizer> = listOf()
+    ) : this(destination, metabolitesToSend.toSet(), rateLimiter)
 
     // Use object identity to avoid infinite recursion in circular graphs
     override fun hashCode(): Int = System.identityHashCode(this)
@@ -61,6 +68,7 @@ actual class BodyTransportGraph {
     val mouth = Mouth()
     val liver = Liver()
     val enterocytes = Enterocytes()
+    val pancreas = Pancreas()
 
     val mouthNode: OrganNode
 
@@ -82,7 +90,8 @@ actual class BodyTransportGraph {
         blood,
         cytosol,
         mitochondrialMatrix,
-        mitochondrialInnerMembrane
+        mitochondrialInnerMembrane,
+        pancreas
     )
 
     init {
@@ -165,10 +174,13 @@ actual class BodyTransportGraph {
             stomach,
             DirectionalOrganEdge(
                 smallIntestineNode,
-                QuantifiedMetabolite(MetaboliteType.STARCH, 30.0f),
-                QuantifiedMetabolite(MetaboliteType.MALTOSE, 30.0f),
+                QuantifiedMetabolite(MetaboliteType.STARCH, 100.0f),
+                QuantifiedMetabolite(MetaboliteType.MALTOSE, 100.0f),
                 QuantifiedMetabolite(MetaboliteType.POLYPEPTIDE, 100.0f),
-                QuantifiedMetabolite(MetaboliteType.TRIOLEIN, 100f)
+                QuantifiedMetabolite(MetaboliteType.TRIOLEIN, 100f),
+                rateLimiter = listOf(
+                    StomachEmptyingRegulator()
+                )
             )
         )
 
@@ -182,6 +194,15 @@ actual class BodyTransportGraph {
                 QuantifiedMetabolite(MetaboliteType.TRIOLEIN, 100f)
             )
         )
+
+        val pancreasNode = OrganNode(
+            pancreas,
+            DirectionalOrganEdge(
+                bloodNode,
+                QuantifiedMetabolite(MetaboliteType.INSULIN, 50f)
+            )
+        )
+
         bloodNode.edges = setOf(
             DirectionalOrganEdge(
                 cytosolNode,
@@ -193,7 +214,8 @@ actual class BodyTransportGraph {
                 liverNode,
                 QuantifiedMetabolite(MetaboliteType.CHYLOMICRON_REMNANT, 90f),
                 QuantifiedMetabolite(MetaboliteType.GLYCEROL, 90f)
-            )
+            ),
+            DirectionalOrganEdge(pancreasNode)
         )
     }
 

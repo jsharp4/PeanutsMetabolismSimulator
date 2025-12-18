@@ -27,7 +27,7 @@ object PhysicalConstants {
      * Consolidated molar mass values for all molecules (in g/mol)
      */
     object MolarMass {
-        val STARCH = 200000000.0  // Average for starch polymer
+        val STARCH = 200000.0  // Average for starch polymer
         val ARARCHIN_POLYPEPTIDE = 68000.0
         val SMALL_PEPTIDE_CHAIN = 680.0  // Unsourced
         val GLUTAMIC_ACID = 147.134
