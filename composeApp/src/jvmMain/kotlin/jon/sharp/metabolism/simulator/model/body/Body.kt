@@ -2,7 +2,11 @@ package jon.sharp.metabolism.simulator.model.body
 
 import jon.sharp.metabolism.simulator.model.Metabolite
 import jon.sharp.metabolism.simulator.model.MetaboliteMap
+import jon.sharp.metabolism.simulator.model.MetaboliteType
+import jon.sharp.metabolism.simulator.model.Organ
 import jon.sharp.metabolism.simulator.model.organ.IOrgan
+import java.util.Queue
+import kotlin.collections.set
 
 actual class Body(
     private val transportGraph: BodyTransportGraph
@@ -15,14 +19,18 @@ actual class Body(
         return transportGraph
     }
 
+    var visitedEdgeMap = mutableMapOf<DirectionalOrganEdge, Int>()
+    var visitedNodeMap = mutableMapOf<OrganNode, Int>()
+
     /**
      * Executes a metabolism time step by passing outputs through the organ pipeline.
      * Each organ processes metabolites and passes its outputs to the next organ in sequence.
      */
     actual suspend fun metabolizeTimeStep(initialInputs: MetaboliteMap) {
         //var currentInputs = initialInputs
-        val visitedEdgeMap = mutableMapOf<DirectionalOrganEdge, Int>()
-        val visitedNodeMap = mutableMapOf<OrganNode, Int>()
+        visitedEdgeMap = mutableMapOf<DirectionalOrganEdge, Int>()
+        visitedNodeMap = mutableMapOf<OrganNode, Int>()
+        transportGraph.edgeTransportMap = mutableMapOf<DirectionalOrganEdge, MetaboliteMap>() // Reset transport map for new step
         val visitQueue = mutableListOf<Pair<OrganNode, MetaboliteMap>>()
         val first = transportGraph.getStartNode()
 
@@ -31,48 +39,70 @@ actual class Body(
         while (visitQueue.isNotEmpty()) {
             val currNodePair = visitQueue.removeAt(0)
 
-            if ((visitedNodeMap[currNodePair.first] ?: 0) < 1) {
-                visitedNodeMap[currNodePair.first] = 1
+            if (!checkIfNodePreviouslyVisitedOrMarkAsVisited(currNodePair.first)) {
+
                 currNodePair.first.organ.metabolizeTimeStep(currNodePair.second)
 
-                val toRemoveFromCurrentNode = MetaboliteMap()
-                currNodePair.first.edges.forEach { edge ->
-                    if ((visitedEdgeMap[edge] ?: 0) < 1) {
-                        visitedEdgeMap[edge] = 1
-                        visitQueue.add(
-                            Pair(
-                                edge.destination,
-                                MetaboliteMap(
-                                    edge.metabolitesToSend.map { metabolite ->
-                                        toRemoveFromCurrentNode.putOrAdd(
-                                            Metabolite(
-                                                metabolite.type,
-                                                metabolite.percentageOfOutput *
-                                                        currNodePair.first.organ.getMetabolites()[metabolite.type]!!.amountMilliMoles
-                                            )
-                                        )
-                                        Metabolite(
-                                            metabolite.type,
-                                            metabolite.percentageOfOutput *
-                                                    currNodePair.first.organ.getMetabolites()[metabolite.type]!!.amountMilliMoles
-                                        )
-                                    }.toSet()
-                                )
-                            )
-                        )
-                    }
-                }
-                currNodePair.first.organ.metabolitesMap.removeIfPresent(toRemoveFromCurrentNode)
+                populateQueueFromEdges(
+                    currNodePair.first,
+                    currNodePair.first.edges,
+                    visitQueue
+                )
+
             } else {
                 currNodePair.first.organ.metabolitesMap.putOrAdd(currNodePair.second)
             }
-
-
-            //organs.forEach { (_, organ) ->
-            //    currentInputs = organ.metabolizeTimeStep(currentInputs)
-            //delay(500L)
-            //}
         }
+    }
+
+    private fun populateQueueFromEdges(
+        currentNode: OrganNode,
+        edges: Set<DirectionalOrganEdge>,
+        queue: MutableList<Pair<OrganNode, MetaboliteMap>>
+    ) {
+        val toRemoveFromCurrentNode = MetaboliteMap()
+        edges.forEach { edge ->
+            if (!checkIfEdgePreviouslyVisitedOrMarkAsVisited(edge)) {
+                // Create MetaboliteMap to capture transported amounts for visualization
+                val transportedMetabolites = MetaboliteMap()
+
+                val metabolitesToQueue = MetaboliteMap(
+                    edge.metabolitesToSend.map { metabolite ->
+                        val actualAmount = metabolite.percentageOfOutput / 100 *
+                                getMetaboliteFromOrganOrZero(currentNode.organ, metabolite.type)
+
+                        val transportedMetabolite = Metabolite(metabolite.type, actualAmount)
+
+                        toRemoveFromCurrentNode.putOrAdd(transportedMetabolite)
+                        transportedMetabolites.putOrAdd(transportedMetabolite) // Capture for visualization
+
+                        transportedMetabolite
+                    }.toSet()
+                )
+
+                // Store in transport graph for visualization
+                transportGraph.edgeTransportMap[edge] = transportedMetabolites
+
+                queue.add(Pair(edge.destination, metabolitesToQueue))
+            }
+        }
+        currentNode.organ.metabolitesMap.removeIfPresent(toRemoveFromCurrentNode)
+    }
+
+    private fun checkIfNodePreviouslyVisitedOrMarkAsVisited(node: OrganNode): Boolean {
+        val previouslyVisited = (visitedNodeMap[node] ?: 0) > 0
+        if (!previouslyVisited) visitedNodeMap[node] = 1
+        return previouslyVisited
+    }
+
+    private fun checkIfEdgePreviouslyVisitedOrMarkAsVisited(edge: DirectionalOrganEdge): Boolean {
+        val previouslyVisited = (visitedEdgeMap[edge] ?: 0) > 0
+        if (!previouslyVisited) visitedEdgeMap[edge] = 1
+        return previouslyVisited
+    }
+
+    private fun getMetaboliteFromOrganOrZero(organ: Organ, type: MetaboliteType): Float {
+        return organ.getMetabolites()[type]?.amountMilliMoles ?: 0f
     }
 
     /**

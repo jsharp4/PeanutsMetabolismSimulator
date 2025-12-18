@@ -6,7 +6,7 @@ import jon.sharp.metabolism.simulator.model.MetaboliteMap
 import jon.sharp.metabolism.simulator.model.MetaboliteType
 import jon.sharp.metabolism.simulator.model.PhysicalConstants
 import jon.sharp.metabolism.simulator.model.body.BodyTransportGraph
-import jon.sharp.metabolism.simulator.model.organ.cells.Blood
+import jon.sharp.metabolism.simulator.model.organ.blood.Blood
 import jon.sharp.metabolism.simulator.model.organ.cells.Cytosol
 import jon.sharp.metabolism.simulator.model.organ.cells.mitochondria.MitochondrialInnerMembrane
 import jon.sharp.metabolism.simulator.model.organ.cells.mitochondria.MitochondrialMatrix

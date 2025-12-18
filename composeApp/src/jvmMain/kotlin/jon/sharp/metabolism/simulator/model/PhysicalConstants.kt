@@ -94,5 +94,15 @@ object PhysicalConstants {
     object Cells {
         val TOTAL_COUNT = 30.00e12
         val SINGLE_VOLUME = 3.04e-12
+
+        val MITOCHONDRIA_PER_CELL = 1000
+
+        val ACTIVE_ATP_SYNTHASE_PER_MITOCHONDRIA = 1000
+    }
+
+    object FattyAcids {
+        object CarbonChainLength {
+            val OLEIC_ACID = 18
+        }
     }
 }

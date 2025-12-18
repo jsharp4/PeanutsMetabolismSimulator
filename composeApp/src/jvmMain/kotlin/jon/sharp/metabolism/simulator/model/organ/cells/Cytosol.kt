@@ -11,5 +11,8 @@ import jon.sharp.metabolism.simulator.model.Organ
  * Receives glucose from Small Intestine and outputs updated blood glucose to Blood organ.
  */
 class Cytosol: Organ(
-    metabolizers = setOf(Glycolysis())
+    metabolizers = setOf(
+        Glycolysis(),
+        AcylCoASynthase()
+    )
 )

@@ -5,6 +5,7 @@ import jon.sharp.metabolism.simulator.model.Organ
 class SmallIntestineLining: Organ(
     setOf(
         MembraneMaltoseHydrolysis(),
-        Peptidase()
+        Peptidase(),
+        MixedMicelleFormer()
     )
 )

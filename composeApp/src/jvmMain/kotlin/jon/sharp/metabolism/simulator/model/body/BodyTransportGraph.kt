@@ -1,14 +1,15 @@
 package jon.sharp.metabolism.simulator.model.body
 
+import jon.sharp.metabolism.simulator.model.MetaboliteMap
 import jon.sharp.metabolism.simulator.model.MetaboliteType
 import jon.sharp.metabolism.simulator.model.Organ
-import jon.sharp.metabolism.simulator.model.PhysicalConstants
 import jon.sharp.metabolism.simulator.model.organ.IOrgan
-import jon.sharp.metabolism.simulator.model.organ.cells.Blood
+import jon.sharp.metabolism.simulator.model.organ.blood.Blood
 import jon.sharp.metabolism.simulator.model.organ.cells.Cytosol
 import jon.sharp.metabolism.simulator.model.organ.cells.mitochondria.MitochondrialInnerMembrane
 import jon.sharp.metabolism.simulator.model.organ.cells.mitochondria.MitochondrialMatrix
 import jon.sharp.metabolism.simulator.model.organ.cells.stomach.Stomach
+import jon.sharp.metabolism.simulator.model.organ.intestine.Enterocytes
 import jon.sharp.metabolism.simulator.model.organ.intestine.SmallIntestine
 import jon.sharp.metabolism.simulator.model.organ.intestine.SmallIntestineLining
 import jon.sharp.metabolism.simulator.model.organ.liver.Liver
@@ -59,8 +60,17 @@ actual class BodyTransportGraph {
     val stomach = Stomach()
     val mouth = Mouth()
     val liver = Liver()
+    val enterocytes = Enterocytes()
 
     val mouthNode: OrganNode
+
+    // Map to store transported quantities per edge for visualization
+    internal var edgeTransportMap = mutableMapOf<DirectionalOrganEdge, MetaboliteMap>()
+
+    // Accessor method to get transported quantities for a specific edge
+    fun getEdgeTransportData(edge: DirectionalOrganEdge): MetaboliteMap {
+        return edgeTransportMap[edge] ?: MetaboliteMap()
+    }
 
     private val allOrgans = setOf(
         mouth,
@@ -68,6 +78,7 @@ actual class BodyTransportGraph {
         smallIntestine,
         liver,
         intestineLining,
+        enterocytes,
         blood,
         cytosol,
         mitochondrialMatrix,
@@ -92,12 +103,24 @@ actual class BodyTransportGraph {
             cytosol,
             DirectionalOrganEdge(
                 mitochondrialMatrixNode,
-                QuantifiedMetabolite(MetaboliteType.PYRUVATE, 100.0f),
-                QuantifiedMetabolite(MetaboliteType.GLUTAMIC_ACID, 100.0f)
+                QuantifiedMetabolite(MetaboliteType.PYRUVATE, 90.0f),
+                QuantifiedMetabolite(MetaboliteType.GLUTAMIC_ACID, 90.0f),
+                QuantifiedMetabolite(MetaboliteType.FATTY_ACYL_COA, 90f)
             ),
             DirectionalOrganEdge(
                 bloodNode,
                 QuantifiedMetabolite(MetaboliteType.GLUCOSE, 100.0f)
+            )
+        )
+
+        val enterocytesNode = OrganNode(
+            enterocytes,
+            DirectionalOrganEdge(
+                bloodNode,
+                QuantifiedMetabolite(
+                    MetaboliteType.CHYLOMICRON,
+                    50f
+                )
             )
         )
 
@@ -107,6 +130,13 @@ actual class BodyTransportGraph {
                 bloodNode,
                 QuantifiedMetabolite(MetaboliteType.GLUTAMIC_ACID, 50.0f),
                 QuantifiedMetabolite(MetaboliteType.GLUCOSE, 50.0f)
+            ),
+            DirectionalOrganEdge(
+                enterocytesNode,
+                QuantifiedMetabolite(
+                    MetaboliteType.MICELLE,
+                    50f
+                )
             )
         )
 
@@ -117,7 +147,8 @@ actual class BodyTransportGraph {
                 QuantifiedMetabolite(MetaboliteType.MALTOSE, 50.0f),
                 QuantifiedMetabolite(MetaboliteType.PEPTIDE_CHAIN, 50.0f),
                 QuantifiedMetabolite(MetaboliteType.OLEIC_ACID, 50f),
-                QuantifiedMetabolite(MetaboliteType.GLYCEROL, 50f)
+                QuantifiedMetabolite(MetaboliteType.MAG, 50f),
+                QuantifiedMetabolite(MetaboliteType.BILE_SALT, 75f)
             )
         )
 
@@ -155,9 +186,14 @@ actual class BodyTransportGraph {
             DirectionalOrganEdge(
                 cytosolNode,
                 QuantifiedMetabolite(MetaboliteType.GLUCOSE, 100f),
-                QuantifiedMetabolite(MetaboliteType.GLUTAMIC_ACID, 100f)
+                QuantifiedMetabolite(MetaboliteType.GLUTAMIC_ACID, 100f),
+                QuantifiedMetabolite(MetaboliteType.OLEIC_ACID, 100f)
             ),
-            DirectionalOrganEdge(liverNode)
+            DirectionalOrganEdge(
+                liverNode,
+                QuantifiedMetabolite(MetaboliteType.CHYLOMICRON_REMNANT, 90f),
+                QuantifiedMetabolite(MetaboliteType.GLYCEROL, 90f)
+            )
         )
     }
 
@@ -174,14 +210,14 @@ actual class BodyTransportGraph {
         val allNodes = collectAllNodes(mouthNode)
         val organToName = allOrgans.associate { organ ->
             organ to when (organ) {
-                mouth -> "Mouth"
-                stomach -> "Stomach"
-                smallIntestine -> "Small Intestine"
-                intestineLining -> "Small Intestine Lining"
-                cytosol -> "Cytosol"
-                mitochondrialMatrix -> "Mitochondrial Matrix"
-                mitochondrialInnerMembrane -> "Inner Matrix Membrane"
-                blood -> "Blood"
+//                mouth -> "Mouth"
+//                stomach -> "Stomach"
+//                smallIntestine -> "Small Intestine"
+//                intestineLining -> "Small Intestine Lining"
+//                cytosol -> "Cytosol"
+//                mitochondrialMatrix -> "Mitochondrial Matrix"
+//                mitochondrialInnerMembrane -> "Inner Matrix Membrane"
+//                blood -> "Blood"
                 else -> organ.getName()
             }
         }
@@ -190,12 +226,19 @@ actual class BodyTransportGraph {
             GraphNode(
                 organName = organToName[node.organ] ?: node.organ.getName(),
                 edges = node.edges.map { edge ->
+                    // Get transported quantities for this edge
+                    val transportedData = getEdgeTransportData(edge)
+
                     GraphEdge(
                         destinationName = organToName[edge.destination.organ] ?: edge.destination.organ.getName(),
                         metabolites = edge.metabolitesToSend.map { metabolite ->
+                            // Include actual amount from last transport
+                            val actualAmount = transportedData[metabolite.type]?.amountMilliMoles ?: 0f
+
                             MetaboliteTransfer(
                                 type = metabolite.type,
-                                percentage = metabolite.percentageOfOutput
+                                percentage = metabolite.percentageOfOutput,
+                                actualAmount = actualAmount
                             )
                         }
                     )

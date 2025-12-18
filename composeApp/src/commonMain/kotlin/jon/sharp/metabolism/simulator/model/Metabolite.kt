@@ -11,6 +11,7 @@ enum class MetaboliteType {
     e3PG,
     PEP,
     PYRUVATE,
+    ACETYL_COA,
     GTP,
     NADH,
     FADH2,
@@ -23,8 +24,13 @@ enum class MetaboliteType {
     KETOGLUTARATE,
     BILE_SALT,
     TRIOLEIN,
+    MAG,
     GLYCEROL,
-    OLEIC_ACID
+    OLEIC_ACID,
+    MICELLE,
+    CHYLOMICRON,
+    CHYLOMICRON_REMNANT,
+    FATTY_ACYL_COA
 }
 data class Metabolite(
     val type: MetaboliteType,

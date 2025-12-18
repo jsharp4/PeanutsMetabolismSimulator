@@ -176,6 +176,18 @@ fun DrawScope.drawGraphEdge(
         lastSegmentEnd.y
     )
     drawArrowhead(lastSegmentEnd.x, lastSegmentEnd.y, angle, color)
+
+    // Draw label if there are metabolites to show
+    if (edgePath.metabolites.isNotEmpty()) {
+        val labelPosition = calculateLabelPosition(waypoints)
+        drawEdgeLabel(
+            position = labelPosition,
+            metabolites = edgePath.metabolites,
+            color = color,
+            textMeasurer = textMeasurer,
+            colorScheme = colorScheme
+        )
+    }
 }
 
 /**
@@ -214,5 +226,75 @@ fun DrawScope.drawArrowhead(
     drawPath(
         path = path,
         color = color
+    )
+}
+
+/**
+ * Draws a label showing metabolite quantities on an edge.
+ */
+fun DrawScope.drawEdgeLabel(
+    position: Offset,
+    metabolites: List<jon.sharp.metabolism.simulator.model.body.MetaboliteTransfer>,
+    color: Color,
+    textMeasurer: TextMeasurer,
+    colorScheme: ColorScheme
+) {
+    // Filter to only show metabolites with actual transport (threshold: 0.001 mmol)
+    val activeMetabolites = metabolites.filter { it.actualAmount > 0.001f }
+    if (activeMetabolites.isEmpty()) return
+
+    // Build label text
+    val labelText = if (activeMetabolites.size <= 2) {
+        // Show details for 1-2 metabolites
+        activeMetabolites.joinToString("\n") {
+            "${it.type}: ${formatWeight(it.actualAmount)}"
+        }
+    } else {
+        // Show count for 3+ metabolites to avoid clutter
+        "${activeMetabolites.size} metabolites"
+    }
+
+    val textStyle = TextStyle(
+        fontSize = 10.sp,
+        fontWeight = FontWeight.Normal,
+        color = colorScheme.onSurface
+    )
+
+    val textResult = textMeasurer.measure(labelText, textStyle)
+
+    // Background box with padding
+    val padding = 4f
+    val boxWidth = textResult.size.width + (padding * 2)
+    val boxHeight = textResult.size.height + (padding * 2)
+
+    val boxTopLeft = Offset(
+        x = position.x - (boxWidth / 2),
+        y = position.y - boxHeight - 10f  // Offset above the line
+    )
+
+    // Draw semi-transparent background (darker than edge color for contrast)
+    drawRoundRect(
+        color = color.copy(alpha = 0.85f),
+        topLeft = boxTopLeft,
+        size = Size(boxWidth, boxHeight),
+        cornerRadius = CornerRadius(4f, 4f)
+    )
+
+    // Draw border for better definition
+    drawRoundRect(
+        color = color,
+        topLeft = boxTopLeft,
+        size = Size(boxWidth, boxHeight),
+        cornerRadius = CornerRadius(4f, 4f),
+        style = Stroke(width = 1f)
+    )
+
+    // Draw text
+    drawText(
+        textLayoutResult = textResult,
+        topLeft = Offset(
+            x = boxTopLeft.x + padding,
+            y = boxTopLeft.y + padding
+        )
     )
 }

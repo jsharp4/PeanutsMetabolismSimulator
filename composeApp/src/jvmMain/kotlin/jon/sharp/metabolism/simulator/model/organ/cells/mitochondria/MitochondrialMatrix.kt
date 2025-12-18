@@ -6,6 +6,7 @@ class MitochondrialMatrix(): Organ(
     setOf(
         AlanineAminoTransferase(),
         TCACycle(),
+        FattyAcidOxidation()
     )
 ) {
 }

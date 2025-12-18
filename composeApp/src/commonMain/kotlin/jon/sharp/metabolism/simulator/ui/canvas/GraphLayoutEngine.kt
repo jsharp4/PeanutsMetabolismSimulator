@@ -254,13 +254,20 @@ class GraphLayoutEngine(
                     offset
                 )
 
+                // Extract metabolites from the source node's edges
+                val sourceNode = nodes.find { it.organName == edgeInfo.fromNode }
+                val metabolites = sourceNode?.edges
+                    ?.find { it.destinationName == edgeInfo.toNode }
+                    ?.metabolites ?: emptyList()
+
                 edgePaths.add(
                     EdgePath(
                         fromNode = edgeInfo.fromNode,
                         toNode = edgeInfo.toNode,
                         isBackEdge = edgeInfo.isBackEdge,
                         waypoints = waypoints,
-                        color = edgeInfo.color
+                        color = edgeInfo.color,
+                        metabolites = metabolites
                     )
                 )
             }
@@ -339,6 +346,39 @@ class GraphLayoutEngine(
             height = maxY + CANVAS_PADDING
         )
     }
+}
+
+/**
+ * Calculates optimal position for edge label along the path.
+ * Prefers horizontal segments for better readability.
+ */
+fun calculateLabelPosition(waypoints: List<Offset>): Offset {
+    if (waypoints.size < 2) return waypoints.firstOrNull() ?: Offset.Zero
+
+    // For simple vertical paths (2 waypoints), use midpoint
+    if (waypoints.size == 2) {
+        return Offset(
+            x = waypoints[0].x,
+            y = (waypoints[0].y + waypoints[1].y) / 2
+        )
+    }
+
+    // For orthogonal paths, find the first horizontal segment (best for readability)
+    for (i in 0 until waypoints.size - 1) {
+        val start = waypoints[i]
+        val end = waypoints[i + 1]
+
+        // Horizontal segment (y is same, x differs significantly)
+        if (kotlin.math.abs(start.y - end.y) < 1f && kotlin.math.abs(start.x - end.x) > 30f) {
+            return Offset(
+                x = (start.x + end.x) / 2,
+                y = start.y
+            )
+        }
+    }
+
+    // Fallback: use middle waypoint
+    return waypoints[waypoints.size / 2]
 }
 
 /**

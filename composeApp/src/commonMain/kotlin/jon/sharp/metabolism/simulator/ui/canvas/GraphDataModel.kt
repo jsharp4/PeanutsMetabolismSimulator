@@ -6,6 +6,7 @@ import jon.sharp.metabolism.simulator.model.Metabolite
 import jon.sharp.metabolism.simulator.model.body.Body
 import jon.sharp.metabolism.simulator.model.body.BodyTransportGraph
 import jon.sharp.metabolism.simulator.model.body.GraphEdge
+import jon.sharp.metabolism.simulator.model.body.MetaboliteTransfer
 
 /**
  * Represents a graph node with its metabolite contents merged in.
@@ -36,7 +37,8 @@ data class EdgePath(
     val toNode: String,
     val isBackEdge: Boolean,
     val waypoints: List<Offset>, // List of points for orthogonal routing (start → intermediate points → end)
-    val color: Color // Color matches the source node
+    val color: Color, // Color matches the source node
+    val metabolites: List<MetaboliteTransfer> = emptyList() // Metabolite data for labels
 )
 
 /**

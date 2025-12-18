@@ -16,7 +16,11 @@ class EtcODE: FirstOrderDifferentialEquations {
         val atpPerFADH2 = 1.5
 
         val atpMoleculesPerMinPerSynthase = 100 * 60.0
-        val atpMoleculesPerMinuteTotal = atpMoleculesPerMinPerSynthase * PhysicalConstants.Cells.TOTAL_COUNT
+        val atpMoleculesPerMinuteTotal =
+            atpMoleculesPerMinPerSynthase *
+                    PhysicalConstants.Cells.TOTAL_COUNT *
+                    PhysicalConstants.Cells.MITOCHONDRIA_PER_CELL *
+                    PhysicalConstants.Cells.ACTIVE_ATP_SYNTHASE_PER_MITOCHONDRIA
         val atpMilliMolsPerMinuteTotal = atpMoleculesPerMinuteTotal / AVOGADRO * 1000
 
         //assumption for simplicity that they can each only use a fixed amount
