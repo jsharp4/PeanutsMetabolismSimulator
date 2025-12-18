@@ -6,6 +6,6 @@ import jon.sharp.metabolism.simulator.model.MetaboliteType
 import jon.sharp.metabolism.simulator.model.PhysicalConstants
 
 class Mouth: Organ(
-    setOf(SalivaryAmylase())
+    listOf(SalivaryAmylase())
 ) {
 }

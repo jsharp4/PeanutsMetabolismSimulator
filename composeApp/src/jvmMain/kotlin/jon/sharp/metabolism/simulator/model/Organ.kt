@@ -3,11 +3,16 @@ package jon.sharp.metabolism.simulator.model
 import jon.sharp.metabolism.simulator.model.organ.IOrgan
 
 abstract class Organ(
-    val metabolizers: Set<IMetabolizer>
+    val metabolizers: List<IMetabolizer>,
+    val initialMetabolites: MetaboliteMap = MetaboliteMap()
 ): IOrgan {
     val metabolitesMap = MetaboliteMap()
 
-    override open fun getName(): String {
+    init {
+        metabolitesMap.putOrAdd(initialMetabolites)
+    }
+
+    open override fun getName(): String {
         return this.javaClass.simpleName
     }
 

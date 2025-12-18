@@ -7,7 +7,7 @@ import jon.sharp.metabolism.simulator.model.Organ
 import org.apache.commons.math3.ode.FirstOrderDifferentialEquations
 
 class Enterocytes: Organ(
-    setOf(
+    listOf(
         Golgi()
     )
 )
