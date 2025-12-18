@@ -1,6 +1,7 @@
 package jon.sharp.metabolism.simulator
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.safeContentPadding
@@ -13,6 +14,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.input.key.*
 import androidx.compose.ui.unit.dp
 import jon.sharp.metabolism.simulator.simulation.SimulationEngine
 import jon.sharp.metabolism.simulator.ui.canvas.CanvasGraphVisualization
@@ -35,6 +39,14 @@ fun App() {
         // Force recomposition by tracking update count
         var updateCount by remember { mutableStateOf(0) }
 
+        // Focus requester for keyboard handling
+        val focusRequester = remember { FocusRequester() }
+
+        // Request focus when the composable is first created
+        LaunchedEffect(Unit) {
+            focusRequester.requestFocus()
+        }
+
         // The Logic Engine
         // This block launches whenever 'isSimulating' changes.
         LaunchedEffect(isSimulating) {
@@ -54,7 +66,21 @@ fun App() {
                 .background(MaterialTheme.colorScheme.primaryContainer)
                 .safeContentPadding()
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState()),
+                .verticalScroll(rememberScrollState())
+                .focusRequester(focusRequester)
+                .focusable()
+                .onPreviewKeyEvent { keyEvent ->
+                    if (keyEvent.type == KeyEventType.KeyDown && keyEvent.key == Key.Enter) {
+                        // Trigger the same logic as the button onClick
+                        if (!isSimulating) {
+                            engine.runSimulation()
+                        }
+                        isSimulating = !isSimulating
+                        true // Consume the event
+                    } else {
+                        false // Don't consume other key events
+                    }
+                },
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Button(onClick = {
