@@ -30,7 +30,8 @@ actual class Body(
         //var currentInputs = initialInputs
         visitedEdgeMap = mutableMapOf<DirectionalOrganEdge, Int>()
         visitedNodeMap = mutableMapOf<OrganNode, Int>()
-        transportGraph.edgeTransportMap = mutableMapOf<DirectionalOrganEdge, MetaboliteMap>() // Reset transport map for new step
+        // Build transport map locally to avoid UI seeing partial state during step
+        val newEdgeTransportMap = mutableMapOf<DirectionalOrganEdge, MetaboliteMap>()
         val visitQueue = mutableListOf<Pair<OrganNode, MetaboliteMap>>()
         val first = transportGraph.getStartNode()
 
@@ -46,19 +47,24 @@ actual class Body(
                 populateQueueFromEdges(
                     currNodePair.first,
                     currNodePair.first.edges,
-                    visitQueue
+                    visitQueue,
+                    newEdgeTransportMap
                 )
 
             } else {
                 currNodePair.first.organ.metabolitesMap.putOrAdd(currNodePair.second)
             }
         }
+
+        // Atomically update the transport map so UI sees complete state
+        transportGraph.edgeTransportMap = newEdgeTransportMap
     }
 
     private fun populateQueueFromEdges(
         currentNode: OrganNode,
         edges: Set<DirectionalOrganEdge>,
-        queue: MutableList<Pair<OrganNode, MetaboliteMap>>
+        queue: MutableList<Pair<OrganNode, MetaboliteMap>>,
+        edgeTransportMap: MutableMap<DirectionalOrganEdge, MetaboliteMap>
     ) {
         val toRemoveFromCurrentNode = MetaboliteMap()
         edges.forEach { edge ->
@@ -80,8 +86,8 @@ actual class Body(
                     }.toSet()
                 )
 
-                // Store in transport graph for visualization
-                transportGraph.edgeTransportMap[edge] = transportedMetabolites
+                // Store in local transport map for visualization
+                edgeTransportMap[edge] = transportedMetabolites
 
                 queue.add(Pair(edge.destination, metabolitesToQueue))
             }
