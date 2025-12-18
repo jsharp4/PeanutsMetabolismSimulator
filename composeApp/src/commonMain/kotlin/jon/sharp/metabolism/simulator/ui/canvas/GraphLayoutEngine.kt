@@ -227,9 +227,9 @@ class GraphLayoutEngine(
             }
         }
 
-        // Group edges by routing signature (same source and destination Y positions)
+        // Group edges by destination node (edges converging to same node need parallel routing)
         val edgeGroups = allEdges.groupBy { edge ->
-            "${edge.fromPosition.y.toInt()}_${edge.toPosition.y.toInt()}_${edge.isBackEdge}"
+            edge.toNode
         }
 
         val edgePaths = mutableListOf<EdgePath>()
