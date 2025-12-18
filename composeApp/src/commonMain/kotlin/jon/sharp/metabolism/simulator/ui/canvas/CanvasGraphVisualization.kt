@@ -32,6 +32,7 @@ fun getOrganImage(organName: String): ImageBitmap? {
         "SmallIntestine" -> imageResource(Res.drawable.small_intestine)
         "SmallIntestineLining" -> imageResource(Res.drawable.small_intestine_lining)
         "Stomach" -> imageResource(Res.drawable.stomach)
+        "Pancreas" -> imageResource(Res.drawable.pancreas)
         else -> null
     }
 }
@@ -46,9 +47,9 @@ fun CanvasGraphVisualization(
     modifier: Modifier = Modifier
 ) {
     // Merge graph structure with metabolites
-    val graphData = remember(transportGraph) {
-        createGraphWithMetabolites(transportGraph, body)
-    }
+    // Note: No remember() here because parent uses key(updateCount) to control updates
+    // and we need fresh edge transport data on each render
+    val graphData = createGraphWithMetabolites(transportGraph, body)
 
     // Load organ images - must be done in composable scope
     val organImages = graphData.associate { node ->
