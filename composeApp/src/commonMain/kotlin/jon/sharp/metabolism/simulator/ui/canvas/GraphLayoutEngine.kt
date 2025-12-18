@@ -14,7 +14,7 @@ class GraphLayoutEngine(
     private val availableWidth: Float
 ) {
     companion object {
-        const val NODE_WIDTH = 240f
+        const val NODE_WIDTH = 320f // Increased to accommodate organ images (60px + padding + text)
         const val NODE_MIN_HEIGHT = 100f
         const val NODE_PADDING = 12f
         const val HORIZONTAL_NODE_SPACING = 40f // Horizontal gap between nodes in same layer

@@ -8,10 +8,33 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
 import jon.sharp.metabolism.simulator.model.body.Body
 import jon.sharp.metabolism.simulator.model.body.BodyTransportGraph
+import org.jetbrains.compose.resources.imageResource
+import peanutsmetabolismsimulator.composeapp.generated.resources.*
+
+/**
+ * Maps organ names to their corresponding image resources.
+ */
+@Composable
+fun getOrganImage(organName: String): ImageBitmap? {
+    return when (organName) {
+        "Blood" -> imageResource(Res.drawable.blood)
+        "Cytosol" -> imageResource(Res.drawable.cytosol)
+        "Enterocytes" -> imageResource(Res.drawable.enterocytes)
+        "Liver" -> imageResource(Res.drawable.liver)
+        "MitochondrialInnerMembrane" -> imageResource(Res.drawable.mitochondrial_membrane)
+        "MitochondrialMatrix" -> imageResource(Res.drawable.mitochondrion)
+        "Mouth" -> imageResource(Res.drawable.mouth)
+        "SmallIntestine" -> imageResource(Res.drawable.small_intestine)
+        "SmallIntestineLining" -> imageResource(Res.drawable.small_intestine_lining)
+        "Stomach" -> imageResource(Res.drawable.stomach)
+        else -> null
+    }
+}
 
 /**
  * Main composable for canvas-based graph visualization with integrated organ displays.
@@ -25,6 +48,11 @@ fun CanvasGraphVisualization(
     // Merge graph structure with metabolites
     val graphData = remember(transportGraph) {
         createGraphWithMetabolites(transportGraph, body)
+    }
+
+    // Load organ images - must be done in composable scope
+    val organImages = graphData.associate { node ->
+        node.organName to getOrganImage(node.organName)
     }
 
     val colorScheme = MaterialTheme.colorScheme
@@ -63,7 +91,8 @@ fun CanvasGraphVisualization(
                         position = position,
                         metabolites = node.metabolites,
                         colorScheme = colorScheme,
-                        textMeasurer = textMeasurer
+                        textMeasurer = textMeasurer,
+                        organImage = organImages[node.organName]
                     )
                 }
             }

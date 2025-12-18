@@ -5,6 +5,7 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.DrawScope
@@ -14,10 +15,13 @@ import androidx.compose.ui.text.TextMeasurer
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.sp
 import jon.sharp.metabolism.simulator.model.Metabolite
 import jon.sharp.metabolism.simulator.ui.formatWeight
 import kotlin.math.cos
+import kotlin.math.min
 import kotlin.math.sin
 
 /**
@@ -27,7 +31,8 @@ fun DrawScope.drawGraphNode(
     position: NodePosition,
     metabolites: List<Metabolite>,
     colorScheme: ColorScheme,
-    textMeasurer: TextMeasurer
+    textMeasurer: TextMeasurer,
+    organImage: ImageBitmap? = null
 ) {
     val topLeft = Offset(position.x, position.y)
     val size = Size(position.width, position.height)
@@ -49,6 +54,39 @@ fun DrawScope.drawGraphNode(
         style = Stroke(width = 3f)
     )
 
+    // Draw organ image if available
+    val imageSize = 60f
+    val imageXOffset = if (organImage != null) imageSize + GraphLayoutEngine.NODE_PADDING else 0f
+
+    if (organImage != null) {
+        // Calculate the size to maintain aspect ratio
+        val aspectRatio = organImage.width.toFloat() / organImage.height.toFloat()
+        val drawWidth: Float
+        val drawHeight: Float
+
+        if (aspectRatio > 1f) {
+            // Wider than tall
+            drawWidth = imageSize
+            drawHeight = imageSize / aspectRatio
+        } else {
+            // Taller than wide
+            drawHeight = imageSize
+            drawWidth = imageSize * aspectRatio
+        }
+
+        drawImage(
+            image = organImage,
+            dstOffset = IntOffset(
+                x = (position.x + GraphLayoutEngine.NODE_PADDING).toInt(),
+                y = (position.y + GraphLayoutEngine.NODE_PADDING).toInt()
+            ),
+            dstSize = IntSize(
+                width = drawWidth.toInt(),
+                height = drawHeight.toInt()
+            )
+        )
+    }
+
     // Draw organ name (header)
     val headerStyle = TextStyle(
         fontSize = 16.sp,
@@ -64,7 +102,7 @@ fun DrawScope.drawGraphNode(
     drawText(
         textLayoutResult = headerResult,
         topLeft = Offset(
-            x = position.x + GraphLayoutEngine.NODE_PADDING,
+            x = position.x + GraphLayoutEngine.NODE_PADDING + imageXOffset,
             y = position.y + GraphLayoutEngine.NODE_PADDING
         )
     )
@@ -94,7 +132,7 @@ fun DrawScope.drawGraphNode(
         drawText(
             textLayoutResult = typeResult,
             topLeft = Offset(
-                x = position.x + GraphLayoutEngine.NODE_PADDING,
+                x = position.x + GraphLayoutEngine.NODE_PADDING + imageXOffset,
                 y = currentY
             )
         )
@@ -133,7 +171,7 @@ fun DrawScope.drawGraphNode(
         drawText(
             textLayoutResult = emptyResult,
             topLeft = Offset(
-                x = position.x + GraphLayoutEngine.NODE_PADDING,
+                x = position.x + GraphLayoutEngine.NODE_PADDING + imageXOffset,
                 y = currentY
             )
         )
