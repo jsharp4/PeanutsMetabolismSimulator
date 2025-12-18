@@ -7,8 +7,8 @@ abstract class Organ(
 ): IOrgan {
     val metabolitesMap = MetaboliteMap()
 
-    override fun getName(): String {
-        return this.javaClass.name
+    override open fun getName(): String {
+        return this.javaClass.simpleName
     }
 
     override fun getMetabolites(): MetaboliteMap {
