@@ -245,13 +245,15 @@ fun DrawScope.drawEdgeLabel(
 
     // Build label text
     val labelText = if (activeMetabolites.size <= 2) {
-        // Show details for 1-2 metabolites
+        // Show details for 1-2 metabolites with amounts
         activeMetabolites.joinToString("\n") {
             "${it.type}: ${formatWeight(it.actualAmount)}"
         }
     } else {
-        // Show count for 3+ metabolites to avoid clutter
-        "${activeMetabolites.size} metabolites"
+        // Show only names for 3+ metabolites to avoid clutter
+        activeMetabolites.joinToString("\n") {
+            it.type.toString()
+        }
     }
 
     val textStyle = TextStyle(
