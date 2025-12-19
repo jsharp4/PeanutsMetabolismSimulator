@@ -11,7 +11,6 @@ class Blood: Organ(
     metabolizers = listOf(
         LipoproteinLipase(),
         //InsulinBreakdown()
-        GlucoseUptakeRegulator()
     ),
     MetaboliteMap(
         Metabolite(

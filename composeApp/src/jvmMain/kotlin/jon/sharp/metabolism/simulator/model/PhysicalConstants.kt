@@ -64,7 +64,7 @@ object PhysicalConstants {
     object Insulin {
 
         fun mmolToInternationalUnitConc(mmol: Double): Double {
-            val picoMols = mmol * 10e9
+            val picoMols = mmol * 1e9
             val picoMolPerL = picoMols / Blood.TOTAL_LITERS
             val interationalUnits = picoMolPerL / 6.0
             return interationalUnits
@@ -73,7 +73,7 @@ object PhysicalConstants {
         fun internationalUnitConcToMmol(iUnits: Double): Double {
             val picoMolPerL = iUnits * 6.00
             val picoMol = picoMolPerL * Blood.TOTAL_LITERS
-            val mMol = picoMol * 10e-9
+            val mMol = picoMol * 1e-9
             return mMol
         }
     }

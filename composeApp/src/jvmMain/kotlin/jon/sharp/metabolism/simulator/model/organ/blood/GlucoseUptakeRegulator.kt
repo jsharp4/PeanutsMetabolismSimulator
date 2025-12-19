@@ -39,11 +39,13 @@ class GlucoseUptakeODE: FirstOrderDifferentialEquations {
         val gamma_dimensionless = 1.62
 
         // Glucose distribution volume
-        val v_liters = 12.7
 
-        val glucoseMmolPerLiter = y!![1] / PhysicalConstants.Blood.TOTAL_LITERS
+        val distributionVolume = 12.7
+        val subjectBsaMetersSquared = 1.73
 
-        val insulinPmolPerLiter = y[0] * 10e9 / PhysicalConstants.Blood.TOTAL_LITERS
+        val glucoseMmolPerLiter = y!![1] / distributionVolume
+
+        val insulinPmolPerLiter = y[0] * 1e9 / distributionVolume
 
         val vMaxUpdate = vMax0_mmol_min_m2 +
                 (eMax_mmol_min_m2 * insulinPmolPerLiter.pow(gamma_dimensionless)) /
@@ -54,7 +56,7 @@ class GlucoseUptakeODE: FirstOrderDifferentialEquations {
 
         yDot!![0] = 0.0
         //kinetics model is for uptake in tissues. We take the negative rate to track loss from blood
-        yDot[1] = -dGlucoseConcDt * PhysicalConstants.Blood.TOTAL_LITERS
+        yDot[1] = -dGlucoseConcDt * subjectBsaMetersSquared
     }
 
 }

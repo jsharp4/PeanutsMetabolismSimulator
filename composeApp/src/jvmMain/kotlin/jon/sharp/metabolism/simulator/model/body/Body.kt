@@ -96,7 +96,9 @@ actual class Body(
 
                         val transportedMetabolite = Metabolite(metabolite.type, actualAmount)
 
-                        toRemoveFromCurrentNode.putOrAdd(transportedMetabolite)
+                        if (edge.type == EdgeType.TRANSFER) {
+                            toRemoveFromCurrentNode.putOrAdd(transportedMetabolite)
+                        }
                         transportedMetabolites.putOrAdd(transportedMetabolite) // Capture for visualization
 
                         transportedMetabolite

@@ -7,6 +7,7 @@ import jon.sharp.metabolism.simulator.model.ODESolver
 import jon.sharp.metabolism.simulator.model.Organ
 import jon.sharp.metabolism.simulator.model.organ.IOrgan
 import jon.sharp.metabolism.simulator.model.organ.blood.Blood
+import jon.sharp.metabolism.simulator.model.organ.blood.GlucoseUptakeRegulator
 import jon.sharp.metabolism.simulator.model.organ.cells.Cytosol
 import jon.sharp.metabolism.simulator.model.organ.cells.mitochondria.MitochondrialInnerMembrane
 import jon.sharp.metabolism.simulator.model.organ.cells.mitochondria.MitochondrialMatrix
@@ -25,17 +26,24 @@ data class QuantifiedMetabolite(
     val percentageOfOutput: Float
 )
 
+enum class EdgeType {
+    TRANSFER,
+    READ_ONLY
+}
+
 class DirectionalOrganEdge(
     val destination: OrganNode,
     val metabolitesToSend: Set<QuantifiedMetabolite>,
-    val rateLimiter: List<Metabolizer> = listOf()
+    val rateLimiter: List<Metabolizer> = listOf(),
+    val type: EdgeType
 ) {
     // Varargs constructor for convenience
     constructor(
         destination: OrganNode,
         vararg metabolitesToSend: QuantifiedMetabolite,
-        rateLimiter: List<Metabolizer> = listOf()
-    ) : this(destination, metabolitesToSend.toSet(), rateLimiter)
+        rateLimiter: List<Metabolizer> = listOf(),
+        type: EdgeType = EdgeType.TRANSFER
+    ) : this(destination, metabolitesToSend.toSet(), rateLimiter, type)
 
     // Use object identity to avoid infinite recursion in circular graphs
     override fun hashCode(): Int = System.identityHashCode(this)
@@ -210,7 +218,8 @@ actual class BodyTransportGraph {
                 cytosolNode,
                 QuantifiedMetabolite(MetaboliteType.GLUCOSE, 100f),
                 QuantifiedMetabolite(MetaboliteType.GLUTAMIC_ACID, 100f),
-                QuantifiedMetabolite(MetaboliteType.OLEIC_ACID, 100f)
+                QuantifiedMetabolite(MetaboliteType.OLEIC_ACID, 100f),
+                rateLimiter = listOf(GlucoseUptakeRegulator())
             ),
             DirectionalOrganEdge(
                 liverNode,
@@ -221,7 +230,9 @@ actual class BodyTransportGraph {
                 pancreasNode,
                 QuantifiedMetabolite(MetaboliteType.GLUCOSE, 100f),
                 QuantifiedMetabolite(MetaboliteType.GLUTAMIC_ACID, 100f),
-                QuantifiedMetabolite(MetaboliteType.INSULIN, 100f)
+                QuantifiedMetabolite(MetaboliteType.INSULIN, 100f),
+                rateLimiter = listOf(),
+                type = EdgeType.READ_ONLY,
             )
         )
     }

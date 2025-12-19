@@ -4,7 +4,8 @@ import jon.sharp.metabolism.simulator.model.organ.IOrgan
 
 abstract class Organ(
     val metabolizers: List<IMetabolizer>,
-    val initialMetabolites: MetaboliteMap = MetaboliteMap()
+    val initialMetabolites: MetaboliteMap = MetaboliteMap(),
+    val readOnlyMetabolites: Set<MetaboliteType> = setOf()
 ): IOrgan {
     val metabolitesMap = MetaboliteMap()
 
@@ -25,6 +26,14 @@ abstract class Organ(
         metabolizers.forEach { metabolizer ->
             val updatedSubstrates = metabolizer.processSubstrates(metabolitesMap, t0)
             metabolitesMap.updateQuantities(updatedSubstrates)
+        }
+        readOnlyMetabolites.forEach { type ->
+            if (metabolitesMap.contains(type)) metabolitesMap.updateQuantities(
+                Metabolite(
+                    type,
+                    0.0f
+                )
+            )
         }
     }
     private fun addMetabolitesToPool(inputs: MetaboliteMap) {
