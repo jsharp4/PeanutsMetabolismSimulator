@@ -1,7 +1,6 @@
 package jon.sharp.metabolism.simulator.model.organ.intestine
 
 import jon.sharp.metabolism.simulator.model.Metabolizer
-import jon.sharp.metabolism.simulator.model.ODESolver
 import jon.sharp.metabolism.simulator.model.MetaboliteType
 import jon.sharp.metabolism.simulator.model.PhysicalConstants
 import org.apache.commons.math3.ode.FirstOrderDifferentialEquations
@@ -21,14 +20,18 @@ class TrypsinODE: FirstOrderDifferentialEquations {
 
     override fun computeDerivatives(t: Double, y: DoubleArray?, yDot: DoubleArray?) {
         //polypeptide chain, small peptide chain
-        yDot!![0] = -y!![0] * 0.2
+
+        val linearReactionRateMmolPerMin = 1.1e-2
+
+        yDot!![0] = -linearReactionRateMmolPerMin
         val yDot1Grams = PhysicalConstants.millimolesToGrams(
-            y[0] * 0.2,
-            PhysicalConstants.MolarMass.ARARCHIN_POLYPEPTIDE
+            -yDot[0],
+            PhysicalConstants.MolarMass.ARACHIN_POLYPEPTIDE
         )
-        yDot[1] = PhysicalConstants.gramsToMillimoles(
+        val yDot1Millimoles = PhysicalConstants.gramsToMillimoles(
             yDot1Grams,
             PhysicalConstants.MolarMass.SMALL_PEPTIDE_CHAIN
         )
+        yDot[1] = yDot1Millimoles
     }
 }

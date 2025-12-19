@@ -16,6 +16,16 @@ class Blood: Organ(
         Metabolite(
             MetaboliteType.GLUCOSE,
             (5.0 * PhysicalConstants.Blood.TOTAL_LITERS).toFloat()
+        ),
+        Metabolite(
+            MetaboliteType.INSULIN,
+            PhysicalConstants.Insulin.internationalUnitConcToMmol(
+                PhysicalConstants.Blood.FastingValues.basalInsulin
+            ).toFloat()
+        ),
+        Metabolite(
+            MetaboliteType.GLUTAMIC_ACID,
+            (PhysicalConstants.Blood.FastingValues.basalBCAA * PhysicalConstants.Blood.TOTAL_LITERS).toFloat()
         )
     )
 )

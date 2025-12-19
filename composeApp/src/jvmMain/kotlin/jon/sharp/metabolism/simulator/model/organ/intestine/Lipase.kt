@@ -4,11 +4,13 @@ import jon.sharp.metabolism.simulator.model.MetaboliteType
 import jon.sharp.metabolism.simulator.model.Metabolizer
 import jon.sharp.metabolism.simulator.model.ODESolver
 import org.apache.commons.math3.ode.FirstOrderDifferentialEquations
+import kotlin.math.exp
 
 class Lipase: Metabolizer(
     ode = LipaseODE(),
     metaboliteTypes = listOf(
         MetaboliteType.TRIOLEIN,
+        MetaboliteType.DAG,
         MetaboliteType.MAG,
         MetaboliteType.OLEIC_ACID
     )
@@ -16,14 +18,27 @@ class Lipase: Metabolizer(
 }
 
 class LipaseODE: FirstOrderDifferentialEquations {
-    override fun getDimension() = 3
+    override fun getDimension() = 4
 
     override fun computeDerivatives(t: Double, y: DoubleArray?, yDot: DoubleArray?) {
-        // triolein, MAG, oleic acid
-        yDot!![0] = -0.1 * y!![0]
+        // triolein, DAG, MAG, oleic acid
+        val rateConstantTrio = 0.0276
+        val rateConstantDio = 0.2430
 
-        yDot[1] = yDot[0] * -0.1
+        val dTrioleinDt = -rateConstantTrio * y!![0] * exp(-rateConstantTrio * t)
 
-        yDot[2] = 2 * yDot[1]
+        val dDioDt = y[0] * rateConstantTrio / (rateConstantTrio - rateConstantDio) *
+                (-rateConstantTrio * exp(-rateConstantTrio * t) -
+                        -rateConstantDio * exp(-rateConstantDio * t))
+
+        val dMonoDt = y[0] / (rateConstantDio - rateConstantTrio) *
+                ((rateConstantTrio * rateConstantDio) * (-exp(-rateConstantTrio * t) + exp(-rateConstantDio * t)))
+
+        val dOleicDt = dTrioleinDt + dDioDt
+
+        yDot!![0] = dTrioleinDt
+        yDot[1] = dDioDt
+        yDot[2] = dMonoDt
+        yDot[3] = dOleicDt
     }
 }

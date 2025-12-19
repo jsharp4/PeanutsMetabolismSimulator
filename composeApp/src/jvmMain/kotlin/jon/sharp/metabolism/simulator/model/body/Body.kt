@@ -4,6 +4,7 @@ import jon.sharp.metabolism.simulator.model.Metabolite
 import jon.sharp.metabolism.simulator.model.MetaboliteMap
 import jon.sharp.metabolism.simulator.model.MetaboliteType
 import jon.sharp.metabolism.simulator.model.Organ
+import jon.sharp.metabolism.simulator.model.UpdateType
 import jon.sharp.metabolism.simulator.model.organ.IOrgan
 import java.util.Queue
 import kotlin.collections.set
@@ -53,7 +54,14 @@ actual class Body(
                 )
 
             } else {
-                currNodePair.first.organ.metabolitesMap.putOrAdd(currNodePair.second)
+                currNodePair.second.getAll().forEach {
+                    it ->
+                    if (it.updateType == UpdateType.OVERWRITE) {
+                        currNodePair.first.organ.metabolitesMap.updateQuantities(it)
+                    }
+                    else currNodePair.first.organ.metabolitesMap.putOrAdd(it)
+                }
+                //currNodePair.first.organ.metabolitesMap.putOrAdd(currNodePair.second)
             }
         }
 
@@ -94,7 +102,17 @@ actual class Body(
                                     rateLimitedOutputMetabolites,
                                     metabolite.type)
 
-                        val transportedMetabolite = Metabolite(metabolite.type, actualAmount)
+                        var metaboliteUpdateType = UpdateType.ACCUMULATE
+
+                        if (edge.type == EdgeType.OVERWRITE) {
+                            metaboliteUpdateType = UpdateType.OVERWRITE
+                        }
+
+                        val transportedMetabolite = Metabolite(
+                            metabolite.type,
+                            actualAmount,
+                            updateType = metaboliteUpdateType
+                        )
 
                         if (edge.type == EdgeType.TRANSFER) {
                             toRemoveFromCurrentNode.putOrAdd(transportedMetabolite)

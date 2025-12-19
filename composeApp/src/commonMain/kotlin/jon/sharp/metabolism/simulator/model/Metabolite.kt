@@ -24,6 +24,7 @@ enum class MetaboliteType {
     KETOGLUTARATE,
     BILE_SALT,
     TRIOLEIN,
+    DAG,
     MAG,
     GLYCEROL,
     OLEIC_ACID,
@@ -33,7 +34,14 @@ enum class MetaboliteType {
     FATTY_ACYL_COA,
     INSULIN
 }
+
+enum class UpdateType {
+    ACCUMULATE,
+    OVERWRITE
+}
+
 data class Metabolite(
     val type: MetaboliteType,
     var amountMilliMoles: Float,
+    val updateType: UpdateType = UpdateType.ACCUMULATE
 )

@@ -28,7 +28,8 @@ data class QuantifiedMetabolite(
 
 enum class EdgeType {
     TRANSFER,
-    READ_ONLY
+    READ_ONLY,
+    OVERWRITE
 }
 
 class DirectionalOrganEdge(
@@ -207,9 +208,8 @@ actual class BodyTransportGraph {
             pancreas,
             DirectionalOrganEdge(
                 bloodNode,
-                QuantifiedMetabolite(MetaboliteType.GLUCOSE, 100f),
-                QuantifiedMetabolite(MetaboliteType.GLUTAMIC_ACID, 100f),
-                QuantifiedMetabolite(MetaboliteType.INSULIN, 90f)
+                QuantifiedMetabolite(MetaboliteType.INSULIN, 90f),
+                type = EdgeType.OVERWRITE
             )
         )
 

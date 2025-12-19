@@ -37,6 +37,12 @@ abstract class Organ(
         }
     }
     private fun addMetabolitesToPool(inputs: MetaboliteMap) {
-        metabolitesMap.putOrAdd(inputs)
+        inputs.getAll().forEach {
+            it ->
+            if (it.updateType == UpdateType.OVERWRITE) {
+                metabolitesMap.updateQuantities(it)
+            }
+            else metabolitesMap.putOrAdd(it)
+        }
     }
 }

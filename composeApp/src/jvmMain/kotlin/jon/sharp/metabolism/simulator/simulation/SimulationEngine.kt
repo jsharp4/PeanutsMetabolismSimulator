@@ -51,10 +51,10 @@ actual class SimulationEngine {
                 ),
                 iterations++
             )
-            delay(1000L)
+            delay(100L)
             // Continue simulation
             while (true) {
-                delay(1000L)
+                delay(100L)
                 body.metabolizeTimeStep(MetaboliteMap(
                     Metabolite(
                         MetaboliteType.STARCH,
@@ -63,7 +63,9 @@ actual class SimulationEngine {
                      ),
                     iterations++
                 )
-
+                if (iterations > 20) {
+                    println("WHOO")
+                }
             }
         }
     }
