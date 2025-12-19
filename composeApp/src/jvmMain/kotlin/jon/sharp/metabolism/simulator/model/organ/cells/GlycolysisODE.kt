@@ -41,14 +41,13 @@ class GlycolysisODESolver(ode: FirstOrderDifferentialEquations) : jon.sharp.meta
      * Steps forward one minute given the current metabolite masses.
      *
      * State vector (all values in mmol):
-     * [0] = GLCx (Extracellular/Blood Glucose)
-     * [1] = GLC (Intracellular Glucose)
-     * [2] = G6P (Glucose-6-Phosphate)
-     * [3] = F6P (Fructose-6-Phosphate)
-     * [4] = F16BP (Fructose-1,6-Bisphosphate)
-     * [5] = 3PG (3-Phosphoglycerate)
-     * [6] = PEP (Phosphoenolpyruvate)
-     * [7] = Pyruvate
+     * [0] = GLC (Intracellular Glucose)
+     * [1] = G6P (Glucose-6-Phosphate)
+     * [2] = F6P (Fructose-6-Phosphate)
+     * [3] = F16BP (Fructose-1,6-Bisphosphate)
+     * [4] = 3PG (3-Phosphoglycerate)
+     * [5] = PEP (Phosphoenolpyruvate)
+     * [6] = Pyruvate
      *
      * @param state The current state vector with masses in mmol
      * @param startTime The starting time (default 0.0)
@@ -72,14 +71,13 @@ class GlycolysisODESolver(ode: FirstOrderDifferentialEquations) : jon.sharp.meta
      */
     private fun massesToConcentrations(masses: DoubleArray): DoubleArray {
         return doubleArrayOf(
-            masses[0] / PhysicalConstants.Blood.TOTAL_LITERS,  // Blood glucose
-            masses[1] / totalCellularVolume,                   // Intracellular glucose
-            masses[2] / totalCellularVolume,                   // G6P
-            masses[3] / totalCellularVolume,                   // F6P
-            masses[4] / totalCellularVolume,                   // F16BP
-            masses[5] / totalCellularVolume,                   // 3PG
-            masses[6] / totalCellularVolume,                   // PEP
-            masses[7] / totalCellularVolume                    // Pyruvate
+            masses[0] / totalCellularVolume,                   // Intracellular glucose
+            masses[1] / totalCellularVolume,                   // G6P
+            masses[2] / totalCellularVolume,                   // F6P
+            masses[3] / totalCellularVolume,                   // F16BP
+            masses[4] / totalCellularVolume,                   // 3PG
+            masses[5] / totalCellularVolume,                   // PEP
+            masses[6] / totalCellularVolume                    // Pyruvate
         )
     }
 
@@ -90,28 +88,27 @@ class GlycolysisODESolver(ode: FirstOrderDifferentialEquations) : jon.sharp.meta
      */
     private fun concentrationsToMasses(concentrations: DoubleArray): DoubleArray {
         return doubleArrayOf(
-            concentrations[0] * PhysicalConstants.Blood.TOTAL_LITERS,  // Blood glucose
-            concentrations[1] * totalCellularVolume,                   // Intracellular glucose
-            concentrations[2] * totalCellularVolume,                   // G6P
-            concentrations[3] * totalCellularVolume,                   // F6P
-            concentrations[4] * totalCellularVolume,                   // F16BP
-            concentrations[5] * totalCellularVolume,                   // 3PG
-            concentrations[6] * totalCellularVolume,                   // PEP
-            concentrations[7] * totalCellularVolume                    // Pyruvate
+            concentrations[0] * totalCellularVolume,                   // Intracellular glucose
+            concentrations[1] * totalCellularVolume,                   // G6P
+            concentrations[2] * totalCellularVolume,                   // F6P
+            concentrations[3] * totalCellularVolume,                   // F16BP
+            concentrations[4] * totalCellularVolume,                   // 3PG
+            concentrations[5] * totalCellularVolume,                   // PEP
+            concentrations[6] * totalCellularVolume                    // Pyruvate
         )
     }
 }
 
 class GlycolysisODE: FirstOrderDifferentialEquations {
 
-    override fun getDimension(): Int = 8
+    override fun getDimension(): Int = 7
 
     override fun computeDerivatives(t: Double, y: DoubleArray?, yDot: DoubleArray?) {
 
         val yClamped = y!!.map { it -> max(it, 0.0) }.toDoubleArray()
 
         // keep F16BP above zero to prevent complete loss of feed-forward regulation
-        yClamped[4] = max(yClamped[4], 0.0001)
+        yClamped[3] = max(yClamped[3], 0.0001)
 
 
         // --- Simulation Constants (from Table 1) ---
@@ -161,33 +158,33 @@ class GlycolysisODE: FirstOrderDifferentialEquations {
         val vGlut = kMaxGlut * yClamped[0] / (MICHAELIS_CONSTANT_GLUCOSE_TRANSPORTER + yClamped[0])
 
         // Hexokinase (HK)
-        val vHk = kMaxHk * yClamped[1] / (MICHAELIS_CONSTANT_HEXOKINASE + yClamped[1])
+        val vHk = kMaxHk * yClamped[0] / (MICHAELIS_CONSTANT_HEXOKINASE + yClamped[0])
 
         // GPI
-        val gpiNumerator = yClamped[2] - (yClamped[3] / EQUILIBRIUM_CONSTANT_GLUCOSE_6_PHOSPHATE_ISOMERASE)
-        val gpiDenominator = MICHAELIS_CONSTANT_GLUCOSE_6_PHOSPHATE_ISOMERASE + yClamped[2] + (yClamped[3] / EQUILIBRIUM_CONSTANT_GLUCOSE_6_PHOSPHATE_ISOMERASE)
+        val gpiNumerator = yClamped[1] - (yClamped[2] / EQUILIBRIUM_CONSTANT_GLUCOSE_6_PHOSPHATE_ISOMERASE)
+        val gpiDenominator = MICHAELIS_CONSTANT_GLUCOSE_6_PHOSPHATE_ISOMERASE + yClamped[1] + (yClamped[2] / EQUILIBRIUM_CONSTANT_GLUCOSE_6_PHOSPHATE_ISOMERASE)
         val vGpi = kMaxGpi * gpiNumerator / gpiDenominator
 
         // G6PDH
-        val vG6pdh = kMaxG6pdh * yClamped[2] / (MICHAELIS_CONSTANT_GLUCOSE_6_PHOSPHATE_DEHYDROGENASE + yClamped[2])
+        val vG6pdh = kMaxG6pdh * yClamped[1] / (MICHAELIS_CONSTANT_GLUCOSE_6_PHOSPHATE_DEHYDROGENASE + yClamped[1])
 
         // UT
-        val vUt = kMaxUt * yClamped[2] / (MICHAELIS_CONSTANT_URIDYLYLTRANSFERASE + yClamped[2])
+        val vUt = kMaxUt * yClamped[1] / (MICHAELIS_CONSTANT_URIDYLYLTRANSFERASE + yClamped[1])
 
         // PFK
-        val f6pPow4 = Math.pow(yClamped[3], 4.0)
+        val f6pPow4 = Math.pow(yClamped[2], 4.0)
         val kmPfkPow4 = Math.pow(MICHAELIS_CONSTANT_PHOSPHOFRUCTOKINASE, 4.0)
         val vPfk = kMaxPfk * f6pPow4 / (kmPfkPow4 + f6pPow4)
 
         // ALD
-        val vAld = kMaxAld * yClamped[4] / (MICHAELIS_CONSTANT_ALDOLASE + yClamped[4])
+        val vAld = kMaxAld * yClamped[3] / (MICHAELIS_CONSTANT_ALDOLASE + yClamped[3])
 
         // TATK
-        val vTatkF6p = 0    //kTatkF6p * (1.0 - (yClamped[3] / EQUILIBRIUM_CONSTANT_TRANSALDOLASE_TRANSKETOLASE_F6P))
-        val vTatk3pg = 0    //kTatk3pg * (1.0 - (yClamped[5] / EQUILIBRIUM_CONSTANT_TRANSALDOLASE_TRANSKETOLASE_3PG))
+        val vTatkF6p = 0    //kTatkF6p * (1.0 - (yClamped[2] / EQUILIBRIUM_CONSTANT_TRANSALDOLASE_TRANSKETOLASE_F6P))
+        val vTatk3pg = 0    //kTatk3pg * (1.0 - (yClamped[4] / EQUILIBRIUM_CONSTANT_TRANSALDOLASE_TRANSKETOLASE_3PG))
 
         // ENO
-        val vEno = kEno * (yClamped[5] - (yClamped[6] / EQUILIBRIUM_CONSTANT_ENOLASE))
+        val vEno = kEno * (yClamped[4] - (yClamped[5] / EQUILIBRIUM_CONSTANT_ENOLASE))
 
         // PK - OLD FORMULA (INHIBITION BUG):
         // val pkDenominator = MICHAELIS_CONSTANT_PYRUVATE_KINASE + yClamped[6] + (ACTIVATION_CONSTANT_PYRUVATE_KINASE / yClamped[4])
@@ -196,43 +193,39 @@ class GlycolysisODE: FirstOrderDifferentialEquations {
         // PK - FIXED: Allosteric activation by F16BP
         // F16BP activates pyruvate kinase by reducing the effective Km
         // Using Ka units (mmol²/L²), the activation term uses [F16BP]²
-        val f16bpSquared = yClamped[4] * yClamped[4]
+        val f16bpSquared = yClamped[3] * yClamped[3]
         val activationFactor = 1.0 + (f16bpSquared / ACTIVATION_CONSTANT_PYRUVATE_KINASE)
         val effectiveKm = MICHAELIS_CONSTANT_PYRUVATE_KINASE / activationFactor
-        val vPk = kMaxPk * yClamped[6] / (effectiveKm + yClamped[6])
+        val vPk = kMaxPk * yClamped[5] / (effectiveKm + yClamped[5])
 
         // Diagnostic logging for PEP issue
         if (t == 0.0 || (t % 1.0 < 0.01)) {
-            println("t=$t: 3PG=${yClamped[5]}, PEP=${yClamped[6]}, F16BP=${yClamped[4]}")
+            println("t=$t: 3PG=${yClamped[4]}, PEP=${yClamped[5]}, F16BP=${yClamped[3]}")
             println("  vEno=$vEno, vPk=$vPk, d[PEP]/dt=${vEno - vPk}")
             println("  activationFactor=$activationFactor, effectiveKm=$effectiveKm (base Km=${MICHAELIS_CONSTANT_PYRUVATE_KINASE})")
         }
 
         // --- 4. Differential Equations (d/dt) ---
 
-        // d[GLCx]/dt : Extracellular Glucose
-        // Depends on biomass (Total Cells) and Medium Volume
-        yDot!![0] = -vGlut * volRatio
-
         // d[GLC]/dt : Intracellular Glucose
-        yDot[1] = vGlut - vHk
+        yDot!![0] = vGlut - vHk
 
         // d[G6P]/dt
-        yDot[2] = vHk - vGpi - vG6pdh - vUt
+        yDot[1] = vHk - vGpi - vG6pdh - vUt
 
         // d[F6P]/dt
-        yDot[3] = vGpi - vPfk + vTatkF6p
+        yDot[2] = vGpi - vPfk + vTatkF6p
 
         // d[F16BP]/dt
-        yDot[4] = vPfk - vAld
+        yDot[3] = vPfk - vAld
 
         // d[3PG]/dt
         // Note: ALD produces 2 molecules of triose phosphates
-        yDot[5] = (2.0 * vAld) + vTatk3pg - vEno
+        yDot[4] = (2.0 * vAld) + vTatk3pg - vEno
 
         // d[PEP]/dt
-        yDot[6] = vEno - vPk
+        yDot[5] = vEno - vPk
 
-        yDot[7] = vPk
+        yDot[6] = vPk
     }
 }
