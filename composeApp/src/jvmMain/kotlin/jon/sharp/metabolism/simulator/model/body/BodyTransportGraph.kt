@@ -116,10 +116,10 @@ actual class BodyTransportGraph {
                 QuantifiedMetabolite(MetaboliteType.GLUTAMIC_ACID, 90.0f),
                 QuantifiedMetabolite(MetaboliteType.FATTY_ACYL_COA, 90f)
             ),
-            DirectionalOrganEdge(
-                bloodNode,
-                QuantifiedMetabolite(MetaboliteType.GLUCOSE, 100.0f)
-            )
+//            DirectionalOrganEdge(
+//                bloodNode,
+//                QuantifiedMetabolite(MetaboliteType.GLUCOSE, 100.0f)
+//            )
         )
 
         val enterocytesNode = OrganNode(
@@ -199,7 +199,9 @@ actual class BodyTransportGraph {
             pancreas,
             DirectionalOrganEdge(
                 bloodNode,
-                QuantifiedMetabolite(MetaboliteType.INSULIN, 50f)
+                QuantifiedMetabolite(MetaboliteType.GLUCOSE, 100f),
+                QuantifiedMetabolite(MetaboliteType.GLUTAMIC_ACID, 100f),
+                QuantifiedMetabolite(MetaboliteType.INSULIN, 90f)
             )
         )
 
@@ -215,7 +217,12 @@ actual class BodyTransportGraph {
                 QuantifiedMetabolite(MetaboliteType.CHYLOMICRON_REMNANT, 90f),
                 QuantifiedMetabolite(MetaboliteType.GLYCEROL, 90f)
             ),
-            DirectionalOrganEdge(pancreasNode)
+            DirectionalOrganEdge(
+                pancreasNode,
+                QuantifiedMetabolite(MetaboliteType.GLUCOSE, 100f),
+                QuantifiedMetabolite(MetaboliteType.GLUTAMIC_ACID, 100f),
+                QuantifiedMetabolite(MetaboliteType.INSULIN, 100f)
+            )
         )
     }
 

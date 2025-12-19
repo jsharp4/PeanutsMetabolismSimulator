@@ -10,7 +10,8 @@ import jon.sharp.metabolism.simulator.model.PhysicalConstants
 class Blood: Organ(
     metabolizers = listOf(
         LipoproteinLipase(),
-        InsulinBreakdown()
+        //InsulinBreakdown()
+        GlucoseUptakeRegulator()
     ),
     MetaboliteMap(
         Metabolite(

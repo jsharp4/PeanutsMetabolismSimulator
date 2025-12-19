@@ -23,6 +23,19 @@ object PhysicalConstants {
         return (millimoles / 1000) * molarMass
     }
 
+    fun milliMolesToMgDlPlasma(millimoles: Double, molarMass: Double): Double {
+        val grams = millimolesToGrams(millimoles, molarMass)
+        val milliGrams = grams * 1000
+        val mgDl = milliGrams / (Blood.TOTAL_LITERS * 10)
+        return mgDl
+    }
+
+    fun MgDlPlasmaMillimoles(mgDl: Double, molarMass: Double): Double {
+        val milligrams = mgDl * (Blood.TOTAL_LITERS * 10)
+        val grams = milligrams / 1000
+        return gramsToMillimoles(grams, molarMass)
+    }
+
     /**
      * Consolidated molar mass values for all molecules (in g/mol)
      */
@@ -36,6 +49,7 @@ object PhysicalConstants {
         val MALTOSE = 342.30
         val GLUCOSE = 180.16
         val OLEIC_ACID = 282.5
+        val TRIOLEIN = 885.4
     }
 
     object Maltose {
@@ -47,7 +61,26 @@ object PhysicalConstants {
         }
     }
 
+    object Insulin {
+
+        fun mmolToInternationalUnitConc(mmol: Double): Double {
+            val picoMols = mmol * 10e9
+            val picoMolPerL = picoMols / Blood.TOTAL_LITERS
+            val interationalUnits = picoMolPerL / 6.0
+            return interationalUnits
+        }
+
+        fun internationalUnitConcToMmol(iUnits: Double): Double {
+            val picoMolPerL = iUnits * 6.00
+            val picoMol = picoMolPerL * Blood.TOTAL_LITERS
+            val mMol = picoMol * 10e-9
+            return mMol
+        }
+    }
+
     object Glucose {
+
+        val FASTING_LEVEL_MMOL = 25.0
         object Glycolysis {
             // --- Activation Constants (k_a) ---
             val ACTIVATION_CONSTANT_PYRUVATE_KINASE = 6.56e-1 // Unit: mmol^2 / L^2

@@ -12,7 +12,7 @@ open class PancreaticAmylase: IMetabolizer {
 
     val reactionRateConstantMinutes = 0.03f
 
-    override fun processSubstrates(inputs: MetaboliteMap): MetaboliteMap {
+    override fun processSubstrates(inputs: MetaboliteMap, t0: Double): MetaboliteMap {
         val updatedMap = inputs.copy()
         processStarch(updatedMap)
         return updatedMap

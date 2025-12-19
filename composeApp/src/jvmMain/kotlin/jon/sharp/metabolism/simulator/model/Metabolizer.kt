@@ -39,11 +39,11 @@ abstract class Metabolizer(
         return ODESolver(ode)
     }
 
-    override fun processSubstrates(inputs: MetaboliteMap): MetaboliteMap {
+    override fun processSubstrates(inputs: MetaboliteMap, t0: Double): MetaboliteMap {
         val newSubstrates = inputs.copy()
 
         val initialState = extractState(newSubstrates)
-        val finalState = odeSolver.stepForwardOneMinute(initialState)
+        val finalState = odeSolver.stepForwardOneMinute(initialState, t0)
         updateSubstrates(newSubstrates, finalState)
 
         return newSubstrates

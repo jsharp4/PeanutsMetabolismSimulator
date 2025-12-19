@@ -6,7 +6,7 @@ import jon.sharp.metabolism.simulator.model.organ.IOrgan
 expect class Body {
 
     val organNameMap: Map<String, IOrgan>
-    suspend fun metabolizeTimeStep(initialInputs: MetaboliteMap)
+    suspend fun metabolizeTimeStep(initialInputs: MetaboliteMap, t0: Double)
 
 //    fun getOrganMetabolites(organName: String): MetaboliteMap
 //

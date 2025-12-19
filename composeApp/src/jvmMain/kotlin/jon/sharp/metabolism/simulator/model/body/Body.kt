@@ -26,7 +26,7 @@ actual class Body(
      * Executes a metabolism time step by passing outputs through the organ pipeline.
      * Each organ processes metabolites and passes its outputs to the next organ in sequence.
      */
-    actual suspend fun metabolizeTimeStep(initialInputs: MetaboliteMap) {
+    actual suspend fun metabolizeTimeStep(initialInputs: MetaboliteMap, t0: Double) {
         //var currentInputs = initialInputs
         visitedEdgeMap = mutableMapOf<DirectionalOrganEdge, Int>()
         visitedNodeMap = mutableMapOf<OrganNode, Int>()
@@ -42,13 +42,14 @@ actual class Body(
 
             if (!checkIfNodePreviouslyVisitedOrMarkAsVisited(currNodePair.first)) {
 
-                currNodePair.first.organ.metabolizeTimeStep(currNodePair.second)
+                currNodePair.first.organ.metabolizeTimeStep(currNodePair.second, t0)
 
                 populateQueueFromEdges(
                     currNodePair.first,
                     currNodePair.first.edges,
                     visitQueue,
-                    newEdgeTransportMap
+                    newEdgeTransportMap,
+                    t0
                 )
 
             } else {
@@ -64,7 +65,8 @@ actual class Body(
         currentNode: OrganNode,
         edges: Set<DirectionalOrganEdge>,
         queue: MutableList<Pair<OrganNode, MetaboliteMap>>,
-        edgeTransportMap: MutableMap<DirectionalOrganEdge, MetaboliteMap>
+        edgeTransportMap: MutableMap<DirectionalOrganEdge, MetaboliteMap>,
+        t0: Double
     ) {
         val toRemoveFromCurrentNode = MetaboliteMap()
         edges.forEach { edge ->
@@ -75,7 +77,7 @@ actual class Body(
                 val rateLimitedRetainedMetabolites = currentNode.organ.metabolitesMap.copy()
                 edge.rateLimiter.forEach {
                     rateLimitedRetainedMetabolites.updateQuantities(
-                        it.processSubstrates(rateLimitedRetainedMetabolites)
+                        it.processSubstrates(rateLimitedRetainedMetabolites, t0)
                     )
                 }
 

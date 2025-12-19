@@ -20,10 +20,10 @@ abstract class Organ(
         return metabolitesMap
     }
 
-    override fun metabolizeTimeStep(inputs: MetaboliteMap) {
+    override fun metabolizeTimeStep(inputs: MetaboliteMap, t0: Double) {
         addMetabolitesToPool(inputs)
         metabolizers.forEach { metabolizer ->
-            val updatedSubstrates = metabolizer.processSubstrates(metabolitesMap)
+            val updatedSubstrates = metabolizer.processSubstrates(metabolitesMap, t0)
             metabolitesMap.updateQuantities(updatedSubstrates)
         }
     }

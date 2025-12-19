@@ -18,7 +18,7 @@ actual class SimulationEngine {
     )
 
 
-    private var iterations = 0
+    private var iterations = 0.0
 
     actual fun runSimulation() {
         val scope = CoroutineScope(Dispatchers.Default)
@@ -29,22 +29,28 @@ actual class SimulationEngine {
                 MetaboliteMap(
                     Metabolite(
                         MetaboliteType.STARCH,
-                        0.5f
+                        PhysicalConstants.gramsToMillimoles(
+                            2.0,
+                            PhysicalConstants.MolarMass.STARCH
+                        ).toFloat()
                     ),
                     Metabolite(
                         MetaboliteType.ARACHIN,
                         amountMilliMoles = PhysicalConstants.gramsToMillimoles(
-                            50.0,
+                            13.0,
                             PhysicalConstants.MolarMass.ARACHIN
                         ).toFloat()
                     ),
                     Metabolite(
                         MetaboliteType.TRIOLEIN,
-                        50.0f
+                        PhysicalConstants.gramsToMillimoles(
+                            12.0,
+                            PhysicalConstants.MolarMass.TRIOLEIN
+                        ).toFloat()
                     )
-                )
+                ),
+                iterations++
             )
-            iterations++
             delay(2000L)
             // Continue simulation
             while (true) {
@@ -53,9 +59,11 @@ actual class SimulationEngine {
                     Metabolite(
                         MetaboliteType.STARCH,
                         0.0f//Random.nextFloat() / 2
-                    )
-                ))
-                iterations++
+                        )
+                     ),
+                    iterations++
+                )
+
             }
         }
     }
@@ -65,6 +73,6 @@ actual class SimulationEngine {
     }
 
     actual fun iterationCount(): Int {
-        return iterations
+        return iterations.toInt()
     }
 }

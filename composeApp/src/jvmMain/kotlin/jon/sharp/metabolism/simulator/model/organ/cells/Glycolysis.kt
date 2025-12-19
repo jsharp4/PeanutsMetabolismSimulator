@@ -23,8 +23,8 @@ import org.apache.commons.math3.ode.FirstOrderDifferentialEquations
 class Glycolysis : Metabolizer(
     ode = GlycolysisODE(),
     metaboliteTypes = listOf(
+        //MetaboliteType.GLUCOSE,
         MetaboliteType.GLUCOSE,
-        MetaboliteType.CELL_GLUCOSE,
         MetaboliteType.G6P,
         MetaboliteType.F6P,
         MetaboliteType.F16BP,
