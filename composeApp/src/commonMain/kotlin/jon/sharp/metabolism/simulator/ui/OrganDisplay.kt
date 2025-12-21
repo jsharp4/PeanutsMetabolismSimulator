@@ -66,11 +66,11 @@ fun OrganDisplay(
     }
 }
 
-fun formatWeight(weight: Float): String {
+fun formatWeight(weight: Double): String {
     return when {
-        weight == 0f -> "0.00 mmol"
-        weight >= 0.01f -> "%.2f mmol".format(weight)
-        weight >= 0.0001f -> "%.4f mmol".format(weight)
+        weight == 0.0 -> "0.00 mmol"
+        weight >= 0.01 -> "%.2f mmol".format(weight)
+        weight >= 0.0001 -> "%.4f mmol".format(weight)
         else -> "%.2e mmol".format(weight) // Scientific notation for very small values
     }
 }

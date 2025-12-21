@@ -198,13 +198,6 @@ class GlycolysisODE: FirstOrderDifferentialEquations {
         val effectiveKm = MICHAELIS_CONSTANT_PYRUVATE_KINASE / activationFactor
         val vPk = kMaxPk * yClamped[5] / (effectiveKm + yClamped[5])
 
-        // Diagnostic logging for PEP issue
-        if (t == 0.0 || (t % 1.0 < 0.01)) {
-            println("t=$t: 3PG=${yClamped[4]}, PEP=${yClamped[5]}, F16BP=${yClamped[3]}")
-            println("  vEno=$vEno, vPk=$vPk, d[PEP]/dt=${vEno - vPk}")
-            println("  activationFactor=$activationFactor, effectiveKm=$effectiveKm (base Km=${MICHAELIS_CONSTANT_PYRUVATE_KINASE})")
-        }
-
         // --- 4. Differential Equations (d/dt) ---
 
         // d[GLC]/dt : Intracellular Glucose

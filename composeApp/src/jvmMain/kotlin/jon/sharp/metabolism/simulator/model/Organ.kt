@@ -31,7 +31,7 @@ abstract class Organ(
             if (metabolitesMap.contains(type)) metabolitesMap.updateQuantities(
                 Metabolite(
                     type,
-                    0.0f
+                    0.0
                 )
             )
         }

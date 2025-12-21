@@ -2,7 +2,7 @@ package jon.sharp.metabolism.simulator.model
 
 object PhysicalConstants {
 
-    val AVOGADRO: Float = 6.022e23f
+    val AVOGADRO: Double = 6.022e23
     /**
      * Converts grams to millimoles using the provided molar mass.
      * @param grams The mass in grams

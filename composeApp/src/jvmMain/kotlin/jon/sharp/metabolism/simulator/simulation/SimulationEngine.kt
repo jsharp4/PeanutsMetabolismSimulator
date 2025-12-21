@@ -32,21 +32,21 @@ actual class SimulationEngine {
                         PhysicalConstants.gramsToMillimoles(
                             2.0,
                             PhysicalConstants.MolarMass.STARCH
-                        ).toFloat()
+                        )
                     ),
                     Metabolite(
                         MetaboliteType.ARACHIN,
                         amountMilliMoles = PhysicalConstants.gramsToMillimoles(
                             13.0,
                             PhysicalConstants.MolarMass.ARACHIN
-                        ).toFloat()
+                        )
                     ),
                     Metabolite(
                         MetaboliteType.TRIOLEIN,
                         PhysicalConstants.gramsToMillimoles(
                             12.0,
                             PhysicalConstants.MolarMass.TRIOLEIN
-                        ).toFloat()
+                        )
                     )
                 ),
                 iterations++
@@ -58,7 +58,7 @@ actual class SimulationEngine {
                 body.metabolizeTimeStep(MetaboliteMap(
                     Metabolite(
                         MetaboliteType.STARCH,
-                        0.0f//Random.nextFloat() / 2
+                        0.0
                         )
                      ),
                     iterations++

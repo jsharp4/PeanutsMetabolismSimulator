@@ -59,7 +59,7 @@ abstract class Metabolizer(
      */
     protected open fun extractState(inputs: MetaboliteMap): DoubleArray {
         return metaboliteTypes.map { type ->
-            inputs[type]?.amountMilliMoles?.toDouble() ?: 0.0
+            inputs[type]?.amountMilliMoles ?: 0.0
         }.toDoubleArray()
     }
 
@@ -73,7 +73,7 @@ abstract class Metabolizer(
      */
     protected open fun updateSubstrates(substrates: MetaboliteMap, state: DoubleArray) {
         val updatedMetabolites = metaboliteTypes.mapIndexed { index, type ->
-            Metabolite(type, state[index].toFloat())
+            Metabolite(type, state[index])
         }.toTypedArray()
         substrates.updateQuantities(*updatedMetabolites)
     }

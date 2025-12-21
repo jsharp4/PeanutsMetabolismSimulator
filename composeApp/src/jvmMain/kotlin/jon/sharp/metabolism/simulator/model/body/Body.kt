@@ -104,7 +104,7 @@ actual class Body(
 
                         var metaboliteUpdateType = UpdateType.ACCUMULATE
 
-                        if (edge.type == EdgeType.OVERWRITE) {
+                        if (edge.type == EdgeType.OVERWRITE || edge.type == EdgeType.READ_ONLY) {
                             metaboliteUpdateType = UpdateType.OVERWRITE
                         }
 
@@ -144,8 +144,8 @@ actual class Body(
         return previouslyVisited
     }
 
-    private fun getMetaboliteFromMapOrZero(map: MetaboliteMap, type: MetaboliteType): Float {
-        return map[type]?.amountMilliMoles ?: 0f
+    private fun getMetaboliteFromMapOrZero(map: MetaboliteMap, type: MetaboliteType): Double {
+        return map[type]?.amountMilliMoles ?: 0.0
     }
 
     /**

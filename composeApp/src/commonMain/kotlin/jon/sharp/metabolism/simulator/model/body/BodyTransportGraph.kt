@@ -10,8 +10,8 @@ data class GraphEdge(
 
 data class MetaboliteTransfer(
     val type: MetaboliteType,
-    val percentage: Float,
-    val actualAmount: Float = 0f // Actual amount transported in last step
+    val percentage: Double,
+    val actualAmount: Double = 0.0 // Actual amount transported in last step
 )
 
 data class GraphNode(

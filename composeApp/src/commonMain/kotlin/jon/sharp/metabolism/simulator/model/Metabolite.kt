@@ -42,6 +42,6 @@ enum class UpdateType {
 
 data class Metabolite(
     val type: MetaboliteType,
-    var amountMilliMoles: Float,
+    var amountMilliMoles: Double,
     val updateType: UpdateType = UpdateType.ACCUMULATE
 )

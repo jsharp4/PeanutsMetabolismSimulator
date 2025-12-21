@@ -36,7 +36,7 @@ class MetaboliteMap(
         metabolites.getAll().forEach { metabolite ->
             if (map.containsKey(metabolite.type)) {
                 map[metabolite.type]!!.amountMilliMoles = max(
-                    map[metabolite.type]!!.amountMilliMoles - metabolite.amountMilliMoles, 0.0f
+                    map[metabolite.type]!!.amountMilliMoles - metabolite.amountMilliMoles, 0.0
                 )
             }
         }

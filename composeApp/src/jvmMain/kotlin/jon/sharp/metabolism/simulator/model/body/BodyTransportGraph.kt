@@ -23,7 +23,7 @@ import jon.sharp.metabolism.simulator.model.organ.stomach.StomachEmptyingRegulat
 
 data class QuantifiedMetabolite(
     val type: MetaboliteType,
-    val percentageOfOutput: Float
+    val percentageOfOutput: Double
 )
 
 enum class EdgeType {
@@ -112,8 +112,8 @@ actual class BodyTransportGraph {
             mitochondrialMatrix,
             DirectionalOrganEdge(
                 mitochondrialMembraneNode,
-                QuantifiedMetabolite(MetaboliteType.NADH, 100.0f),
-                QuantifiedMetabolite(MetaboliteType.FADH2, 100.0f)
+                QuantifiedMetabolite(MetaboliteType.NADH, 100.0),
+                QuantifiedMetabolite(MetaboliteType.FADH2, 100.0)
             )
         )
 
@@ -121,9 +121,9 @@ actual class BodyTransportGraph {
             cytosol,
             DirectionalOrganEdge(
                 mitochondrialMatrixNode,
-                QuantifiedMetabolite(MetaboliteType.PYRUVATE, 90.0f),
-                QuantifiedMetabolite(MetaboliteType.GLUTAMIC_ACID, 90.0f),
-                QuantifiedMetabolite(MetaboliteType.FATTY_ACYL_COA, 90f)
+                QuantifiedMetabolite(MetaboliteType.PYRUVATE, 90.0),
+                QuantifiedMetabolite(MetaboliteType.GLUTAMIC_ACID, 90.0),
+                QuantifiedMetabolite(MetaboliteType.FATTY_ACYL_COA, 90.0)
             ),
 //            DirectionalOrganEdge(
 //                bloodNode,
@@ -137,7 +137,7 @@ actual class BodyTransportGraph {
                 bloodNode,
                 QuantifiedMetabolite(
                     MetaboliteType.CHYLOMICRON,
-                    50f
+                    50.0
                 )
             )
         )
@@ -146,14 +146,14 @@ actual class BodyTransportGraph {
             intestineLining,
             DirectionalOrganEdge(
                 bloodNode,
-                QuantifiedMetabolite(MetaboliteType.GLUTAMIC_ACID, 50.0f),
-                QuantifiedMetabolite(MetaboliteType.GLUCOSE, 50.0f)
+                QuantifiedMetabolite(MetaboliteType.GLUTAMIC_ACID, 50.0),
+                QuantifiedMetabolite(MetaboliteType.GLUCOSE, 50.0)
             ),
             DirectionalOrganEdge(
                 enterocytesNode,
                 QuantifiedMetabolite(
                     MetaboliteType.MICELLE,
-                    50f
+                    50.0
                 )
             )
         )
@@ -162,11 +162,11 @@ actual class BodyTransportGraph {
             smallIntestine,
             DirectionalOrganEdge(
                 intestineLiningNode,
-                QuantifiedMetabolite(MetaboliteType.MALTOSE, 50.0f),
-                QuantifiedMetabolite(MetaboliteType.PEPTIDE_CHAIN, 50.0f),
-                QuantifiedMetabolite(MetaboliteType.OLEIC_ACID, 50f),
-                QuantifiedMetabolite(MetaboliteType.MAG, 50f),
-                QuantifiedMetabolite(MetaboliteType.BILE_SALT, 75f)
+                QuantifiedMetabolite(MetaboliteType.MALTOSE, 50.0),
+                QuantifiedMetabolite(MetaboliteType.PEPTIDE_CHAIN, 50.0),
+                QuantifiedMetabolite(MetaboliteType.OLEIC_ACID, 50.0),
+                QuantifiedMetabolite(MetaboliteType.MAG, 50.0),
+                QuantifiedMetabolite(MetaboliteType.BILE_SALT, 75.0)
             )
         )
 
@@ -174,7 +174,7 @@ actual class BodyTransportGraph {
             liver,
             DirectionalOrganEdge(
                 smallIntestineNode,
-                QuantifiedMetabolite(MetaboliteType.BILE_SALT, 30f)
+                QuantifiedMetabolite(MetaboliteType.BILE_SALT, 30.0)
             )
         )
 
@@ -183,10 +183,10 @@ actual class BodyTransportGraph {
             stomach,
             DirectionalOrganEdge(
                 smallIntestineNode,
-                QuantifiedMetabolite(MetaboliteType.STARCH, 100.0f),
-                QuantifiedMetabolite(MetaboliteType.MALTOSE, 100.0f),
-                QuantifiedMetabolite(MetaboliteType.POLYPEPTIDE, 100.0f),
-                QuantifiedMetabolite(MetaboliteType.TRIOLEIN, 100f),
+                QuantifiedMetabolite(MetaboliteType.STARCH, 100.0),
+                QuantifiedMetabolite(MetaboliteType.MALTOSE, 100.0),
+                QuantifiedMetabolite(MetaboliteType.POLYPEPTIDE, 100.0),
+                QuantifiedMetabolite(MetaboliteType.TRIOLEIN, 100.0),
                 rateLimiter = listOf(
                     StomachEmptyingRegulator()
                 )
@@ -197,10 +197,10 @@ actual class BodyTransportGraph {
             mouth,
             DirectionalOrganEdge(
                 stomachNode,
-                QuantifiedMetabolite(MetaboliteType.STARCH, 100.0f),
-                QuantifiedMetabolite(MetaboliteType.MALTOSE, 100.0f),
-                QuantifiedMetabolite(MetaboliteType.ARACHIN, 100.0f),
-                QuantifiedMetabolite(MetaboliteType.TRIOLEIN, 100f)
+                QuantifiedMetabolite(MetaboliteType.STARCH, 100.0),
+                QuantifiedMetabolite(MetaboliteType.MALTOSE, 100.0),
+                QuantifiedMetabolite(MetaboliteType.ARACHIN, 100.0),
+                QuantifiedMetabolite(MetaboliteType.TRIOLEIN, 100.0)
             )
         )
 
@@ -208,7 +208,7 @@ actual class BodyTransportGraph {
             pancreas,
             DirectionalOrganEdge(
                 bloodNode,
-                QuantifiedMetabolite(MetaboliteType.INSULIN, 90f),
+                QuantifiedMetabolite(MetaboliteType.INSULIN, 90.0),
                 type = EdgeType.OVERWRITE
             )
         )
@@ -216,21 +216,21 @@ actual class BodyTransportGraph {
         bloodNode.edges = setOf(
             DirectionalOrganEdge(
                 cytosolNode,
-                QuantifiedMetabolite(MetaboliteType.GLUCOSE, 100f),
-                QuantifiedMetabolite(MetaboliteType.GLUTAMIC_ACID, 100f),
-                QuantifiedMetabolite(MetaboliteType.OLEIC_ACID, 100f),
+                QuantifiedMetabolite(MetaboliteType.GLUCOSE, 100.0),
+                QuantifiedMetabolite(MetaboliteType.GLUTAMIC_ACID, 100.0),
+                QuantifiedMetabolite(MetaboliteType.OLEIC_ACID, 100.0),
                 rateLimiter = listOf(GlucoseUptakeRegulator())
             ),
             DirectionalOrganEdge(
                 liverNode,
-                QuantifiedMetabolite(MetaboliteType.CHYLOMICRON_REMNANT, 90f),
-                QuantifiedMetabolite(MetaboliteType.GLYCEROL, 90f)
+                QuantifiedMetabolite(MetaboliteType.CHYLOMICRON_REMNANT, 90.0),
+                QuantifiedMetabolite(MetaboliteType.GLYCEROL, 90.0)
             ),
             DirectionalOrganEdge(
                 pancreasNode,
-                QuantifiedMetabolite(MetaboliteType.GLUCOSE, 100f),
-                QuantifiedMetabolite(MetaboliteType.GLUTAMIC_ACID, 100f),
-                QuantifiedMetabolite(MetaboliteType.INSULIN, 100f),
+                QuantifiedMetabolite(MetaboliteType.GLUCOSE, 100.0),
+                QuantifiedMetabolite(MetaboliteType.GLUTAMIC_ACID, 100.0),
+                QuantifiedMetabolite(MetaboliteType.INSULIN, 100.0),
                 rateLimiter = listOf(),
                 type = EdgeType.READ_ONLY,
             )
@@ -273,7 +273,7 @@ actual class BodyTransportGraph {
                         destinationName = organToName[edge.destination.organ] ?: edge.destination.organ.getName(),
                         metabolites = edge.metabolitesToSend.map { metabolite ->
                             // Include actual amount from last transport
-                            val actualAmount = transportedData[metabolite.type]?.amountMilliMoles ?: 0f
+                            val actualAmount = transportedData[metabolite.type]?.amountMilliMoles ?: 0.0
 
                             MetaboliteTransfer(
                                 type = metabolite.type,

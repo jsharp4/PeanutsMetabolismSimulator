@@ -10,7 +10,7 @@ import kotlin.math.roundToInt
 
 open class PancreaticAmylase: IMetabolizer {
 
-    val reactionRateConstantMinutes = 0.03f
+    val reactionRateConstantMinutes = 0.03
 
     override fun processSubstrates(inputs: MetaboliteMap, t0: Double): MetaboliteMap {
         val updatedMap = inputs.copy()
@@ -21,17 +21,17 @@ open class PancreaticAmylase: IMetabolizer {
     protected open fun processStarch(map: MetaboliteMap) {
         if (map.contains(MetaboliteType.STARCH)) {
             val starchMilliMoles = map.get(MetaboliteType.STARCH)!!.amountMilliMoles
-            val starchGrams = PhysicalConstants.millimolesToGrams(starchMilliMoles.toDouble(), PhysicalConstants.MolarMass.STARCH)
+            val starchGrams = PhysicalConstants.millimolesToGrams(starchMilliMoles, PhysicalConstants.MolarMass.STARCH)
             val maltoseGrams = starchGrams * (1 - exp(reactionRateConstantMinutes * -1))
             map.putOrAdd(
                 Metabolite(MetaboliteType.MALTOSE,
-                    PhysicalConstants.gramsToMillimoles(maltoseGrams, PhysicalConstants.MolarMass.MALTOSE).toFloat(),
+                    PhysicalConstants.gramsToMillimoles(maltoseGrams, PhysicalConstants.MolarMass.MALTOSE),
                 )
             )
             map.updateQuantities(
                 Metabolite(
                     MetaboliteType.STARCH,
-                    PhysicalConstants.gramsToMillimoles(starchGrams - maltoseGrams, PhysicalConstants.MolarMass.STARCH).toFloat(),
+                    PhysicalConstants.gramsToMillimoles(starchGrams - maltoseGrams, PhysicalConstants.MolarMass.STARCH),
                 )
             )
         }
