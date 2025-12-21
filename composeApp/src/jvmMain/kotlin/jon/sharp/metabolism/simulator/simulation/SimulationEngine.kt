@@ -63,9 +63,6 @@ actual class SimulationEngine {
                      ),
                     iterations++
                 )
-                if (iterations > 20) {
-                    println("WHOO")
-                }
             }
         }
     }
