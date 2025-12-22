@@ -202,20 +202,39 @@ class GraphLayoutEngine(private val nodes: List<GraphNodeWithMetabolites>, priva
     }
 }
 
-fun calculateLabelPosition(waypoints: List<Offset>): Offset {
+fun calculateLabelPosition(
+    waypoints: List<Offset>,
+    nodePositions: Map<String, NodePosition>
+): Offset {
     if (waypoints.size < 2) return waypoints.firstOrNull() ?: Offset.Zero
-    // Find longest horizontal segment
-    var bestIdx = 0
-    var maxDist = -1f
+
+    val horizontalSegments = mutableListOf<Pair<Offset, Offset>>()
     for (i in 0 until waypoints.size - 1) {
-        val dx = abs(waypoints[i].x - waypoints[i+1].x)
-        if (abs(waypoints[i].y - waypoints[i+1].y) < 2f && dx > maxDist) {
-            maxDist = dx
-            bestIdx = i
+        if (abs(waypoints[i].y - waypoints[i+1].y) < 2f) {
+            horizontalSegments.add(waypoints[i] to waypoints[i+1])
         }
     }
-    val midX = (waypoints[bestIdx].x + waypoints[bestIdx+1].x) / 2
-    return Offset(midX, waypoints[bestIdx].y - 12f)
+
+    val sortedSegments = horizontalSegments.sortedByDescending { abs(it.first.x - it.second.x) }
+
+    for (seg in sortedSegments) {
+        val midX = (seg.first.x + seg.second.x) / 2
+        val y = seg.first.y
+
+        val overlaps = nodePositions.values.any { node ->
+            val margin = 15f
+            val nL = node.x - margin
+            val nR = node.x + node.width + margin
+            val nT = node.y - margin
+            val nB = node.y + node.height + margin
+            midX in nL..nR && y in nT..nB
+        }
+
+        if (!overlaps) return Offset(midX, y)
+    }
+
+    val longest = sortedSegments.firstOrNull() ?: return waypoints[waypoints.size / 2]
+    return Offset((longest.first.x + longest.second.x) / 2, longest.first.y)
 }
 
 fun calculateArrowAngle(x1: Float, y1: Float, x2: Float, y2: Float): Float = atan2(y2 - y1, x2 - x1)

@@ -200,51 +200,38 @@ fun DrawScope.drawGraphNode(
 /**
  * Draws an edge between nodes using orthogonal routing.
  */
+/**
+ * Draws an edge between nodes using orthogonal routing.
+ * Requires nodePositions to ensure edge labels are placed in empty spaces.
+ */
+/**
+ * Draws the line segments and arrowhead for an edge.
+ * Labels are now handled separately to ensure they appear on the top-most layer.
+ */
 fun DrawScope.drawGraphEdge(
     edgePath: EdgePath,
-    colorScheme: ColorScheme,
-    textMeasurer: TextMeasurer
+    colorScheme: ColorScheme
 ) {
-    val color = edgePath.color // Use the edge's assigned color (matches source node)
-
+    val color = edgePath.color
     val waypoints = edgePath.waypoints
     if (waypoints.size < 2) return
 
-    // Draw orthogonal path through waypoints (all solid lines)
+    // 1. Draw the lines
     for (i in 0 until waypoints.size - 1) {
-        val start = waypoints[i]
-        val end = waypoints[i + 1]
-
         drawLine(
             color = color,
-            start = start,
-            end = end,
+            start = waypoints[i],
+            end = waypoints[i + 1],
             strokeWidth = 3f
         )
     }
 
-    // Draw arrowhead at the end
-    val lastSegmentStart = waypoints[waypoints.size - 2]
-    val lastSegmentEnd = waypoints[waypoints.size - 1]
-    val angle = calculateArrowAngle(
-        lastSegmentStart.x,
-        lastSegmentStart.y,
-        lastSegmentEnd.x,
-        lastSegmentEnd.y
-    )
-    drawArrowhead(lastSegmentEnd.x, lastSegmentEnd.y, angle, color)
+    // 2. Draw the arrowhead at the end
+    val last = waypoints.last()
+    val prev = waypoints[waypoints.size - 2]
+    val angle = calculateArrowAngle(prev.x, prev.y, last.x, last.y)
 
-    // Draw label if there are metabolites to show
-    if (edgePath.metabolites.isNotEmpty()) {
-        val labelPosition = calculateLabelPosition(waypoints)
-        drawEdgeLabel(
-            position = labelPosition,
-            metabolites = edgePath.metabolites,
-            color = color,
-            textMeasurer = textMeasurer,
-            colorScheme = colorScheme
-        )
-    }
+    drawArrowhead(last.x, last.y, angle, color)
 }
 
 /**
@@ -287,8 +274,8 @@ fun DrawScope.drawArrowhead(
 }
 
 /**
- * Draws a label showing metabolite types on an edge.
- * Displays only the metabolite type names, without amounts or percentages.
+ * Draws the metabolite label.
+ * Alpha is set to 1.0f to ensure it masks nodes/lines underneath.
  */
 fun DrawScope.drawEdgeLabel(
     position: Offset,
@@ -299,52 +286,42 @@ fun DrawScope.drawEdgeLabel(
 ) {
     if (metabolites.isEmpty()) return
 
-    // Build label text showing only metabolite type names
-    val labelText = metabolites.joinToString("\n") {
-        it.type.toString()
-    }
-
+    val labelText = metabolites.joinToString("\n") { it.type.toString() }
     val textStyle = TextStyle(
         fontSize = 10.sp,
-        fontWeight = FontWeight.Normal,
-        color = colorScheme.onSurface
+        fontWeight = FontWeight.Bold,
+        color = Color.White
     )
 
     val textResult = textMeasurer.measure(labelText, textStyle)
-
-    // Background box with padding
-    val padding = 4f
+    val padding = 6f
     val boxWidth = textResult.size.width + (padding * 2)
     val boxHeight = textResult.size.height + (padding * 2)
 
     val boxTopLeft = Offset(
         x = position.x - (boxWidth / 2),
-        y = position.y - boxHeight - 10f  // Offset above the line
+        y = position.y - boxHeight - 10f
     )
 
-    // Draw semi-transparent background (darker than edge color for contrast)
+    // Draw solid background (Send to Front requires 1.0f alpha to hide what's behind)
     drawRoundRect(
-        color = color.copy(alpha = 0.85f),
+        color = color.copy(alpha = 1.0f),
         topLeft = boxTopLeft,
         size = Size(boxWidth, boxHeight),
         cornerRadius = CornerRadius(4f, 4f)
     )
 
-    // Draw border for better definition
+    // White border for extra "pop" on the top layer
     drawRoundRect(
-        color = color,
+        color = Color.White.copy(alpha = 0.5f),
         topLeft = boxTopLeft,
         size = Size(boxWidth, boxHeight),
         cornerRadius = CornerRadius(4f, 4f),
         style = Stroke(width = 1f)
     )
 
-    // Draw text
     drawText(
         textLayoutResult = textResult,
-        topLeft = Offset(
-            x = boxTopLeft.x + padding,
-            y = boxTopLeft.y + padding
-        )
+        topLeft = boxTopLeft + Offset(padding, padding)
     )
 }
