@@ -3,7 +3,7 @@ package jon.sharp.metabolism.simulator.model
 import jon.sharp.metabolism.simulator.model.organ.IOrgan
 
 abstract class Organ(
-    val metabolizers: List<IMetabolizer>,
+    val metabolicProcesses: List<IMetabolicProcess>,
     val initialMetabolites: MetaboliteMap = MetaboliteMap(),
     val readOnlyMetabolites: Set<MetaboliteType> = setOf()
 ): IOrgan {
@@ -23,7 +23,7 @@ abstract class Organ(
 
     override fun metabolizeTimeStep(inputs: MetaboliteMap, t0: Double) {
         addMetabolitesToPool(inputs)
-        metabolizers.forEach { metabolizer ->
+        metabolicProcesses.forEach { metabolizer ->
             val updatedSubstrates = metabolizer.processSubstrates(metabolitesMap, t0)
             metabolitesMap.updateQuantities(updatedSubstrates)
         }

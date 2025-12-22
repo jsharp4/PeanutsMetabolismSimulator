@@ -1,9 +1,9 @@
 package jon.sharp.metabolism.simulator.model.organ.stomach
 
-import jon.sharp.metabolism.simulator.model.Metabolizer
+import jon.sharp.metabolism.simulator.model.MetabolicProcess
 import jon.sharp.metabolism.simulator.model.MetaboliteType
 
-class Pepsin: Metabolizer(
+class Pepsin: MetabolicProcess(
     ode = PepsinODE(),
     metaboliteTypes = listOf(
         MetaboliteType.ARACHIN,

@@ -3,7 +3,6 @@ package jon.sharp.metabolism.simulator.model.organ.mouth
 import jon.sharp.metabolism.simulator.model.Metabolite
 import jon.sharp.metabolism.simulator.model.MetaboliteMap
 import jon.sharp.metabolism.simulator.model.MetaboliteType
-import jon.sharp.metabolism.simulator.model.Metabolizer
 import jon.sharp.metabolism.simulator.model.PhysicalConstants
 import jon.sharp.metabolism.simulator.model.organ.intestine.PancreaticAmylase
 import kotlin.math.exp

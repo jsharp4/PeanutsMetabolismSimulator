@@ -1,12 +1,11 @@
 package jon.sharp.metabolism.simulator.model.organ.intestine
 
-import jon.sharp.metabolism.simulator.model.Metabolizer
-import jon.sharp.metabolism.simulator.model.ODESolver
+import jon.sharp.metabolism.simulator.model.MetabolicProcess
 import jon.sharp.metabolism.simulator.model.MetaboliteType
 import jon.sharp.metabolism.simulator.model.PhysicalConstants
 import org.apache.commons.math3.ode.FirstOrderDifferentialEquations
 
-class Peptidase: Metabolizer(
+class Peptidase: MetabolicProcess(
     ode = PeptidaseODE(),
     metaboliteTypes = listOf(
         MetaboliteType.PEPTIDE_CHAIN,

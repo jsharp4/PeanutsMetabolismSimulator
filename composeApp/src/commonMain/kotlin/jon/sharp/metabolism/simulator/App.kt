@@ -94,7 +94,7 @@ fun App() {
             }
 
             Text(
-                text = "Iteration: $iterationCount (update: $updateCount)",
+                text = "Minute: $iterationCount",
                 style = MaterialTheme.typography.headlineMedium
             )
 

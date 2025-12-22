@@ -16,10 +16,10 @@ import org.apache.commons.math3.ode.FirstOrderDifferentialEquations
  * @param ode The differential equations that define the metabolic process
  * @param metaboliteTypes Ordered list of metabolite types corresponding to the solver's state vector
  */
-abstract class Metabolizer(
+abstract class MetabolicProcess(
     ode: FirstOrderDifferentialEquations,
     protected val metaboliteTypes: List<MetaboliteType>
-) : IMetabolizer {
+) : IMetabolicProcess {
 
     /**
      * The ODE solver that implements the metabolic equations.

@@ -8,5 +8,4 @@ class MitochondrialMatrix(): Organ(
         TCACycle(),
         FattyAcidOxidation()
     )
-) {
-}
+)

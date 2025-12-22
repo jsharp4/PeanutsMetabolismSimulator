@@ -1,10 +1,7 @@
 package jon.sharp.metabolism.simulator.model.organ.intestine
 
-import jon.sharp.metabolism.simulator.model.Metabolizer
-import jon.sharp.metabolism.simulator.model.ODESolver
+import jon.sharp.metabolism.simulator.model.MetabolicProcess
 import jon.sharp.metabolism.simulator.model.MaltoseHydrolysisODE
-import jon.sharp.metabolism.simulator.model.Metabolite
-import jon.sharp.metabolism.simulator.model.MetaboliteMap
 import jon.sharp.metabolism.simulator.model.MetaboliteType
 import jon.sharp.metabolism.simulator.model.PhysicalConstants.Maltose.Hydrolysis.JEJUNUM_LENGTH_CM
 import jon.sharp.metabolism.simulator.model.PhysicalConstants.Maltose.Hydrolysis.LUMEN_VOLUME_LITERS
@@ -20,7 +17,7 @@ import jon.sharp.metabolism.simulator.model.PhysicalConstants.Maltose.Hydrolysis
  *
  * All values are in mmol.
  */
-class MembraneMaltoseHydrolysis : Metabolizer(
+class MembraneMaltoseHydrolysis : MetabolicProcess(
     ode = MaltoseHydrolysisODE(
         MAX_HYDROLYSIS_RATE,
         LUMEN_VOLUME_LITERS,

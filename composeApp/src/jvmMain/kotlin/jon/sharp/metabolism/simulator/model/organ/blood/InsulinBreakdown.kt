@@ -1,12 +1,11 @@
 package jon.sharp.metabolism.simulator.model.organ.blood
 
 import jon.sharp.metabolism.simulator.model.MetaboliteType
-import jon.sharp.metabolism.simulator.model.Metabolizer
+import jon.sharp.metabolism.simulator.model.MetabolicProcess
 import org.apache.commons.math3.ode.FirstOrderDifferentialEquations
-import kotlin.math.exp
 import kotlin.math.ln
 
-class InsulinBreakdown: Metabolizer(
+class InsulinBreakdown: MetabolicProcess(
     InsulinBreakdownODE(),
     listOf(
         MetaboliteType.INSULIN

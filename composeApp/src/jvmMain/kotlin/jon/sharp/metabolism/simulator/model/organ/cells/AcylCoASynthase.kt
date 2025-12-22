@@ -1,11 +1,10 @@
 package jon.sharp.metabolism.simulator.model.organ.cells
 
 import jon.sharp.metabolism.simulator.model.MetaboliteType
-import jon.sharp.metabolism.simulator.model.Metabolizer
-import jon.sharp.metabolism.simulator.model.ODESolver
+import jon.sharp.metabolism.simulator.model.MetabolicProcess
 import org.apache.commons.math3.ode.FirstOrderDifferentialEquations
 
-class AcylCoASynthase: Metabolizer(
+class AcylCoASynthase: MetabolicProcess(
     ode = AcylCoASynthaseODE(),
     metaboliteTypes = listOf(
         MetaboliteType.OLEIC_ACID,

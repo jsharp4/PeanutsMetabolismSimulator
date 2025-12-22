@@ -3,12 +3,11 @@ package jon.sharp.metabolism.simulator.model.organ.intestine
 import jon.sharp.metabolism.simulator.model.Metabolite
 import jon.sharp.metabolism.simulator.model.MetaboliteMap
 import jon.sharp.metabolism.simulator.model.MetaboliteType
-import jon.sharp.metabolism.simulator.model.IMetabolizer
+import jon.sharp.metabolism.simulator.model.IMetabolicProcess
 import jon.sharp.metabolism.simulator.model.PhysicalConstants
 import kotlin.math.exp
-import kotlin.math.roundToInt
 
-open class PancreaticAmylase: IMetabolizer {
+open class PancreaticAmylase: IMetabolicProcess {
 
     val reactionRateConstantMinutes = 0.03
 

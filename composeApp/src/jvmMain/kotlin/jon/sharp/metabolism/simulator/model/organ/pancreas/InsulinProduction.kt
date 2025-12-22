@@ -1,13 +1,13 @@
 package jon.sharp.metabolism.simulator.model.organ.pancreas
 
 import jon.sharp.metabolism.simulator.model.MetaboliteType
-import jon.sharp.metabolism.simulator.model.Metabolizer
+import jon.sharp.metabolism.simulator.model.MetabolicProcess
 import jon.sharp.metabolism.simulator.model.PhysicalConstants
 import jon.sharp.metabolism.simulator.model.PhysicalConstants.Blood.FastingValues.basalBCAA
 import jon.sharp.metabolism.simulator.model.PhysicalConstants.Blood.FastingValues.basalInsulin
 import org.apache.commons.math3.ode.FirstOrderDifferentialEquations
 
-class InsulinProduction: Metabolizer(
+class InsulinProduction: MetabolicProcess(
     InsulinODE(),
     listOf(
         MetaboliteType.GLUCOSE,

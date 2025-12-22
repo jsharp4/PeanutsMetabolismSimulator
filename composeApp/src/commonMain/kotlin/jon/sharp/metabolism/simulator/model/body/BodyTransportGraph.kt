@@ -29,17 +29,17 @@ object OrganLayoutConfig {
     data class LayoutPosition(val row: Int, val column: Int)
 
     val organPositions: Map<String, LayoutPosition> = mapOf(
-        "Mouth" to LayoutPosition(row = 0, column = 0),
-        "Stomach" to LayoutPosition(row = 1, column = 0),
+        "Mouth" to LayoutPosition(row = 0, column = 1),
+        "Stomach" to LayoutPosition(row = 1, column = 1),
         "SmallIntestine" to LayoutPosition(row = 2, column = 0),
-        "SmallIntestineLining" to LayoutPosition(row = 3, column = 0),
-        "Enterocytes" to LayoutPosition(row = 3, column = 1),
-        "Blood" to LayoutPosition(row = 4, column = 0),
-        "Liver" to LayoutPosition(row = 4, column = 1),
-        "Pancreas" to LayoutPosition(row = 5, column = 1),
-        "Cytosol" to LayoutPosition(row = 5, column = 0),
-        "MitochondrialMatrix" to LayoutPosition(row = 6, column = 0),
-        "MitochondrialInnerMembrane" to LayoutPosition(row = 7, column = 0)
+        "SmallIntestineLining" to LayoutPosition(row = 2, column = 1),
+        "Enterocytes" to LayoutPosition(row = 2, column = 2),
+        "Blood" to LayoutPosition(row = 3, column = 0),
+        "Liver" to LayoutPosition(row = 3, column = 1),
+        "Pancreas" to LayoutPosition(row = 3, column = 2),
+        "Cytosol" to LayoutPosition(row = 4, column = 1),
+        "MitochondrialMatrix" to LayoutPosition(row = 5, column = 0),
+        "MitochondrialInnerMembrane" to LayoutPosition(row = 5, column = 1)
     )
 
     fun getRowNumber(organName: String): Int =

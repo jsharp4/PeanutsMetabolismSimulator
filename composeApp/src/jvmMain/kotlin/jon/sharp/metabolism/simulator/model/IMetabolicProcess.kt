@@ -1,5 +1,5 @@
 package jon.sharp.metabolism.simulator.model
 
-interface IMetabolizer {
+interface IMetabolicProcess {
     fun processSubstrates(inputs: MetaboliteMap, t0: Double): MetaboliteMap
 }

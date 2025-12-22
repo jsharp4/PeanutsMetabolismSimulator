@@ -1,6 +1,6 @@
 package jon.sharp.metabolism.simulator.model.organ.cells
 
-import jon.sharp.metabolism.simulator.model.Metabolizer
+import jon.sharp.metabolism.simulator.model.MetabolicProcess
 import jon.sharp.metabolism.simulator.model.MetaboliteType
 import jon.sharp.metabolism.simulator.model.ODESolver
 import org.apache.commons.math3.ode.FirstOrderDifferentialEquations
@@ -20,7 +20,7 @@ import org.apache.commons.math3.ode.FirstOrderDifferentialEquations
  *
  * The solver handles all unit conversions internally, working with masses in mmol.
  */
-class Glycolysis : Metabolizer(
+class Glycolysis : MetabolicProcess(
     ode = GlycolysisODE(),
     metaboliteTypes = listOf(
         //MetaboliteType.GLUCOSE,

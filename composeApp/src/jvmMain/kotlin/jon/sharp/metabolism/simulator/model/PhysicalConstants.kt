@@ -36,6 +36,10 @@ object PhysicalConstants {
         return gramsToMillimoles(grams, molarMass)
     }
 
+    object Human {
+        val AVERAGE_HUMAN_BODY_SURFACE_AREA_METERS_SQUARED = 1.79
+    }
+
     /**
      * Consolidated molar mass values for all molecules (in g/mol)
      */

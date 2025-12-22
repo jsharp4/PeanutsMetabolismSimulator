@@ -1,12 +1,11 @@
 package jon.sharp.metabolism.simulator.model.organ.cells.mitochondria
 
 import jon.sharp.metabolism.simulator.model.MetaboliteType
-import jon.sharp.metabolism.simulator.model.Metabolizer
-import jon.sharp.metabolism.simulator.model.ODESolver
+import jon.sharp.metabolism.simulator.model.MetabolicProcess
 import jon.sharp.metabolism.simulator.model.PhysicalConstants
 import org.apache.commons.math3.ode.FirstOrderDifferentialEquations
 
-class FattyAcidOxidation: Metabolizer(
+class FattyAcidOxidation: MetabolicProcess(
     ode = FattyAcidOxidationODE(),
     metaboliteTypes = listOf(
         MetaboliteType.FATTY_ACYL_COA,

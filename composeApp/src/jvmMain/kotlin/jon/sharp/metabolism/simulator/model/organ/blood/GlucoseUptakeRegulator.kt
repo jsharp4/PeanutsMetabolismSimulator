@@ -1,12 +1,12 @@
 package jon.sharp.metabolism.simulator.model.organ.blood
 
 import jon.sharp.metabolism.simulator.model.MetaboliteType
-import jon.sharp.metabolism.simulator.model.Metabolizer
+import jon.sharp.metabolism.simulator.model.MetabolicProcess
 import jon.sharp.metabolism.simulator.model.PhysicalConstants
 import org.apache.commons.math3.ode.FirstOrderDifferentialEquations
 import kotlin.math.pow
 
-class GlucoseUptakeRegulator: Metabolizer(
+class GlucoseUptakeRegulator: MetabolicProcess(
     GlucoseUptakeODE(),
     listOf(
         MetaboliteType.INSULIN,
@@ -41,7 +41,7 @@ class GlucoseUptakeODE: FirstOrderDifferentialEquations {
         // Glucose distribution volume
 
         val distributionVolume = 12.7
-        val subjectBsaMetersSquared = 1.73
+        val subjectBsaMetersSquared = PhysicalConstants.Human.AVERAGE_HUMAN_BODY_SURFACE_AREA_METERS_SQUARED
 
         val glucoseMmolPerLiter = y!![1] / distributionVolume
 

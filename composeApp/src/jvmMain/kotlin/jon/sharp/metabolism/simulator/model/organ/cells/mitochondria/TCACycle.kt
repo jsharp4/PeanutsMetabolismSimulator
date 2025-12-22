@@ -1,6 +1,6 @@
 package jon.sharp.metabolism.simulator.model.organ.cells.mitochondria
 
-import jon.sharp.metabolism.simulator.model.Metabolizer
+import jon.sharp.metabolism.simulator.model.MetabolicProcess
 import jon.sharp.metabolism.simulator.model.MetaboliteType
 
 /**
@@ -14,7 +14,7 @@ import jon.sharp.metabolism.simulator.model.MetaboliteType
  *
  * All values are in mmol.
  */
-class TCACycle : Metabolizer(
+class TCACycle : MetabolicProcess(
     ode = TcaODE(),
     metaboliteTypes = listOf(
         MetaboliteType.PYRUVATE,

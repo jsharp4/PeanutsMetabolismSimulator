@@ -1,8 +1,7 @@
 package jon.sharp.metabolism.simulator.model.organ.intestine
 
 import jon.sharp.metabolism.simulator.model.MetaboliteType
-import jon.sharp.metabolism.simulator.model.Metabolizer
-import jon.sharp.metabolism.simulator.model.ODESolver
+import jon.sharp.metabolism.simulator.model.MetabolicProcess
 import jon.sharp.metabolism.simulator.model.Organ
 import org.apache.commons.math3.ode.FirstOrderDifferentialEquations
 
@@ -12,7 +11,7 @@ class Enterocytes: Organ(
     )
 )
 
-class Golgi: Metabolizer(
+class Golgi: MetabolicProcess(
     ode = ChylomicronProducerODE(),
     metaboliteTypes = listOf(
         MetaboliteType.MICELLE,

@@ -1,13 +1,13 @@
 package jon.sharp.metabolism.simulator.model.organ.stomach
 
 import jon.sharp.metabolism.simulator.model.MetaboliteType
-import jon.sharp.metabolism.simulator.model.Metabolizer
+import jon.sharp.metabolism.simulator.model.MetabolicProcess
 import org.apache.commons.math3.ode.FirstOrderDifferentialEquations
 import kotlin.math.exp
 import kotlin.math.max
 import kotlin.math.pow
 
-class StomachEmptyingRegulator: Metabolizer(
+class StomachEmptyingRegulator: MetabolicProcess(
     StomachEmptyingODE(),
     listOf(
         MetaboliteType.STARCH,

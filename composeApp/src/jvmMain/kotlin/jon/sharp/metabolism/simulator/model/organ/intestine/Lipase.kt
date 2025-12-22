@@ -1,12 +1,11 @@
 package jon.sharp.metabolism.simulator.model.organ.intestine
 
 import jon.sharp.metabolism.simulator.model.MetaboliteType
-import jon.sharp.metabolism.simulator.model.Metabolizer
-import jon.sharp.metabolism.simulator.model.ODESolver
+import jon.sharp.metabolism.simulator.model.MetabolicProcess
 import org.apache.commons.math3.ode.FirstOrderDifferentialEquations
 import kotlin.math.exp
 
-class Lipase: Metabolizer(
+class Lipase: MetabolicProcess(
     ode = LipaseODE(),
     metaboliteTypes = listOf(
         MetaboliteType.TRIOLEIN,

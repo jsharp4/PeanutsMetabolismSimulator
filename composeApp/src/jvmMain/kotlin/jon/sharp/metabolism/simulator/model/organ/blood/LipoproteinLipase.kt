@@ -1,11 +1,10 @@
 package jon.sharp.metabolism.simulator.model.organ.blood
 
 import jon.sharp.metabolism.simulator.model.MetaboliteType
-import jon.sharp.metabolism.simulator.model.Metabolizer
-import jon.sharp.metabolism.simulator.model.ODESolver
+import jon.sharp.metabolism.simulator.model.MetabolicProcess
 import org.apache.commons.math3.ode.FirstOrderDifferentialEquations
 
-class LipoproteinLipase: Metabolizer(
+class LipoproteinLipase: MetabolicProcess(
     ode = LipoproteinLipaseODE(),
     metaboliteTypes = listOf(
         MetaboliteType.CHYLOMICRON,

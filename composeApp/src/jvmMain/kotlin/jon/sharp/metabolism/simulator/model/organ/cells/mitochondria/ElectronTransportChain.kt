@@ -1,9 +1,9 @@
 package jon.sharp.metabolism.simulator.model.organ.cells.mitochondria
 
-import jon.sharp.metabolism.simulator.model.Metabolizer
+import jon.sharp.metabolism.simulator.model.MetabolicProcess
 import jon.sharp.metabolism.simulator.model.MetaboliteType
 
-class ElectronTransportChain: Metabolizer(
+class ElectronTransportChain: MetabolicProcess(
     ode = EtcODE(),
     metaboliteTypes = listOf(
         MetaboliteType.NADH,

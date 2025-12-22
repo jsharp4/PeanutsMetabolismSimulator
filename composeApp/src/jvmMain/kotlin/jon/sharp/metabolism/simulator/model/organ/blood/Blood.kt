@@ -3,12 +3,11 @@ package jon.sharp.metabolism.simulator.model.organ.blood
 import jon.sharp.metabolism.simulator.model.Metabolite
 import jon.sharp.metabolism.simulator.model.MetaboliteMap
 import jon.sharp.metabolism.simulator.model.MetaboliteType
-import jon.sharp.metabolism.simulator.model.Metabolizer
 import jon.sharp.metabolism.simulator.model.Organ
 import jon.sharp.metabolism.simulator.model.PhysicalConstants
 
 class Blood: Organ(
-    metabolizers = listOf(
+    metabolicProcesses = listOf(
         LipoproteinLipase(),
         //InsulinBreakdown()
     ),
