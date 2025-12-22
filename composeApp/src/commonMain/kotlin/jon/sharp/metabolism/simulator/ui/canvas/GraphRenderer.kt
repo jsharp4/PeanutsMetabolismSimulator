@@ -288,6 +288,8 @@ fun DrawScope.drawArrowhead(
 
 /**
  * Draws a label showing metabolite quantities on an edge.
+ * Shows metabolite types and percentages before simulation starts (actualAmount == 0),
+ * and actual amounts during simulation (actualAmount > 0).
  */
 fun DrawScope.drawEdgeLabel(
     position: Offset,
@@ -296,20 +298,40 @@ fun DrawScope.drawEdgeLabel(
     textMeasurer: TextMeasurer,
     colorScheme: ColorScheme
 ) {
-    // Filter to only show metabolites with actual transport (threshold: 0.001 mmol)
-    val activeMetabolites = metabolites.filter { it.actualAmount > 0.001f }
-    if (activeMetabolites.isEmpty()) return
+    if (metabolites.isEmpty()) return
 
-    // Build label text
-    val labelText = if (activeMetabolites.size <= 2) {
-        // Show details for 1-2 metabolites with amounts
-        activeMetabolites.joinToString("\n") {
-            "${it.type}: ${formatWeight(it.actualAmount)}"
+    // Check if simulation has started (any metabolite has actualAmount > 0)
+    val hasActualAmounts = metabolites.any { it.actualAmount > 0.001f }
+
+    // Build label text based on simulation state
+    val labelText = if (hasActualAmounts) {
+        // During simulation: show actual amounts
+        val activeMetabolites = metabolites.filter { it.actualAmount > 0.001f }
+        if (activeMetabolites.isEmpty()) return
+
+        if (activeMetabolites.size <= 2) {
+            // Show details for 1-2 metabolites with amounts
+            activeMetabolites.joinToString("\n") {
+                "${it.type}: ${formatWeight(it.actualAmount)}"
+            }
+        } else {
+            // Show only names for 3+ metabolites to avoid clutter
+            activeMetabolites.joinToString("\n") {
+                it.type.toString()
+            }
         }
     } else {
-        // Show only names for 3+ metabolites to avoid clutter
-        activeMetabolites.joinToString("\n") {
-            it.type.toString()
+        // Before simulation: show metabolite types and percentages
+        if (metabolites.size <= 2) {
+            // Show details for 1-2 metabolites with percentages
+            metabolites.joinToString("\n") {
+                "${it.type}: ${it.percentage.toInt()}%"
+            }
+        } else {
+            // Show only names for 3+ metabolites to avoid clutter
+            metabolites.joinToString("\n") {
+                it.type.toString()
+            }
         }
     }
 
