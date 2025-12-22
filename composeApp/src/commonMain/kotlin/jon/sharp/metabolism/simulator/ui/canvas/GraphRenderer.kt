@@ -26,10 +26,21 @@ import kotlin.math.sin
 
 /**
  * Converts a camel case class name to space-separated display format.
- * Example: "SmallIntestine" -> "Small Intestine"
+ * If more than two words, adds a newline after the second word.
+ * Examples:
+ *   "SmallIntestine" -> "Small Intestine"
+ *   "MitochondrialInnerMembrane" -> "Mitochondrial Inner\nMembrane"
  */
 fun formatOrganName(className: String): String {
-    return className.replace(Regex("([a-z])([A-Z])"), "$1 $2")
+    val spaceSeparated = className.replace(Regex("([a-z])([A-Z])"), "$1 $2")
+    val words = spaceSeparated.split(" ")
+
+    return if (words.size > 2) {
+        // Join first two words, add newline, then join remaining words
+        "${words[0]} ${words[1]}\n${words.drop(2).joinToString(" ")}"
+    } else {
+        spaceSeparated
+    }
 }
 
 /**
