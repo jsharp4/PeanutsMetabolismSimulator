@@ -3,6 +3,7 @@ package jon.sharp.metabolism.simulator.ui.canvas
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import jon.sharp.metabolism.simulator.model.body.OrganLayoutConfig
 import kotlin.math.max
 import kotlin.math.atan2
 
@@ -68,55 +69,18 @@ class GraphLayoutEngine(
     }
 
     /**
-     * Assigns layers to nodes using BFS and detects cycles.
-     * Returns a map of organ name to layer number.
+     * Assigns layers to nodes using the rowNumber from each GraphNode.
+     * Returns a map of organ name to layer (row) number.
      */
     private fun assignLayers(): Map<String, Int> {
-        val layerMap = mutableMapOf<String, Int>()
-        val visited = mutableSetOf<String>()
-
-        // Start from the first node (should be Mouth in the metabolism graph)
-        val startNode = nodes.first()
-        val queue = ArrayDeque<String>()
-
-        queue.add(startNode.organName)
-        layerMap[startNode.organName] = 0
-        visited.add(startNode.organName)
-
-        while (queue.isNotEmpty()) {
-            val currentName = queue.removeFirst()
-            val currentNode = nodes.find { it.organName == currentName }
-                ?: continue
-
-            val currentLayer = layerMap[currentName]!!
-
-            currentNode.edges.forEach { edge ->
-                val destName = edge.destinationName
-
-                if (destName !in visited) {
-                    // Forward edge - assign next layer
-                    layerMap[destName] = currentLayer + 1
-                    visited.add(destName)
-                    queue.add(destName)
-                } else {
-                    // Back edge detected - node already visited
-                    // We'll mark this during edge path calculation
-                }
-            }
+        return nodes.associate { node ->
+            node.organName to node.rowNumber
         }
-
-        // Handle any disconnected nodes (shouldn't happen in this graph)
-        nodes.forEach { node ->
-            if (node.organName !in layerMap) {
-                layerMap[node.organName] = 0
-            }
-        }
-
-        return layerMap
     }
 
     /**
      * Calculates node positions using vertical top-to-bottom layout.
+     * Uses OrganLayoutConfig column numbers for horizontal positioning.
      * Returns both the positions and a color map for nodes.
      */
     private fun calculateVerticalNodePositions(
@@ -125,12 +89,26 @@ class GraphLayoutEngine(
         val positions = mutableMapOf<String, NodePosition>()
         val colorMap = mutableMapOf<String, Color>()
 
-        // Group nodes by layer
+        // Group nodes by layer (row)
         val layers = mutableMapOf<Int, MutableList<GraphNodeWithMetabolites>>()
         nodes.forEach { node ->
             val layer = layerMap[node.organName] ?: 0
             layers.getOrPut(layer) { mutableListOf() }.add(node)
         }
+
+        // Sort nodes within each layer by their column number
+        layers.values.forEach { nodesInLayer ->
+            nodesInLayer.sortBy { OrganLayoutConfig.getColumnNumber(it.organName) }
+        }
+
+        // Find max columns across all layers for consistent width calculation
+        val maxColumns = layers.values.maxOfOrNull { nodesInLayer ->
+            nodesInLayer.maxOfOrNull { OrganLayoutConfig.getColumnNumber(it.organName) } ?: 0
+        } ?: 0
+
+        // Calculate total width needed for max columns
+        val totalWidth = ((maxColumns + 1) * NODE_WIDTH) + (maxColumns * HORIZONTAL_NODE_SPACING)
+        val startX = (availableWidth - totalWidth) / 2
 
         // Calculate Y position for each layer
         var currentY = CANVAS_PADDING
@@ -139,23 +117,19 @@ class GraphLayoutEngine(
         layers.keys.sorted().forEach { layer ->
             val nodesInLayer = layers[layer] ?: emptyList()
 
-            // Calculate total width needed for this layer
-            val totalWidth = (nodesInLayer.size * NODE_WIDTH) + ((nodesInLayer.size - 1) * HORIZONTAL_NODE_SPACING)
-
-            // Center the layer horizontally
-            var currentX = (availableWidth - totalWidth) / 2
-
             // Find the max height in this layer for consistent spacing
             val maxHeightInLayer = nodesInLayer.maxOfOrNull { calculateNodeHeight(it) } ?: NODE_MIN_HEIGHT
 
-            // Position each node in this layer
+            // Position each node in this layer using its column number
             nodesInLayer.forEach { node ->
+                val column = OrganLayoutConfig.getColumnNumber(node.organName)
+                val nodeX = startX + (column * (NODE_WIDTH + HORIZONTAL_NODE_SPACING))
                 val height = calculateNodeHeight(node)
                 val color = getNodeColor(colorIndex++)
 
                 positions[node.organName] = NodePosition(
                     organName = node.organName,
-                    x = currentX,
+                    x = nodeX,
                     y = currentY,
                     width = NODE_WIDTH,
                     height = height,
@@ -163,7 +137,6 @@ class GraphLayoutEngine(
                 )
 
                 colorMap[node.organName] = color
-                currentX += NODE_WIDTH + HORIZONTAL_NODE_SPACING
             }
 
             // Move to next layer

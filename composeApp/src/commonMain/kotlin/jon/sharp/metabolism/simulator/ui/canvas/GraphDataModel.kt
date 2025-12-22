@@ -14,7 +14,8 @@ import jon.sharp.metabolism.simulator.model.body.MetaboliteTransfer
 data class GraphNodeWithMetabolites(
     val organName: String,
     val edges: List<GraphEdge>,
-    val metabolites: List<Metabolite>
+    val metabolites: List<Metabolite>,
+    val rowNumber: Int
 )
 
 /**
@@ -69,7 +70,8 @@ fun createGraphWithMetabolites(
         GraphNodeWithMetabolites(
             organName = graphNode.organName,
             edges = graphNode.edges,
-            metabolites = metabolites
+            metabolites = metabolites,
+            rowNumber = graphNode.rowNumber
         )
     }
 }

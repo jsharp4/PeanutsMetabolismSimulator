@@ -16,8 +16,44 @@ data class MetaboliteTransfer(
 
 data class GraphNode(
     val organName: String,
-    val edges: List<GraphEdge>
+    val edges: List<GraphEdge>,
+    val rowNumber: Int
 )
+
+/**
+ * Configuration for organ layout in the graph visualization.
+ * Row numbers determine vertical position (0 = top).
+ * Column numbers determine horizontal position within a row (0 = leftmost).
+ */
+object OrganLayoutConfig {
+    data class LayoutPosition(val row: Int, val column: Int)
+
+    val organPositions: Map<String, LayoutPosition> = mapOf(
+        "Mouth" to LayoutPosition(row = 0, column = 0),
+        "Stomach" to LayoutPosition(row = 1, column = 0),
+        "Small Intestine" to LayoutPosition(row = 2, column = 0),
+        "Small Intestine Lining" to LayoutPosition(row = 3, column = 0),
+        "Enterocytes" to LayoutPosition(row = 3, column = 1),
+        "Blood" to LayoutPosition(row = 4, column = 0),
+        "Liver" to LayoutPosition(row = 4, column = 1),
+        "Pancreas" to LayoutPosition(row = 5, column = 1),
+        "Cytosol" to LayoutPosition(row = 5, column = 0),
+        "Mitochondrial Matrix" to LayoutPosition(row = 6, column = 0),
+        "Inner Mitochondrial Membrane" to LayoutPosition(row = 7, column = 0)
+    )
+
+    fun getRowNumber(organName: String): Int =
+        organPositions[organName]?.row ?: 0
+
+    fun getColumnNumber(organName: String): Int =
+        organPositions[organName]?.column ?: 0
+
+    /**
+     * Returns a map of organ names to their column numbers for use by the graph visualization.
+     */
+    fun getColumnMap(): Map<String, Int> =
+        organPositions.mapValues { it.value.column }
+}
 
 expect class BodyTransportGraph {
     fun getAllOrgans(): Set<IOrgan>
