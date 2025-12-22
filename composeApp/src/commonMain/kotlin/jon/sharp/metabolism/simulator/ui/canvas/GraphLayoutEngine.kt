@@ -368,7 +368,7 @@ class GraphLayoutEngine(
      * Calculates orthogonal waypoints (right-angle routing) between two nodes.
      * All edges start from the BOTTOM of the source node.
      * Destination side is determined by row/column rules.
-     * Includes obstacle avoidance to ensure edges don't pass through nodes.
+     * Ensures perpendicular approach and minimum turns while avoiding obstacles.
      * @param offset Horizontal offset for parallel edge routing
      * @param nodePositions Map of all node positions for obstacle checking
      */
@@ -383,139 +383,225 @@ class GraphLayoutEngine(
         offset: Float = 0f,
         nodePositions: Map<String, NodePosition>
     ): List<Offset> {
-        val waypoints = mutableListOf<Offset>()
-
         // Always start from BOTTOM of source node
         val startPoint = getConnectionPoint(fromPosition, NodeSide.BOTTOM, offset)
-        waypoints.add(startPoint)
 
         // Determine destination side based on row/column rules
         val destinationSide = determineDestinationSide(fromOrganName, toOrganName, fromRow, toRow)
         val endPoint = getConnectionPoint(toPosition, destinationSide, offset)
 
-        if (isBackEdge) {
-            // For back edges, route around to the side to avoid overlapping nodes
-            val routeOffset = 60f + kotlin.math.abs(offset)
-            val sideX = max(fromPosition.x + fromPosition.width, toPosition.x + toPosition.width) + routeOffset
-
-            // Go down, then to the side, then to destination
-            waypoints.add(Offset(startPoint.x, startPoint.y + 30f))
-            waypoints.add(Offset(sideX, startPoint.y + 30f))
-            waypoints.add(Offset(sideX, endPoint.y))
-            waypoints.add(endPoint)
-        } else {
-            // For forward edges, create orthogonal path based on destination side
-            when (destinationSide) {
-                NodeSide.TOP -> {
-                    // Destination is below source - vertical routing
-                    if (kotlin.math.abs(endPoint.x - startPoint.x) < 10f) {
-                        // Nearly vertical - direct line
-                        waypoints.add(endPoint)
-                    } else {
-                        // Use midpoint for right-angle routing
-                        val midY = (startPoint.y + endPoint.y) / 2
-                        waypoints.add(Offset(startPoint.x, midY))
-                        waypoints.add(Offset(endPoint.x, midY))
-                        waypoints.add(endPoint)
-                    }
-                }
-                NodeSide.LEFT, NodeSide.RIGHT -> {
-                    // Destination is to the side - route down, across, then to side
-                    val verticalClearance = 30f
-                    waypoints.add(Offset(startPoint.x, startPoint.y + verticalClearance))
-                    waypoints.add(Offset(endPoint.x, startPoint.y + verticalClearance))
-                    waypoints.add(Offset(endPoint.x, endPoint.y))
-                    waypoints.add(endPoint)
-                }
-                NodeSide.BOTTOM -> {
-                    // Should not happen with our rules, but handle it
-                    waypoints.add(endPoint)
-                }
-            }
+        // Calculate perpendicular approach point
+        val approachDistance = 40f
+        val approachPoint = when (destinationSide) {
+            NodeSide.TOP -> Offset(endPoint.x, endPoint.y - approachDistance)
+            NodeSide.BOTTOM -> Offset(endPoint.x, endPoint.y + approachDistance)
+            NodeSide.LEFT -> Offset(endPoint.x - approachDistance, endPoint.y)
+            NodeSide.RIGHT -> Offset(endPoint.x + approachDistance, endPoint.y)
         }
 
-        // Check for obstacles and adjust waypoints if needed
-        return avoidObstacles(waypoints, fromOrganName, toOrganName, nodePositions)
+        // Build path with obstacle avoidance
+        val waypoints = buildObstacleFreePath(
+            startPoint,
+            approachPoint,
+            endPoint,
+            destinationSide,
+            fromOrganName,
+            toOrganName,
+            nodePositions,
+            fromPosition,
+            toPosition,
+            isBackEdge
+        )
+
+        return waypoints
     }
 
     /**
-     * Checks if the path intersects any nodes and adds waypoints to route around them.
+     * Builds a path from start to approach point to end, avoiding all obstacles.
      */
-    private fun avoidObstacles(
-        originalWaypoints: List<Offset>,
+    private fun buildObstacleFreePath(
+        start: Offset,
+        approach: Offset,
+        end: Offset,
+        endSide: NodeSide,
         fromOrganName: String,
         toOrganName: String,
-        nodePositions: Map<String, NodePosition>
+        nodePositions: Map<String, NodePosition>,
+        fromPosition: NodePosition,
+        toPosition: NodePosition,
+        isBackEdge: Boolean
     ): List<Offset> {
-        val result = mutableListOf<Offset>()
-        result.add(originalWaypoints.first())
+        val waypoints = mutableListOf<Offset>()
+        waypoints.add(start)
 
-        for (i in 0 until originalWaypoints.size - 1) {
-            val start = originalWaypoints[i]
-            val end = originalWaypoints[i + 1]
+        if (isBackEdge) {
+            // For back edges, route far to the right side
+            val margin = 80f
+            val sideX = max(fromPosition.x + fromPosition.width, toPosition.x + toPosition.width) + margin
+            waypoints.add(Offset(start.x, start.y + 30f))
+            waypoints.add(Offset(sideX, start.y + 30f))
+            waypoints.add(Offset(sideX, approach.y))
+            waypoints.add(approach)
+            waypoints.add(end)
+            return waypoints
+        }
 
-            // Check if this segment intersects any node (except source and destination)
-            val intersectingNodes = nodePositions.filter { (organName, nodePos) ->
-                organName != fromOrganName &&
-                organName != toOrganName &&
-                lineSegmentIntersectsNode(start.x, start.y, end.x, end.y, nodePos)
+        // For forward edges, route with minimum turns
+        when (endSide) {
+            NodeSide.TOP -> {
+                // Approaching from above - need vertical final approach
+                routeForVerticalApproach(waypoints, start, approach, fromOrganName, toOrganName, nodePositions)
             }
-
-            if (intersectingNodes.isEmpty()) {
-                // No obstacles, add the endpoint
-                result.add(end)
-            } else {
-                // There's an obstacle, route around it
-                val obstacle = intersectingNodes.values.first()
-
-                // Determine whether to route around left or right
-                // Choose based on which side is shorter
-                val obstacleLeft = obstacle.x - 20f
-                val obstacleRight = obstacle.x + obstacle.width + 20f
-                val obstacleTop = obstacle.y - 20f
-                val obstacleBottom = obstacle.y + obstacle.height + 20f
-
-                // For horizontal segments, route around top or bottom
-                if (kotlin.math.abs(start.y - end.y) < 5f) {
-                    // Horizontal segment - route around top or bottom
-                    val routeTop = listOf(
-                        Offset(start.x, obstacleTop),
-                        Offset(end.x, obstacleTop)
-                    )
-                    val routeBottom = listOf(
-                        Offset(start.x, obstacleBottom),
-                        Offset(end.x, obstacleBottom)
-                    )
-
-                    // Check which route is shorter and doesn't intersect other obstacles
-                    val useTop = kotlin.math.abs(obstacleTop - start.y) < kotlin.math.abs(obstacleBottom - start.y)
-                    val detourWaypoints = if (useTop) routeTop else routeBottom
-
-                    result.addAll(detourWaypoints)
-                } else {
-                    // Vertical segment - route around left or right
-                    val routeLeft = listOf(
-                        Offset(obstacleLeft, start.y),
-                        Offset(obstacleLeft, end.y)
-                    )
-                    val routeRight = listOf(
-                        Offset(obstacleRight, start.y),
-                        Offset(obstacleRight, end.y)
-                    )
-
-                    // Check which route is shorter
-                    val useLeft = kotlin.math.abs(obstacleLeft - start.x) < kotlin.math.abs(obstacleRight - start.x)
-                    val detourWaypoints = if (useLeft) routeLeft else routeRight
-
-                    result.addAll(detourWaypoints)
-                }
-
-                result.add(end)
+            NodeSide.BOTTOM -> {
+                // Approaching from below - need vertical final approach
+                routeForVerticalApproach(waypoints, start, approach, fromOrganName, toOrganName, nodePositions)
+            }
+            NodeSide.LEFT, NodeSide.RIGHT -> {
+                // Approaching from side - need horizontal final approach
+                routeForHorizontalApproach(waypoints, start, approach, fromOrganName, toOrganName, nodePositions)
             }
         }
 
-        return result
+        waypoints.add(end)
+        return waypoints
     }
+
+    /**
+     * Routes to a point that needs vertical final approach.
+     */
+    private fun routeForVerticalApproach(
+        waypoints: MutableList<Offset>,
+        start: Offset,
+        approach: Offset,
+        fromOrganName: String,
+        toOrganName: String,
+        nodePositions: Map<String, NodePosition>
+    ) {
+        // For vertical approach, we need to get to the X coordinate, then approach vertically
+        if (kotlin.math.abs(approach.x - start.x) < 5f) {
+            // Already aligned vertically - just check for obstacles
+            if (!pathHasObstacles(start, approach, fromOrganName, toOrganName, nodePositions)) {
+                waypoints.add(approach)
+                return
+            }
+        }
+
+        // Need to route: down, across, then to approach point
+        // Find a safe horizontal corridor
+        val corridorY = findSafeHorizontalCorridor(
+            start.x, approach.x, start.y, approach.y,
+            fromOrganName, toOrganName, nodePositions
+        )
+
+        waypoints.add(Offset(start.x, corridorY))
+        waypoints.add(Offset(approach.x, corridorY))
+        waypoints.add(approach)
+    }
+
+    /**
+     * Routes to a point that needs horizontal final approach.
+     */
+    private fun routeForHorizontalApproach(
+        waypoints: MutableList<Offset>,
+        start: Offset,
+        approach: Offset,
+        fromOrganName: String,
+        toOrganName: String,
+        nodePositions: Map<String, NodePosition>
+    ) {
+        // For horizontal approach, we need: vertical down, horizontal across, vertical to approach Y, then horizontal to approach
+        // Find a safe horizontal corridor
+        val corridorY = findSafeHorizontalCorridor(
+            start.x, approach.x, start.y, approach.y,
+            fromOrganName, toOrganName, nodePositions
+        )
+
+        waypoints.add(Offset(start.x, corridorY))
+        waypoints.add(Offset(approach.x, corridorY))
+        waypoints.add(approach)
+    }
+
+    /**
+     * Finds a horizontal Y coordinate that doesn't intersect any nodes.
+     */
+    private fun findSafeHorizontalCorridor(
+        x1: Float, x2: Float, y1: Float, y2: Float,
+        fromOrganName: String,
+        toOrganName: String,
+        nodePositions: Map<String, NodePosition>
+    ): Float {
+        val minX = kotlin.math.min(x1, x2)
+        val maxX = kotlin.math.max(x1, x2)
+        val startY = y1 + 30f
+        val endY = y2
+        val margin = 30f
+
+        // Try corridors at various Y positions
+        val attempts = mutableListOf<Float>()
+        attempts.add(startY)
+
+        // Add more potential corridors
+        for (i in 1..5) {
+            attempts.add(startY + i * 40f)
+        }
+
+        // If going upward, try positions above
+        if (endY < startY) {
+            for (i in 1..3) {
+                attempts.add(startY - i * 40f)
+            }
+        }
+
+        // Test each corridor
+        for (testY in attempts) {
+            var hasObstacle = false
+
+            for ((organName, nodePos) in nodePositions) {
+                if (organName == fromOrganName || organName == toOrganName) continue
+
+                val nodeTop = nodePos.y - margin
+                val nodeBottom = nodePos.y + nodePos.height + margin
+                val nodeLeft = nodePos.x - margin
+                val nodeRight = nodePos.x + nodePos.width + margin
+
+                // Check if corridor at testY would intersect this node
+                if (testY >= nodeTop && testY <= nodeBottom) {
+                    // Corridor is at the height of this node - check if it overlaps horizontally
+                    if (maxX >= nodeLeft && minX <= nodeRight) {
+                        hasObstacle = true
+                        break
+                    }
+                }
+            }
+
+            if (!hasObstacle) {
+                return testY
+            }
+        }
+
+        // Fallback: return a position far below
+        return startY + 100f
+    }
+
+    /**
+     * Checks if a path between two points intersects any nodes.
+     */
+    private fun pathHasObstacles(
+        from: Offset,
+        to: Offset,
+        fromOrganName: String,
+        toOrganName: String,
+        nodePositions: Map<String, NodePosition>
+    ): Boolean {
+        for ((organName, nodePos) in nodePositions) {
+            if (organName == fromOrganName || organName == toOrganName) continue
+            if (lineSegmentIntersectsNode(from.x, from.y, to.x, to.y, nodePos, margin = 20f)) {
+                return true
+            }
+        }
+        return false
+    }
+
 
     /**
      * Calculates the bounding box for the entire canvas.
