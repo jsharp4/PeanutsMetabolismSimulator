@@ -25,6 +25,14 @@ import kotlin.math.min
 import kotlin.math.sin
 
 /**
+ * Converts a camel case class name to space-separated display format.
+ * Example: "SmallIntestine" -> "Small Intestine"
+ */
+fun formatOrganName(className: String): String {
+    return className.replace(Regex("([a-z])([A-Z])"), "$1 $2")
+}
+
+/**
  * Draws a graph node with metabolite information.
  */
 fun DrawScope.drawGraphNode(
@@ -87,7 +95,7 @@ fun DrawScope.drawGraphNode(
         )
     }
 
-    // Draw organ name (header)
+    // Draw organ name (header) - formatted with spaces
     val headerStyle = TextStyle(
         fontSize = 16.sp,
         fontWeight = FontWeight.Bold,
@@ -95,7 +103,7 @@ fun DrawScope.drawGraphNode(
     )
 
     val headerResult = textMeasurer.measure(
-        text = position.organName,
+        text = formatOrganName(position.organName),
         style = headerStyle
     )
 
