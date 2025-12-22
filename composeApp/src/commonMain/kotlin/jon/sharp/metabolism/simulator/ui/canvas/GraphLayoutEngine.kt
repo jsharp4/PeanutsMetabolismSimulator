@@ -8,6 +8,62 @@ import kotlin.math.max
 import kotlin.math.atan2
 
 /**
+ * Represents the four sides of a node for edge connections.
+ */
+enum class NodeSide {
+    TOP, BOTTOM, LEFT, RIGHT
+}
+
+/**
+ * Calculates the connection point on a specific side of a node.
+ */
+fun getConnectionPoint(position: NodePosition, side: NodeSide, offset: Float = 0f): Offset {
+    return when (side) {
+        NodeSide.TOP -> Offset(
+            x = position.x + (position.width / 2) + offset,
+            y = position.y
+        )
+        NodeSide.BOTTOM -> Offset(
+            x = position.x + (position.width / 2) + offset,
+            y = position.y + position.height
+        )
+        NodeSide.LEFT -> Offset(
+            x = position.x,
+            y = position.y + (position.height / 2)
+        )
+        NodeSide.RIGHT -> Offset(
+            x = position.x + position.width,
+            y = position.y + (position.height / 2)
+        )
+    }
+}
+
+/**
+ * Determines which side of the destination node to connect to based on simple row/column rules.
+ * Rules:
+ * - If origin row < destination row: connect to TOP of destination
+ * - If origin row > destination row: connect to LEFT (if origin column > dest column) or RIGHT (if origin column < dest column)
+ * - If origin row == destination row: connect to LEFT or RIGHT based on column comparison
+ */
+fun determineDestinationSide(
+    fromOrganName: String,
+    toOrganName: String,
+    fromRow: Int,
+    toRow: Int
+): NodeSide {
+    val fromColumn = OrganLayoutConfig.getColumnNumber(fromOrganName)
+    val toColumn = OrganLayoutConfig.getColumnNumber(toOrganName)
+
+    return when {
+        fromRow < toRow -> NodeSide.TOP
+        fromRow > toRow || fromRow == toRow -> {
+            if (fromColumn > toColumn) NodeSide.LEFT else NodeSide.RIGHT
+        }
+        else -> NodeSide.TOP // fallback
+    }
+}
+
+/**
  * Layout engine that computes spatial positions for graph nodes using an adaptive hierarchical layout.
  */
 class GraphLayoutEngine(
@@ -221,8 +277,12 @@ class GraphLayoutEngine(
 
                 // Calculate orthogonal waypoints with parallel offset
                 val waypoints = calculateOrthogonalWaypoints(
+                    edgeInfo.fromNode,
+                    edgeInfo.toNode,
                     edgeInfo.fromPosition,
                     edgeInfo.toPosition,
+                    edgeInfo.fromLayer,
+                    edgeInfo.toLayer,
                     edgeInfo.isBackEdge,
                     offset
                 )
@@ -250,48 +310,69 @@ class GraphLayoutEngine(
     }
 
     /**
-     * Calculates orthogonal waypoints (right-angle routing) between two nodes for vertical layout.
+     * Calculates orthogonal waypoints (right-angle routing) between two nodes.
+     * All edges start from the BOTTOM of the source node.
+     * Destination side is determined by row/column rules.
      * @param offset Horizontal offset for parallel edge routing
      */
     private fun calculateOrthogonalWaypoints(
+        fromOrganName: String,
+        toOrganName: String,
         fromPosition: NodePosition,
         toPosition: NodePosition,
+        fromRow: Int,
+        toRow: Int,
         isBackEdge: Boolean,
         offset: Float = 0f
     ): List<Offset> {
         val waypoints = mutableListOf<Offset>()
 
-        // Start from bottom-center of source node (with offset)
-        val startX = fromPosition.x + (fromPosition.width / 2) + offset
-        val startY = fromPosition.y + fromPosition.height
-        waypoints.add(Offset(startX, startY))
+        // Always start from BOTTOM of source node
+        val startPoint = getConnectionPoint(fromPosition, NodeSide.BOTTOM, offset)
+        waypoints.add(startPoint)
 
-        // End at top-center of destination node (with offset)
-        val endX = toPosition.x + (toPosition.width / 2) + offset
-        val endY = toPosition.y
+        // Determine destination side based on row/column rules
+        val destinationSide = determineDestinationSide(fromOrganName, toOrganName, fromRow, toRow)
+        val endPoint = getConnectionPoint(toPosition, destinationSide, offset)
 
         if (isBackEdge) {
             // For back edges, route around to the side to avoid overlapping nodes
             val routeOffset = 60f + kotlin.math.abs(offset)
             val sideX = max(fromPosition.x + fromPosition.width, toPosition.x + toPosition.width) + routeOffset
 
-            // Go down, then to the side, then up to destination
-            waypoints.add(Offset(startX, startY + 30f))
-            waypoints.add(Offset(sideX, startY + 30f))
-            waypoints.add(Offset(sideX, endY - 30f))
-            waypoints.add(Offset(endX, endY - 30f))
-            waypoints.add(Offset(endX, endY))
+            // Go down, then to the side, then to destination
+            waypoints.add(Offset(startPoint.x, startPoint.y + 30f))
+            waypoints.add(Offset(sideX, startPoint.y + 30f))
+            waypoints.add(Offset(sideX, endPoint.y))
+            waypoints.add(endPoint)
         } else {
-            // For forward edges, use simple vertical routing
-            if (kotlin.math.abs(endX - startX) < 10f) {
-                // Nearly vertical - direct line (with offset applied)
-                waypoints.add(Offset(endX, endY))
-            } else {
-                // Use midpoint for right-angle routing (offset maintains parallel paths)
-                val midY = (startY + endY) / 2
-                waypoints.add(Offset(startX, midY))
-                waypoints.add(Offset(endX, midY))
-                waypoints.add(Offset(endX, endY))
+            // For forward edges, create orthogonal path based on destination side
+            when (destinationSide) {
+                NodeSide.TOP -> {
+                    // Destination is below source - vertical routing
+                    if (kotlin.math.abs(endPoint.x - startPoint.x) < 10f) {
+                        // Nearly vertical - direct line
+                        waypoints.add(endPoint)
+                    } else {
+                        // Use midpoint for right-angle routing
+                        val midY = (startPoint.y + endPoint.y) / 2
+                        waypoints.add(Offset(startPoint.x, midY))
+                        waypoints.add(Offset(endPoint.x, midY))
+                        waypoints.add(endPoint)
+                    }
+                }
+                NodeSide.LEFT, NodeSide.RIGHT -> {
+                    // Destination is to the side - route down, across, then to side
+                    val verticalClearance = 30f
+                    waypoints.add(Offset(startPoint.x, startPoint.y + verticalClearance))
+                    waypoints.add(Offset(endPoint.x, startPoint.y + verticalClearance))
+                    waypoints.add(Offset(endPoint.x, endPoint.y))
+                    waypoints.add(endPoint)
+                }
+                NodeSide.BOTTOM -> {
+                    // Should not happen with our rules, but handle it
+                    waypoints.add(endPoint)
+                }
             }
         }
 
