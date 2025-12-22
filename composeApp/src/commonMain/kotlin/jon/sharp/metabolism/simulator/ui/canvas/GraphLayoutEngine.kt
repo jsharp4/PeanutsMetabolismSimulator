@@ -64,6 +64,60 @@ fun determineDestinationSide(
 }
 
 /**
+ * Checks if a line segment from (x1, y1) to (x2, y2) intersects with a node's bounding box.
+ * Uses a margin around the node to ensure clearance.
+ */
+fun lineSegmentIntersectsNode(
+    x1: Float, y1: Float, x2: Float, y2: Float,
+    nodePosition: NodePosition,
+    margin: Float = 10f
+): Boolean {
+    val nodeLeft = nodePosition.x - margin
+    val nodeRight = nodePosition.x + nodePosition.width + margin
+    val nodeTop = nodePosition.y - margin
+    val nodeBottom = nodePosition.y + nodePosition.height + margin
+
+    // Check if the line segment intersects the expanded node rectangle
+    // Using Liang-Barsky algorithm for line-rectangle intersection
+
+    val dx = x2 - x1
+    val dy = y2 - y1
+
+    if (dx == 0f && dy == 0f) {
+        // Point check
+        return x1 >= nodeLeft && x1 <= nodeRight && y1 >= nodeTop && y1 <= nodeBottom
+    }
+
+    var t0 = 0f
+    var t1 = 1f
+
+    // Check against each edge
+    val edges = listOf(
+        Pair(-dx, x1 - nodeLeft),   // left
+        Pair(dx, nodeRight - x1),    // right
+        Pair(-dy, y1 - nodeTop),     // top
+        Pair(dy, nodeBottom - y1)    // bottom
+    )
+
+    for ((p, q) in edges) {
+        if (p == 0f) {
+            if (q < 0f) return false
+        } else {
+            val r = q / p
+            if (p < 0f) {
+                if (r > t1) return false
+                if (r > t0) t0 = r
+            } else {
+                if (r < t0) return false
+                if (r < t1) t1 = r
+            }
+        }
+    }
+
+    return t0 <= t1
+}
+
+/**
  * Layout engine that computes spatial positions for graph nodes using an adaptive hierarchical layout.
  */
 class GraphLayoutEngine(
@@ -284,7 +338,8 @@ class GraphLayoutEngine(
                     edgeInfo.fromLayer,
                     edgeInfo.toLayer,
                     edgeInfo.isBackEdge,
-                    offset
+                    offset,
+                    nodePositions
                 )
 
                 // Extract metabolites from the source node's edges
@@ -313,7 +368,9 @@ class GraphLayoutEngine(
      * Calculates orthogonal waypoints (right-angle routing) between two nodes.
      * All edges start from the BOTTOM of the source node.
      * Destination side is determined by row/column rules.
+     * Includes obstacle avoidance to ensure edges don't pass through nodes.
      * @param offset Horizontal offset for parallel edge routing
+     * @param nodePositions Map of all node positions for obstacle checking
      */
     private fun calculateOrthogonalWaypoints(
         fromOrganName: String,
@@ -323,7 +380,8 @@ class GraphLayoutEngine(
         fromRow: Int,
         toRow: Int,
         isBackEdge: Boolean,
-        offset: Float = 0f
+        offset: Float = 0f,
+        nodePositions: Map<String, NodePosition>
     ): List<Offset> {
         val waypoints = mutableListOf<Offset>()
 
@@ -376,7 +434,87 @@ class GraphLayoutEngine(
             }
         }
 
-        return waypoints
+        // Check for obstacles and adjust waypoints if needed
+        return avoidObstacles(waypoints, fromOrganName, toOrganName, nodePositions)
+    }
+
+    /**
+     * Checks if the path intersects any nodes and adds waypoints to route around them.
+     */
+    private fun avoidObstacles(
+        originalWaypoints: List<Offset>,
+        fromOrganName: String,
+        toOrganName: String,
+        nodePositions: Map<String, NodePosition>
+    ): List<Offset> {
+        val result = mutableListOf<Offset>()
+        result.add(originalWaypoints.first())
+
+        for (i in 0 until originalWaypoints.size - 1) {
+            val start = originalWaypoints[i]
+            val end = originalWaypoints[i + 1]
+
+            // Check if this segment intersects any node (except source and destination)
+            val intersectingNodes = nodePositions.filter { (organName, nodePos) ->
+                organName != fromOrganName &&
+                organName != toOrganName &&
+                lineSegmentIntersectsNode(start.x, start.y, end.x, end.y, nodePos)
+            }
+
+            if (intersectingNodes.isEmpty()) {
+                // No obstacles, add the endpoint
+                result.add(end)
+            } else {
+                // There's an obstacle, route around it
+                val obstacle = intersectingNodes.values.first()
+
+                // Determine whether to route around left or right
+                // Choose based on which side is shorter
+                val obstacleLeft = obstacle.x - 20f
+                val obstacleRight = obstacle.x + obstacle.width + 20f
+                val obstacleTop = obstacle.y - 20f
+                val obstacleBottom = obstacle.y + obstacle.height + 20f
+
+                // For horizontal segments, route around top or bottom
+                if (kotlin.math.abs(start.y - end.y) < 5f) {
+                    // Horizontal segment - route around top or bottom
+                    val routeTop = listOf(
+                        Offset(start.x, obstacleTop),
+                        Offset(end.x, obstacleTop)
+                    )
+                    val routeBottom = listOf(
+                        Offset(start.x, obstacleBottom),
+                        Offset(end.x, obstacleBottom)
+                    )
+
+                    // Check which route is shorter and doesn't intersect other obstacles
+                    val useTop = kotlin.math.abs(obstacleTop - start.y) < kotlin.math.abs(obstacleBottom - start.y)
+                    val detourWaypoints = if (useTop) routeTop else routeBottom
+
+                    result.addAll(detourWaypoints)
+                } else {
+                    // Vertical segment - route around left or right
+                    val routeLeft = listOf(
+                        Offset(obstacleLeft, start.y),
+                        Offset(obstacleLeft, end.y)
+                    )
+                    val routeRight = listOf(
+                        Offset(obstacleRight, start.y),
+                        Offset(obstacleRight, end.y)
+                    )
+
+                    // Check which route is shorter
+                    val useLeft = kotlin.math.abs(obstacleLeft - start.x) < kotlin.math.abs(obstacleRight - start.x)
+                    val detourWaypoints = if (useLeft) routeLeft else routeRight
+
+                    result.addAll(detourWaypoints)
+                }
+
+                result.add(end)
+            }
+        }
+
+        return result
     }
 
     /**
