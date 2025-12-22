@@ -31,9 +31,9 @@ class LipaseODE: FirstOrderDifferentialEquations {
                         -rateConstantDio * exp(-rateConstantDio * t))
 
         val dMonoDt = y[0] / (rateConstantDio - rateConstantTrio) *
-                ((rateConstantTrio * rateConstantDio) * (-exp(-rateConstantTrio * t) + exp(-rateConstantDio * t)))
+                ((rateConstantTrio * rateConstantDio) * (exp(-rateConstantTrio * t) - exp(-rateConstantDio * t)))
 
-        val dOleicDt = dTrioleinDt + dDioDt
+        val dOleicDt = -dTrioleinDt - dDioDt
 
         yDot!![0] = dTrioleinDt
         yDot[1] = dDioDt

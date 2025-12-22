@@ -22,6 +22,9 @@ abstract class Organ(
     }
 
     override fun metabolizeTimeStep(inputs: MetaboliteMap, t0: Double) {
+        if (this.javaClass.simpleName == "SmallIntestine") {
+            println("hi")
+        }
         addMetabolitesToPool(inputs)
         metabolicProcesses.forEach { metabolizer ->
             val updatedSubstrates = metabolizer.processSubstrates(metabolitesMap, t0)
