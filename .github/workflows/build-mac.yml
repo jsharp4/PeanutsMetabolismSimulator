@@ -1,5 +1,6 @@
 name: Build macOS App
-on: [push]
+on:
+  workflow_dispatch:
 
 jobs:
   build:
@@ -24,4 +25,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: macOS-Installer
-          path: build/compose/binaries/main/dmg/*.dmg
+          path: composeApp/build/compose/binaries/main/dmg/*.dmg
