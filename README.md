@@ -1,3 +1,7 @@
+## See Paper Writeup
+`jon-sharp-project-final.pdf` within this directory
+
+## Basic setup documentation (Provided by Kotlin Compose template)
 This is a Kotlin Multiplatform project targeting Android, iOS, Web, Desktop (JVM).
 
 * [/composeApp](./composeApp/src) is for code that will be shared across your Compose Multiplatform applications.
