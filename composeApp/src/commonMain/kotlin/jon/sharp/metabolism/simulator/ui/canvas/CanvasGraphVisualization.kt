@@ -37,6 +37,9 @@ fun getOrganImage(organName: String): ImageBitmap? {
     }
 }
 
+/**
+ * Main composable for canvas-based graph visualization with integrated organ displays.
+ */
 @Composable
 fun CanvasGraphVisualization(
     transportGraph: BodyTransportGraph,
@@ -44,9 +47,11 @@ fun CanvasGraphVisualization(
     modifier: Modifier = Modifier
 ) {
     // Merge graph structure with metabolites
+    // Note: No remember() here because parent uses key(updateCount) to control updates
+    // and we need fresh edge transport data on each render
     val graphData = createGraphWithMetabolites(transportGraph, body)
 
-    // Load organ images
+    // Load organ images - must be done in composable scope
     val organImages = graphData.associate { node ->
         node.organName to getOrganImage(node.organName)
     }
@@ -54,12 +59,13 @@ fun CanvasGraphVisualization(
     val colorScheme = MaterialTheme.colorScheme
     val textMeasurer = rememberTextMeasurer()
 
+    // Use BoxWithConstraints to get available width for adaptive layout
     BoxWithConstraints(
         modifier = modifier.fillMaxWidth()
     ) {
         val availableWidthPx = constraints.maxWidth.toFloat()
 
-        // Compute layout based on available width
+        // Compute layout based on available width (recalculate when width or data changes)
         val layoutResult = remember(graphData, availableWidthPx) {
             GraphLayoutEngine(graphData, availableWidthPx).computeLayout()
         }
@@ -69,15 +75,16 @@ fun CanvasGraphVisualization(
                 .fillMaxWidth()
                 .height(layoutResult.canvasHeight.dp)
         ) {
-            // PASS 1: Draw all edge lines (Bottom Layer)
+            // Draw all edges first (behind nodes)
             layoutResult.edgePaths.forEach { edgePath ->
                 drawGraphEdge(
                     edgePath = edgePath,
-                    colorScheme = colorScheme
+                    colorScheme = colorScheme,
+                    textMeasurer = textMeasurer
                 )
             }
 
-            // PASS 2: Draw all nodes (Middle Layer)
+            // Draw all nodes on top
             graphData.forEach { node ->
                 val position = layoutResult.nodePositions[node.organName]
                 if (position != null) {
@@ -87,25 +94,6 @@ fun CanvasGraphVisualization(
                         colorScheme = colorScheme,
                         textMeasurer = textMeasurer,
                         organImage = organImages[node.organName]
-                    )
-                }
-            }
-
-            // PASS 3: Draw all edge labels (Top Layer - "Sent to Front")
-            layoutResult.edgePaths.forEach { edgePath ->
-                if (edgePath.metabolites.isNotEmpty()) {
-                    // Calculate a position that doesn't overlap any nodes
-                    val labelPosition = calculateLabelPosition(
-                        waypoints = edgePath.waypoints,
-                        nodePositions = layoutResult.nodePositions
-                    )
-
-                    drawEdgeLabel(
-                        position = labelPosition,
-                        metabolites = edgePath.metabolites,
-                        color = edgePath.color,
-                        textMeasurer = textMeasurer,
-                        colorScheme = colorScheme
                     )
                 }
             }

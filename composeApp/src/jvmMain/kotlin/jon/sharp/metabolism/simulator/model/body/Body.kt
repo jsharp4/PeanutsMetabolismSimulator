@@ -82,10 +82,10 @@ actual class Body(
                 // Create MetaboliteMap to capture transported amounts for visualization
                 val transportedMetabolites = MetaboliteMap()
 
-                val rateLimitedRetainedMetabolites = currentNode.organ.metabolitesMap.copy()
+                val rateLimitedRetainedMetabolites = MetaboliteMap()
                 edge.rateLimiter.forEach {
                     rateLimitedRetainedMetabolites.updateQuantities(
-                        it.processSubstrates(rateLimitedRetainedMetabolites, t0)
+                        it.processSubstrates(currentNode.organ.metabolitesMap, t0)
                     )
                 }
 

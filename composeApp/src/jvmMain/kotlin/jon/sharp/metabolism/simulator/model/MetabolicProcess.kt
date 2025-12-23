@@ -18,7 +18,7 @@ import org.apache.commons.math3.ode.FirstOrderDifferentialEquations
  */
 abstract class MetabolicProcess(
     ode: FirstOrderDifferentialEquations,
-    protected val metaboliteTypes: List<MetaboliteType>
+    val metaboliteTypes: List<MetaboliteType>
 ) : IMetabolicProcess {
 
     /**

@@ -22,7 +22,7 @@ abstract class Organ(
     }
 
     override fun metabolizeTimeStep(inputs: MetaboliteMap, t0: Double) {
-        if (this.javaClass.simpleName == "SmallIntestine") {
+        if (this.javaClass.simpleName == "Pancreas") {
             println("hi")
         }
         addMetabolitesToPool(inputs)

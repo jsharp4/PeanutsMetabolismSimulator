@@ -25,25 +25,6 @@ import kotlin.math.min
 import kotlin.math.sin
 
 /**
- * Converts a camel case class name to space-separated display format.
- * If more than two words, adds a newline after the second word.
- * Examples:
- *   "SmallIntestine" -> "Small Intestine"
- *   "MitochondrialInnerMembrane" -> "Mitochondrial Inner\nMembrane"
- */
-fun formatOrganName(className: String): String {
-    val spaceSeparated = className.replace(Regex("([a-z])([A-Z])"), "$1 $2")
-    val words = spaceSeparated.split(" ")
-
-    return if (words.size > 2) {
-        // Join first two words, add newline, then join remaining words
-        "${words[0]} ${words[1]}\n${words.drop(2).joinToString(" ")}"
-    } else {
-        spaceSeparated
-    }
-}
-
-/**
  * Draws a graph node with metabolite information.
  */
 fun DrawScope.drawGraphNode(
@@ -106,7 +87,7 @@ fun DrawScope.drawGraphNode(
         )
     }
 
-    // Draw organ name (header) - formatted with spaces
+    // Draw organ name (header)
     val headerStyle = TextStyle(
         fontSize = 16.sp,
         fontWeight = FontWeight.Bold,
@@ -114,7 +95,7 @@ fun DrawScope.drawGraphNode(
     )
 
     val headerResult = textMeasurer.measure(
-        text = formatOrganName(position.organName),
+        text = position.organName,
         style = headerStyle
     )
 
@@ -200,38 +181,51 @@ fun DrawScope.drawGraphNode(
 /**
  * Draws an edge between nodes using orthogonal routing.
  */
-/**
- * Draws an edge between nodes using orthogonal routing.
- * Requires nodePositions to ensure edge labels are placed in empty spaces.
- */
-/**
- * Draws the line segments and arrowhead for an edge.
- * Labels are now handled separately to ensure they appear on the top-most layer.
- */
 fun DrawScope.drawGraphEdge(
     edgePath: EdgePath,
-    colorScheme: ColorScheme
+    colorScheme: ColorScheme,
+    textMeasurer: TextMeasurer
 ) {
-    val color = edgePath.color
+    val color = edgePath.color // Use the edge's assigned color (matches source node)
+
     val waypoints = edgePath.waypoints
     if (waypoints.size < 2) return
 
-    // 1. Draw the lines
+    // Draw orthogonal path through waypoints (all solid lines)
     for (i in 0 until waypoints.size - 1) {
+        val start = waypoints[i]
+        val end = waypoints[i + 1]
+
         drawLine(
             color = color,
-            start = waypoints[i],
-            end = waypoints[i + 1],
+            start = start,
+            end = end,
             strokeWidth = 3f
         )
     }
 
-    // 2. Draw the arrowhead at the end
-    val last = waypoints.last()
-    val prev = waypoints[waypoints.size - 2]
-    val angle = calculateArrowAngle(prev.x, prev.y, last.x, last.y)
+    // Draw arrowhead at the end
+    val lastSegmentStart = waypoints[waypoints.size - 2]
+    val lastSegmentEnd = waypoints[waypoints.size - 1]
+    val angle = calculateArrowAngle(
+        lastSegmentStart.x,
+        lastSegmentStart.y,
+        lastSegmentEnd.x,
+        lastSegmentEnd.y
+    )
+    drawArrowhead(lastSegmentEnd.x, lastSegmentEnd.y, angle, color)
 
-    drawArrowhead(last.x, last.y, angle, color)
+    // Draw label if there are metabolites to show
+    if (edgePath.metabolites.isNotEmpty()) {
+        val labelPosition = calculateLabelPosition(waypoints)
+        drawEdgeLabel(
+            position = labelPosition,
+            metabolites = edgePath.metabolites,
+            color = color,
+            textMeasurer = textMeasurer,
+            colorScheme = colorScheme
+        )
+    }
 }
 
 /**
@@ -274,8 +268,7 @@ fun DrawScope.drawArrowhead(
 }
 
 /**
- * Draws the metabolite label.
- * Alpha is set to 1.0f to ensure it masks nodes/lines underneath.
+ * Draws a label showing metabolite quantities on an edge.
  */
 fun DrawScope.drawEdgeLabel(
     position: Offset,
@@ -284,44 +277,64 @@ fun DrawScope.drawEdgeLabel(
     textMeasurer: TextMeasurer,
     colorScheme: ColorScheme
 ) {
-    if (metabolites.isEmpty()) return
+    // Filter to only show metabolites with actual transport (threshold: 0.001 mmol)
+    val activeMetabolites = metabolites.filter { it.actualAmount > 0.001f }
+    if (activeMetabolites.isEmpty()) return
 
-    val labelText = metabolites.joinToString("\n") { it.type.toString() }
+    // Build label text
+    val labelText = if (activeMetabolites.size <= 2) {
+        // Show details for 1-2 metabolites with amounts
+        activeMetabolites.joinToString("\n") {
+            "${it.type}: ${formatWeight(it.actualAmount)}"
+        }
+    } else {
+        // Show only names for 3+ metabolites to avoid clutter
+        activeMetabolites.joinToString("\n") {
+            it.type.toString()
+        }
+    }
+
     val textStyle = TextStyle(
         fontSize = 10.sp,
-        fontWeight = FontWeight.Bold,
-        color = Color.White
+        fontWeight = FontWeight.Normal,
+        color = colorScheme.onSurface
     )
 
     val textResult = textMeasurer.measure(labelText, textStyle)
-    val padding = 6f
+
+    // Background box with padding
+    val padding = 4f
     val boxWidth = textResult.size.width + (padding * 2)
     val boxHeight = textResult.size.height + (padding * 2)
 
     val boxTopLeft = Offset(
         x = position.x - (boxWidth / 2),
-        y = position.y - boxHeight - 10f
+        y = position.y - boxHeight - 10f  // Offset above the line
     )
 
-    // Draw solid background (Send to Front requires 1.0f alpha to hide what's behind)
+    // Draw semi-transparent background (darker than edge color for contrast)
     drawRoundRect(
-        color = color.copy(alpha = 1.0f),
+        color = color.copy(alpha = 0.85f),
         topLeft = boxTopLeft,
         size = Size(boxWidth, boxHeight),
         cornerRadius = CornerRadius(4f, 4f)
     )
 
-    // White border for extra "pop" on the top layer
+    // Draw border for better definition
     drawRoundRect(
-        color = Color.White.copy(alpha = 0.5f),
+        color = color,
         topLeft = boxTopLeft,
         size = Size(boxWidth, boxHeight),
         cornerRadius = CornerRadius(4f, 4f),
         style = Stroke(width = 1f)
     )
 
+    // Draw text
     drawText(
         textLayoutResult = textResult,
-        topLeft = boxTopLeft + Offset(padding, padding)
+        topLeft = Offset(
+            x = boxTopLeft.x + padding,
+            y = boxTopLeft.y + padding
+        )
     )
 }
