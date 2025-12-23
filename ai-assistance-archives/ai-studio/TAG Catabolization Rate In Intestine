@@ -1,0 +1,206 @@
+{
+  "runSettings": {
+    "temperature": 1.0,
+    "model": "models/gemini-3-pro-preview",
+    "topP": 0.95,
+    "topK": 64,
+    "maxOutputTokens": 65536,
+    "safetySettings": [{
+      "category": "HARM_CATEGORY_HARASSMENT",
+      "threshold": "OFF"
+    }, {
+      "category": "HARM_CATEGORY_HATE_SPEECH",
+      "threshold": "OFF"
+    }, {
+      "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+      "threshold": "OFF"
+    }, {
+      "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
+      "threshold": "OFF"
+    }],
+    "enableCodeExecution": false,
+    "enableSearchAsATool": true,
+    "enableBrowseAsATool": false,
+    "enableAutoFunctionResponse": false,
+    "thinkingBudget": -1,
+    "googleSearch": {
+    },
+    "outputResolution": "1K",
+    "thinkingLevel": "THINKING_HIGH"
+  },
+  "systemInstruction": {
+  },
+  "chunkedPrompt": {
+    "chunks": [{
+      "text": "I need an academic source for the rate of catabolization of TAGs in the intestine due to bile salts and pancreatic lipase",
+      "role": "user",
+      "tokenCount": 26
+    }, {
+      "text": "**Analyzing Lipolysis Kinetics**\n\nI\u0027m currently focused on the enzymatic breakdown of triglycerides in the gut. I\u0027m digging into academic literature to pinpoint the reaction rates and turnover numbers associated with pancreatic lipase\u0027s activity. The role of bile salts in this process is also a high priority. I aim to uncover the specific kinetic details I need.\n\n\n**Reviewing Reaction Mechanisms**\n\nI\u0027m now zeroing in on the mechanism of lipolysis, especially the interaction of key players: lipase, colipase, and bile salts. Finding the actual rate of TAG catabolization is the objective, so I\u0027m deep diving into the kinetics literature to get specific numbers. I\u0027ll summarize everything and provide a citation.\n\n\n**Analyzing Lipid Digestion**\n\nI\u0027m now diving into the mechanisms of lipid digestion.  The research highlights pancreatic lipase\u0027s sequential hydrolysis of TAGs.  I\u0027m focusing on the interplay of colipase and bile salts in this enzymatic process.\n\n\n**Evaluating Lipase Kinetics**\n\nI\u0027m now investigating lipase kinetics, considering the impact of colipase and bile salts. It appears that high bile salt concentrations inhibit lipase, but colipase reverses this by anchoring it at the interface. While snippets hint at increased activity, specific rate numbers are elusive due to assay dependence. I\u0027m scrutinizing rate constants for TAG hydrolysis steps, which may need clarification from more readings, and noting reaction times as another factor to consider.\n\n\n**Calculating Lipase Activity**\n\nI\u0027m now hunting for precise kinetic data. The literature points to 75% of fatty acids released from the initial reaction, but I\u0027m eager for numerical specifics. I\u0027m focusing on \"specific activity\" (Units/mg) and \"turnover number\" under physiological conditions, especially considering bile salts and colipase. I\u0027ve noted an activation energy of approximately 59.8 kJ/mol.\n\n\n**Defining Lipase Rates**\n\nI\u0027m presently synthesizing the rate constants for pancreatic lipase activity and have identified several key papers. The data seems variable, but I\u0027m extracting representative kcat values, aiming to describe them within the context of bile salt inhibition and colipase activation. I\u0027ll need to pinpoint optimal conditions reported in these papers to get a fair view of lipase activity under physiological circumstances, and I\u0027ll include citations, of course.\n\n\n**Evaluating the Findings**\n\nI\u0027ve been poring over the search results, and some numbers are starting to pop out. For example, I found that the activity of stingray pancreatic colipase is around 9200 U/mg with olive oil as a substrate. This looks promising. Now, I\u0027m trying to figure out how this compares to other colipases.\n\n\n**Investigating Activity Kinetics**\n\nI\u0027m now diving into the kinetics aspect, and it\u0027s getting more interesting.  I found specific activity for the purified CoSPL, which is good.  However, I\u0027m slightly puzzled about the units as they are a bit ambiguous about if they measure the colipase or the lipase itself. I found maximal hydrolysis rate and rate constants. And, there\u0027s a good study that provides context on bile salts and colipase. The restoration effect mentioned is something that may need to be factored in.\n\n\n**Comparing Key Activities**\n\nI\u0027ve been double-checking the figures and thinking I have enough to construct an answer.  Specifically, I\u0027m verifying the 9200 U/mg value in relation to lipase activity per mg of colipase.  I found the specific activities for porcine pancreatic lipase are 2,000-4,000 U/mg. I can now confidently discuss the factors affecting hydrolysis rates.\n\n\n**Verifying Baseline Activity**\n\nI\u0027m focusing now on establishing a reliable baseline comparison. The 9200 U/mg figure for stingray colipase needs a solid reference point. I\u0027m searching for the specific activity of pure porcine pancreatic lipase from a reliable source like Sigma-Aldrich or a classic biochemistry text.  This will help me to quantify the \"variable but high\" concept and explain the kinetic mechanisms I\u0027ve uncovered. I have to make sure the units are consistent!\n\n\n**Reviewing the Data**\n\nI have enough information to address the user\u0027s inquiry now. Specifically, I\u0027ve confirmed that pancreatic lipase is inhibited by bile salts when their concentration surpasses the CMC, as the bile salts outcompete the enzyme for space at the lipid interface.\n\n\n**Analyzing Enzyme Kinetics**\n\nNow, I\u0027m focusing on the enzyme kinetics.  I\u0027ve found specific activity values varying widely: pure porcine lipase clocks in at 2,000-4,000 U/mg, and some even higher, while commercial \"High Activity\" versions are lower. The key Borgstrom paper from 1975 emphasizes the restoration of activity. I\u0027ve also found a range for maximal hydrolysis rates around 1.25 mg fat per ml per minute.\n\n\n**Estimating Turnover Rates**\n\nI\u0027m now considering the $k_{cat}$ values. Based on my general enzyme knowledge and the specific activity data I have, I\u0027m estimating turnover numbers for lipases around 10^3 to 10^4 s^-1.  The multi-step hydrolysis process and potential lag times due to product accumulation are now being considered.\n\n\n**Defining Enzyme Units**\n\nI\u0027m now clarifying the units used for lipase activity. I\u0027ve confirmed that \"U/mg\" indeed represents micromoles of fatty acid released per minute per milligram of enzyme. Since one triglyceride molecule yields two fatty acid molecules during hydrolysis, I need to explicitly state this in my response to avoid any ambiguity. With this final detail, I\u0027m ready to begin composing a complete and accurate response.\n\n\n",
+      "role": "model",
+      "tokenCount": 1372,
+      "isThought": true,
+      "parts": [{
+        "text": "**Analyzing Lipolysis Kinetics**\n\nI\u0027m currently focused on the enzymatic breakdown of triglycerides in the gut. I\u0027m digging into academic literature to pinpoint the reaction rates and turnover numbers associated with pancreatic lipase\u0027s activity. The role of bile salts in this process is also a high priority. I aim to uncover the specific kinetic details I need.\n\n\n",
+        "thought": true
+      }, {
+        "text": "**Reviewing Reaction Mechanisms**\n\nI\u0027m now zeroing in on the mechanism of lipolysis, especially the interaction of key players: lipase, colipase, and bile salts. Finding the actual rate of TAG catabolization is the objective, so I\u0027m deep diving into the kinetics literature to get specific numbers. I\u0027ll summarize everything and provide a citation.\n\n\n",
+        "thought": true
+      }, {
+        "text": "**Analyzing Lipid Digestion**\n\nI\u0027m now diving into the mechanisms of lipid digestion.  The research highlights pancreatic lipase\u0027s sequential hydrolysis of TAGs.  I\u0027m focusing on the interplay of colipase and bile salts in this enzymatic process.\n\n\n",
+        "thought": true
+      }, {
+        "text": "**Evaluating Lipase Kinetics**\n\nI\u0027m now investigating lipase kinetics, considering the impact of colipase and bile salts. It appears that high bile salt concentrations inhibit lipase, but colipase reverses this by anchoring it at the interface. While snippets hint at increased activity, specific rate numbers are elusive due to assay dependence. I\u0027m scrutinizing rate constants for TAG hydrolysis steps, which may need clarification from more readings, and noting reaction times as another factor to consider.\n\n\n",
+        "thought": true
+      }, {
+        "text": "**Calculating Lipase Activity**\n\nI\u0027m now hunting for precise kinetic data. The literature points to 75% of fatty acids released from the initial reaction, but I\u0027m eager for numerical specifics. I\u0027m focusing on \"specific activity\" (Units/mg) and \"turnover number\" under physiological conditions, especially considering bile salts and colipase. I\u0027ve noted an activation energy of approximately 59.8 kJ/mol.\n\n\n",
+        "thought": true
+      }, {
+        "text": "**Defining Lipase Rates**\n\nI\u0027m presently synthesizing the rate constants for pancreatic lipase activity and have identified several key papers. The data seems variable, but I\u0027m extracting representative kcat values, aiming to describe them within the context of bile salt inhibition and colipase activation. I\u0027ll need to pinpoint optimal conditions reported in these papers to get a fair view of lipase activity under physiological circumstances, and I\u0027ll include citations, of course.\n\n\n",
+        "thought": true
+      }, {
+        "text": "**Evaluating the Findings**\n\nI\u0027ve been poring over the search results, and some numbers are starting to pop out. For example, I found that the activity of stingray pancreatic colipase is around 9200 U/mg with olive oil as a substrate. This looks promising. Now, I\u0027m trying to figure out how this compares to other colipases.\n\n\n",
+        "thought": true
+      }, {
+        "text": "**Investigating Activity Kinetics**\n\nI\u0027m now diving into the kinetics aspect, and it\u0027s getting more interesting.  I found specific activity for the purified CoSPL, which is good.  However, I\u0027m slightly puzzled about the units as they are a bit ambiguous about if they measure the colipase or the lipase itself. I found maximal hydrolysis rate and rate constants. And, there\u0027s a good study that provides context on bile salts and colipase. The restoration effect mentioned is something that may need to be factored in.\n\n\n",
+        "thought": true
+      }, {
+        "text": "**Comparing Key Activities**\n\nI\u0027ve been double-checking the figures and thinking I have enough to construct an answer.  Specifically, I\u0027m verifying the 9200 U/mg value in relation to lipase activity per mg of colipase.  I found the specific activities for porcine pancreatic lipase are 2,000-4,000 U/mg. I can now confidently discuss the factors affecting hydrolysis rates.\n\n\n",
+        "thought": true
+      }, {
+        "text": "**Verifying Baseline Activity**\n\nI\u0027m focusing now on establishing a reliable baseline comparison. The 9200 U/mg figure for stingray colipase needs a solid reference point. I\u0027m searching for the specific activity of pure porcine pancreatic lipase from a reliable source like Sigma-Aldrich or a classic biochemistry text.  This will help me to quantify the \"variable but high\" concept and explain the kinetic mechanisms I\u0027ve uncovered. I have to make sure the units are consistent!\n\n\n",
+        "thought": true
+      }, {
+        "text": "**Reviewing the Data**\n\nI have enough information to address the user\u0027s inquiry now. Specifically, I\u0027ve confirmed that pancreatic lipase is inhibited by bile salts when their concentration surpasses the CMC, as the bile salts outcompete the enzyme for space at the lipid interface.\n\n\n",
+        "thought": true
+      }, {
+        "text": "**Analyzing Enzyme Kinetics**\n\nNow, I\u0027m focusing on the enzyme kinetics.  I\u0027ve found specific activity values varying widely: pure porcine lipase clocks in at 2,000-4,000 U/mg, and some even higher, while commercial \"High Activity\" versions are lower. The key Borgstrom paper from 1975 emphasizes the restoration of activity. I\u0027ve also found a range for maximal hydrolysis rates around 1.25 mg fat per ml per minute.\n\n\n",
+        "thought": true
+      }, {
+        "text": "**Estimating Turnover Rates**\n\nI\u0027m now considering the $k_{cat}$ values. Based on my general enzyme knowledge and the specific activity data I have, I\u0027m estimating turnover numbers for lipases around 10^3 to 10^4 s^-1.  The multi-step hydrolysis process and potential lag times due to product accumulation are now being considered.\n\n\n",
+        "thought": true
+      }, {
+        "text": "**Defining Enzyme Units**\n\nI\u0027m now clarifying the units used for lipase activity. I\u0027ve confirmed that \"U/mg\" indeed represents micromoles of fatty acid released per minute per milligram of enzyme. Since one triglyceride molecule yields two fatty acid molecules during hydrolysis, I need to explicitly state this in my response to avoid any ambiguity. With this final detail, I\u0027m ready to begin composing a complete and accurate response.\n\n\n",
+        "thought": true
+      }]
+    }, {
+      "text": "The rate of triglyceride (TAG) catabolization (hydrolysis) by pancreatic lipase in the presence of bile salts and colipase is typically expressed as a **specific activity** or a **turnover number**.\n\nIn academic literature, the specific activity of pure pancreatic lipase under optimal conditions (saturated interface, presence of colipase, and supramicellar bile salts) is approximately **2,000 to 4,000 International Units (U) per mg of protein**.\n\n*   **1 Unit (U)** is defined as the amount of enzyme that releases 1 $\\mu$mol of fatty acid per minute.\n*   **Turnover Number ($k_{cat}$):** This corresponds to a turnover number of approximately **2,000 to 3,000 s$^{-1}$** (substrate molecules processed per second per active site), assuming a molecular weight of ~50 kDa for the enzyme.\n\n### Key Academic Source\nA definitive academic source for the kinetics and interaction between pancreatic lipase, bile salts, and colipase is:\n\n\u003e **Borgström, B. (1975). \"On the interactions between pancreatic lipase and colipase and the substrate, and the importance of bile salts.\"** *Journal of Lipid Research*, 16(6), 411–417.\n\n**Summary of Findings from this Source:**\n*   **Inhibition by Bile Salts:** Alone, pancreatic lipase is active on triglyceride emulsions. However, at physiological concentrations of bile salts (above the Critical Micellar Concentration, ~2–4 mM), bile salts coat the lipid droplets and displace the lipase, reducing the rate of hydrolysis to near zero.\n*   **Restoration by Colipase:** The protein cofactor **colipase** binds to the bile salt-coated interface and creates a high-affinity anchor for pancreatic lipase. This restores the rate of lipolysis to its maximal velocity ($V_{max}$).\n*   **Rate Kinetics:** The study established that with colipase present, the reaction follows zero-order kinetics (constant rate) initially, provided the interfacial area is constant.\n\n### Additional Kinetic Context\n*   **Sequential Hydrolysis:** Pancreatic lipase hydrolyzes TAGs in two steps:\n    1.  TAG $\\rightarrow$ 1,2-Diacylglycerol (DAG) + Fatty Acid (FA)\n    2.  1,2-DAG $\\rightarrow$ 2-Monoacylglycerol (MAG) + FA\n    *(The enzyme is specific for the sn-1 and sn-3 positions and does not hydrolyze the sn-2 position efficiently.)*\n*   **Macroscopic Rate:** In human physiological studies (e.g., intubation studies), the macroscopic rate of lipolysis is often limited by the surface area of the emulsion rather than the enzyme quantity. A representative maximal hydrolysis rate observed in vitro for beef fat emulsions is **~1.25 mg fat / (mL $\\cdot$ min)**.\n\n### Reference for Further Reading\nFor a review of the structural and kinetic mechanisms, you may also consult:\n\u003e **Lowe, M. E. (1997). \"Structure and function of pancreatic lipase and colipase.\"** *Annual Review of Nutrition*, 17, 141-158.",
+      "role": "model",
+      "grounding": {
+        "corroborationSegments": [{
+          "index": 961,
+          "uri": "https://www.google.com/url?sa\u003dE\u0026q\u003dhttps%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQGUiidgl8HWlsrv8vAxx33u3TA7JN-AobDU6JE3ckEqmsorniRPa8_EP0nIkvvXVV80YXbFv_lBHbl7taLre_DBzyI90QxCRNPLa86-KLuWYiOEFI1TA1ENsfgN0Eodtro09EY%3D",
+          "footnoteNumber": 1
+        }, {
+          "index": 961,
+          "uri": "https://www.google.com/url?sa\u003dE\u0026q\u003dhttps%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQEDkFKcRVjHmKEiMQqihoKDgxudGop-I7LSESQd3zhR72VP7580af-UdonuW0zeW54Dj3srPWB_jvvLxE1Rw89T_NrSjlwqCjpAKwGaKzua8BBOOZmL7AS-sGjBkss1buqmEianizFKi_ouo-GjFTqBFNMZEgNOsaVu130fQivRk5vef8yXscEOE9kY8Q%3D%3D",
+          "footnoteNumber": 2
+        }, {
+          "index": 1124,
+          "uri": "https://www.google.com/url?sa\u003dE\u0026q\u003dhttps%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQEDGUYLrepyco4Y_sCwOf7_IfVKrVL1f0CIrN6ZlPDjfXLm_Akfgvl5tRhPUfhY5Hvn6prdv67fSGvg7X0GY_SoeJ0ZWNOlDCx7rFikU84K3Ovw-asnAJKCsAHF9UXCRQ%3D%3D",
+          "footnoteNumber": 3
+        }, {
+          "index": 1263,
+          "uri": "https://www.google.com/url?sa\u003dE\u0026q\u003dhttps%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQGIe8iMlKMDA1NqArpB4m9ioB0tG1oblMcBaCWhU9g3tPLGwEOE9aYLPrgnhRSKNidghlfQ5RorF31eHHKQ0j-mngkoDS1muWpif9dPECsaBtp1hKKIDEa4zPHez4VmxJPKO0hMWRSE_htl1g%3D%3D",
+          "footnoteNumber": 4
+        }, {
+          "index": 1645,
+          "uri": "https://www.google.com/url?sa\u003dE\u0026q\u003dhttps%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQEDGUYLrepyco4Y_sCwOf7_IfVKrVL1f0CIrN6ZlPDjfXLm_Akfgvl5tRhPUfhY5Hvn6prdv67fSGvg7X0GY_SoeJ0ZWNOlDCx7rFikU84K3Ovw-asnAJKCsAHF9UXCRQ%3D%3D",
+          "footnoteNumber": 3
+        }, {
+          "index": 2013,
+          "uri": "https://www.google.com/url?sa\u003dE\u0026q\u003dhttps%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQE6_HkTpjDxQqXR2JXouUGfFE65_pdTJbjjHMKOe8RakwrkVWIGv_jBiX-5A-C3v7PdZfjVuvn00jqjmOqHhq6fewNEf8ulRDs7rGZi1YXz7eBBZWb4qz1hPXyChyx_r8GAeUE%3D",
+          "footnoteNumber": 5
+        }],
+        "webSearchQueries": ["pancreatic lipase activity rate bile salts effect", "rate of TAG hydrolysis by pancreatic lipase and bile salts academic source", "kinetics of triglyceride catabolism in intestine by pancreatic lipase and bile salts", "turnover number pancreatic lipase triglyceride hydrolysis", "kinetic parameters of pancreatic lipase hydrolysis of triolein", "kcat of pancreatic lipase on triglyceride substrate", "specific activity of pancreatic lipase with colipase and bile salts units/mg", "rate of lipolysis in human small intestine mmol/min", "specific activity of pure porcine pancreatic lipase U/mg", "Borgstrom 1975 pancreatic lipase kinetics", "rate of hydrolysis of long chain triglycerides by pancreatic lipase", "turnover number kcat porcine pancreatic lipase"],
+        "groundingSources": [{
+          "referenceNumber": 1,
+          "uri": "https://www.google.com/url?sa\u003dE\u0026q\u003dhttps%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQGUiidgl8HWlsrv8vAxx33u3TA7JN-AobDU6JE3ckEqmsorniRPa8_EP0nIkvvXVV80YXbFv_lBHbl7taLre_DBzyI90QxCRNPLa86-KLuWYiOEFI1TA1ENsfgN0Eodtro09EY%3D",
+          "title": "nih.gov"
+        }, {
+          "referenceNumber": 2,
+          "uri": "https://www.google.com/url?sa\u003dE\u0026q\u003dhttps%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQEDkFKcRVjHmKEiMQqihoKDgxudGop-I7LSESQd3zhR72VP7580af-UdonuW0zeW54Dj3srPWB_jvvLxE1Rw89T_NrSjlwqCjpAKwGaKzua8BBOOZmL7AS-sGjBkss1buqmEianizFKi_ouo-GjFTqBFNMZEgNOsaVu130fQivRk5vef8yXscEOE9kY8Q%3D%3D",
+          "title": "researchgate.net"
+        }, {
+          "referenceNumber": 3,
+          "uri": "https://www.google.com/url?sa\u003dE\u0026q\u003dhttps%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQEDGUYLrepyco4Y_sCwOf7_IfVKrVL1f0CIrN6ZlPDjfXLm_Akfgvl5tRhPUfhY5Hvn6prdv67fSGvg7X0GY_SoeJ0ZWNOlDCx7rFikU84K3Ovw-asnAJKCsAHF9UXCRQ%3D%3D",
+          "title": "nih.gov"
+        }, {
+          "referenceNumber": 4,
+          "uri": "https://www.google.com/url?sa\u003dE\u0026q\u003dhttps%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQGIe8iMlKMDA1NqArpB4m9ioB0tG1oblMcBaCWhU9g3tPLGwEOE9aYLPrgnhRSKNidghlfQ5RorF31eHHKQ0j-mngkoDS1muWpif9dPECsaBtp1hKKIDEa4zPHez4VmxJPKO0hMWRSE_htl1g%3D%3D",
+          "title": "nih.gov"
+        }, {
+          "referenceNumber": 5,
+          "uri": "https://www.google.com/url?sa\u003dE\u0026q\u003dhttps%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQE6_HkTpjDxQqXR2JXouUGfFE65_pdTJbjjHMKOe8RakwrkVWIGv_jBiX-5A-C3v7PdZfjVuvn00jqjmOqHhq6fewNEf8ulRDs7rGZi1YXz7eBBZWb4qz1hPXyChyx_r8GAeUE%3D",
+          "title": "nih.gov"
+        }]
+      },
+      "finishReason": "STOP",
+      "tokenCount": 690,
+      "parts": [{
+        "text": "The rate of triglyceride (TAG) catabolization (hydrolysis) by pancreatic lipase in the presence of bile salts and colipase is typically"
+      }, {
+        "text": " expressed as a **specific activity** or a **turnover number**.\n\nIn academic literature, the specific activity of pure pancreatic"
+      }, {
+        "text": " lipase under optimal conditions (saturated interface, presence of colipase, and supramicellar bile salts) is approximately **2"
+      }, {
+        "text": ",000 to 4,000 International Units (U) per mg of protein**.\n\n*   "
+      }, {
+        "text": "**1 Unit (U)** is defined as the amount of enzyme that releases 1 $\\mu$mol of fatty acid"
+      }, {
+        "text": " per minute.\n*   **Turnover Number ($k_{cat}$):** This corresponds to a turnover number of approximately **2"
+      }, {
+        "text": ",000 to 3,000 s$^{-1}$** (substrate molecules processed per second per active"
+      }, {
+        "text": " site), assuming a molecular weight of ~50 kDa for the enzyme.\n\n### Key Academic Source\nA definitive academic source for the"
+      }, {
+        "text": " kinetics and interaction between pancreatic lipase, bile salts, and colipase is:\n\n\u003e **Borgström, B. ("
+      }, {
+        "text": "1975). \"On the interactions between pancreatic lipase and colipase and the substrate, and the importance of"
+      }, {
+        "text": " bile salts.\"** *Journal of Lipid Research*, 16(6), 411–417.\n\n**"
+      }, {
+        "text": "Summary of Findings from this Source:**\n*   **Inhibition by Bile Salts:** Alone, pancreatic lipase is active on"
+      }, {
+        "text": " triglyceride emulsions. However, at physiological concentrations of bile salts (above the Critical Micellar Concentration, ~2–4 mM), bile"
+      }, {
+        "text": " salts coat the lipid droplets and displace the lipase, reducing the rate of hydrolysis to near zero.\n*   **Rest"
+      }, {
+        "text": "oration by Colipase:** The protein cofactor **colipase** binds to the bile salt-coated interface and creates"
+      }, {
+        "text": " a high-affinity anchor for pancreatic lipase. This restores the rate of lipolysis to its maximal velocity ($V_{max}$)."
+      }, {
+        "text": "\n*   **Rate Kinetics:** The study established that with colipase present, the reaction follows zero-order kinetics"
+      }, {
+        "text": " (constant rate) initially, provided the interfacial area is constant.\n\n### Additional Kinetic Context\n*   **Sequential Hydro"
+      }, {
+        "text": "lysis:** Pancreatic lipase hydrolyzes TAGs in two steps:\n    1.  TAG $\\rightarrow$ 1,2"
+      }, {
+        "text": "-Diacylglycerol (DAG) + Fatty Acid (FA)\n    2.  1,2-DAG $\\rightarrow$ "
+      }, {
+        "text": "2-Monoacylglycerol (MAG) + FA\n    *(The enzyme is specific for the sn-1 and sn-"
+      }, {
+        "text": "3 positions and does not hydrolyze the sn-2 position efficiently.)*\n*   **Macroscopic Rate:** In"
+      }, {
+        "text": " human physiological studies (e.g., intubation studies), the macroscopic rate of lipolysis is often limited by the surface"
+      }, {
+        "text": " area of the emulsion rather than the enzyme quantity. A representative maximal hydrolysis rate observed in vitro for beef fat emulsions is **"
+      }, {
+        "text": "~1.25 mg fat / (mL $\\cdot$ min)**.\n\n### Reference for Further Reading\nFor a"
+      }, {
+        "text": " review of the structural and kinetic mechanisms, you may also consult:\n\u003e **Lowe, M. E. (1"
+      }, {
+        "text": "997). \"Structure and function of pancreatic lipase and colipase.\"** *Annual Review of Nutrition*, "
+      }, {
+        "text": "17, 141-158."
+      }, {
+        "text": "",
+        "thoughtSignature": "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"
+      }]
+    }],
+    "pendingInputs": [{
+      "text": "",
+      "role": "user"
+    }]
+  }
+}

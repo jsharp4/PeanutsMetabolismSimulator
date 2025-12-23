@@ -1,0 +1,295 @@
+{
+  "runSettings": {
+    "temperature": 1.0,
+    "model": "models/gemini-3-pro-preview",
+    "topP": 0.95,
+    "topK": 64,
+    "maxOutputTokens": 65536,
+    "safetySettings": [{
+      "category": "HARM_CATEGORY_HARASSMENT",
+      "threshold": "OFF"
+    }, {
+      "category": "HARM_CATEGORY_HATE_SPEECH",
+      "threshold": "OFF"
+    }, {
+      "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+      "threshold": "OFF"
+    }, {
+      "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
+      "threshold": "OFF"
+    }],
+    "enableCodeExecution": false,
+    "enableSearchAsATool": true,
+    "enableBrowseAsATool": false,
+    "enableAutoFunctionResponse": false,
+    "thinkingBudget": -1,
+    "googleSearch": {
+    },
+    "outputResolution": "1K",
+    "thinkingLevel": "THINKING_HIGH"
+  },
+  "systemInstruction": {
+  },
+  "chunkedPrompt": {
+    "chunks": [{
+      "text": "Is there a kotlin compose library for box and arrow / graph diagrams",
+      "role": "user",
+      "tokenCount": 14
+    }, {
+      "text": "**Analyzing Graph Libraries**\n\nI\u0027m currently focused on identifying Kotlin Compose Multiplatform or Jetpack Compose libraries that are optimized for graph drawing, node-based editing, or creating box-and-arrow diagrams. I\u0027ll then move on to evaluating their popularity and suitability for the task.\n\n\n**Discovering Relevant Libraries**\n\nI\u0027m now searching GitHub and Android forums using terms like \"Compose-Graph\" and \"Compose-Node-Editor.\" My focus is to locate libraries that are actively maintained and offer features needed for graph drawing and node editing. I\u0027m also looking for any community recommendations, such as `compose-diagrams`.\n\n\n**Analyzing Node Diagrams**\n\nI\u0027ve successfully pinpointed several libraries pertinent to the user\u0027s needs. For \"node-based\" diagrams, a likely focus on flowcharting or node editors, KNodeFlow appears particularly relevant. My focus is now on evaluating its capabilities.\n\n\n**Investigating Charting Libraries**\n\nI\u0027ve been examining several promising libraries for Compose Multiplatform. The \"Composable-Graphs\" library sparked my interest, especially its mention of GraphViz code generation. \"DrawBox\" also looks flexible for various visual elements. For statistical charts, I\u0027m checking out Vico, YCharts, ComposeCharts (ehsannarmani), KoalaPlot, Charts.kt, and CMPCharts, though I need to confirm YCharts\u0027 exact features.\n\n\n**Defining Diagram Types**\n\nI\u0027m now clarifying the distinctions between \"charting\" and \"diagramming\" libraries. My focus has sharpened to \"node editors\" or \"flowcharts\" which I\u0027m searching for explicitly. While `compose-graphs` looks like a general charting library, my new search terms are \"Compose diagram library\", \"Compose flowchart library\", and \"Compose node editor\" to find more options beyond KNodeFlow. I need to confirm whether it focuses on graphs that are charts, or is general enough to draw node-and-edge graphs.\n\n\n**Refining Search Terms**\n\nI\u0027m refining my search terms to be more precise. My plan now is to use \"Jetpack Compose flowchart library,\" \"Jetpack Compose node editor,\" and \"Compose Multiplatform directed graph visualization.\" This will help me sift through the results and create a clear distinction between node-based diagramming solutions and statistical charting libraries. My goal is to synthesize the answer, clearly categorizing the different library types.\n\n\n**Analyzing the Landscape**\n\nI\u0027ve made significant progress in mapping out the territory. The search results have been incredibly clarifying. KNodeFlow emerges as a key player, confirmed as the node-based visual editor specifically for Compose Multiplatform. It\u0027s fascinating to see the active development on Reddit.\n\n\n**Investigating Potential Libraries**\n\nI\u0027m now diving into the landscape of potential libraries. ComposeFlow stands out as a promising candidate, especially given its AI focus. It appears to utilize a node-based approach, which aligns perfectly. The lack of a clear \"React Flow\" equivalent in Compose is apparent, with many opting for Canvas-based custom solutions.\n\n\n**Evaluating Library Options**\n\nI\u0027ve expanded my research to include further options for statistical charts. Y-Charts and KoalaPlot are looking strong, alongside ComposeCharts. While MPAndroidChart is an option through `AndroidView`, the preferred direction is clearly towards Compose-native solutions. The crucial distinction is becoming clear: users requesting \"box and arrow\" diagrams are likely after directed graph or flowchart capabilities. I need to make this point crystal clear in my response.\n\n\n**Refining the Focus**\n\nI\u0027ve confirmed that KNodeFlow is the leading contender for a native Compose Multiplatform node-based editor. The research shows a clear path forward. I\u0027m noting that robust, production-ready diagrams might need a WebView wrapper for JavaScript libraries. However, KNodeFlow presents a promising native solution. Further research into its release status is needed.\n\n\n**Hunting Down GitHub Links**\n\nI\u0027m focusing now on pinning down a direct GitHub link for KNodeFlow. The initial search was unfruitful, leading to unrelated results. I will track down the author\u0027s repo and see if it can be found. I\u0027m hoping to provide a concrete link to a specific project. Failing that, I\u0027ll update that it\u0027s an experimental node editor project. Let\u0027s see if this quick GitHub search will finally return a result.\n\n\n**Investigating Relevant Projects**\n\nI\u0027ve been looking into \"KNodeFlow\" and haven\u0027t found a direct GitHub repository yet. However, I found a snippet for `ComposeFlow` by `thagikura` on GitHub. It describes an \"AI-first visual editor for mobile apps\" and the ability to \"Refine your UI using a visual editor,\" which appears quite relevant.\n\n\n**Connecting the Dots**\n\nI\u0027ve made a crucial connection between `KNodeFlow` and `ComposeFlow` – they\u0027re likely related. The GitHub user `thagikura` appears in both contexts, suggesting `KNodeFlow` may be an earlier name or component within `ComposeFlow`.  `ComposeFlow` looks very promising as a visual node editor for Compose, despite the lack of a mature, standalone library like React Flow. I also discovered `adrielcafe/bonsai`, a multiplatform tree view, but it\u0027s not a graph editor.\n\n\n**Synthesizing Findings**\n\nI\u0027m solidifying my understanding of the landscape. I\u0027ve pinpointed `ComposeFlow` as the strongest contender for a node editor, even if it\u0027s not a standalone library like React Flow. I\u0027ll clearly distinguish between charts (like `Vico` and `Y-Charts`) and node-based diagrams, pointing to `Bonsai` for hierarchical/tree structures. I\u0027ll also offer guidance on manual implementations leveraging `Canvas` and layout algorithms like Dagre/Elk. I\u0027ll verify one last time if `KNodeFlow` might be the engine.\n\n\n**Refining Project Search**\n\nI\u0027m now zeroing in on `ComposeFlow` by `thagikura`, which seems to be the key project.  The GitHub description clearly states it\u0027s a visual app builder, while a Reddit post confirms the same author is behind both `KNodeFlow` and `ComposeFlow`.  It looks like `ComposeFlow` is the current, open-sourced iteration.\n\n\n",
+      "role": "model",
+      "tokenCount": 1719,
+      "isThought": true,
+      "parts": [{
+        "text": "**Analyzing Graph Libraries**\n\nI\u0027m currently focused on identifying Kotlin Compose Multiplatform or Jetpack Compose libraries that are optimized for graph drawing, node-based editing, or creating box-and-arrow diagrams. I\u0027ll then move on to evaluating their popularity and suitability for the task.\n\n\n",
+        "thought": true
+      }, {
+        "text": "**Discovering Relevant Libraries**\n\nI\u0027m now searching GitHub and Android forums using terms like \"Compose-Graph\" and \"Compose-Node-Editor.\" My focus is to locate libraries that are actively maintained and offer features needed for graph drawing and node editing. I\u0027m also looking for any community recommendations, such as `compose-diagrams`.\n\n\n",
+        "thought": true
+      }, {
+        "text": "**Analyzing Node Diagrams**\n\nI\u0027ve successfully pinpointed several libraries pertinent to the user\u0027s needs. For \"node-based\" diagrams, a likely focus on flowcharting or node editors, KNodeFlow appears particularly relevant. My focus is now on evaluating its capabilities.\n\n\n",
+        "thought": true
+      }, {
+        "text": "**Investigating Charting Libraries**\n\nI\u0027ve been examining several promising libraries for Compose Multiplatform. The \"Composable-Graphs\" library sparked my interest, especially its mention of GraphViz code generation. \"DrawBox\" also looks flexible for various visual elements. For statistical charts, I\u0027m checking out Vico, YCharts, ComposeCharts (ehsannarmani), KoalaPlot, Charts.kt, and CMPCharts, though I need to confirm YCharts\u0027 exact features.\n\n\n",
+        "thought": true
+      }, {
+        "text": "**Defining Diagram Types**\n\nI\u0027m now clarifying the distinctions between \"charting\" and \"diagramming\" libraries. My focus has sharpened to \"node editors\" or \"flowcharts\" which I\u0027m searching for explicitly. While `compose-graphs` looks like a general charting library, my new search terms are \"Compose diagram library\", \"Compose flowchart library\", and \"Compose node editor\" to find more options beyond KNodeFlow. I need to confirm whether it focuses on graphs that are charts, or is general enough to draw node-and-edge graphs.\n\n\n",
+        "thought": true
+      }, {
+        "text": "**Refining Search Terms**\n\nI\u0027m refining my search terms to be more precise. My plan now is to use \"Jetpack Compose flowchart library,\" \"Jetpack Compose node editor,\" and \"Compose Multiplatform directed graph visualization.\" This will help me sift through the results and create a clear distinction between node-based diagramming solutions and statistical charting libraries. My goal is to synthesize the answer, clearly categorizing the different library types.\n\n\n",
+        "thought": true
+      }, {
+        "text": "**Analyzing the Landscape**\n\nI\u0027ve made significant progress in mapping out the territory. The search results have been incredibly clarifying. KNodeFlow emerges as a key player, confirmed as the node-based visual editor specifically for Compose Multiplatform. It\u0027s fascinating to see the active development on Reddit.\n\n\n",
+        "thought": true
+      }, {
+        "text": "**Investigating Potential Libraries**\n\nI\u0027m now diving into the landscape of potential libraries. ComposeFlow stands out as a promising candidate, especially given its AI focus. It appears to utilize a node-based approach, which aligns perfectly. The lack of a clear \"React Flow\" equivalent in Compose is apparent, with many opting for Canvas-based custom solutions.\n\n\n",
+        "thought": true
+      }, {
+        "text": "**Evaluating Library Options**\n\nI\u0027ve expanded my research to include further options for statistical charts. Y-Charts and KoalaPlot are looking strong, alongside ComposeCharts. While MPAndroidChart is an option through `AndroidView`, the preferred direction is clearly towards Compose-native solutions. The crucial distinction is becoming clear: users requesting \"box and arrow\" diagrams are likely after directed graph or flowchart capabilities. I need to make this point crystal clear in my response.\n\n\n",
+        "thought": true
+      }, {
+        "text": "**Refining the Focus**\n\nI\u0027ve confirmed that KNodeFlow is the leading contender for a native Compose Multiplatform node-based editor. The research shows a clear path forward. I\u0027m noting that robust, production-ready diagrams might need a WebView wrapper for JavaScript libraries. However, KNodeFlow presents a promising native solution. Further research into its release status is needed.\n\n\n",
+        "thought": true
+      }, {
+        "text": "**Hunting Down GitHub Links**\n\nI\u0027m focusing now on pinning down a direct GitHub link for KNodeFlow. The initial search was unfruitful, leading to unrelated results. I will track down the author\u0027s repo and see if it can be found. I\u0027m hoping to provide a concrete link to a specific project. Failing that, I\u0027ll update that it\u0027s an experimental node editor project. Let\u0027s see if this quick GitHub search will finally return a result.\n\n\n",
+        "thought": true
+      }, {
+        "text": "**Investigating Relevant Projects**\n\nI\u0027ve been looking into \"KNodeFlow\" and haven\u0027t found a direct GitHub repository yet. However, I found a snippet for `ComposeFlow` by `thagikura` on GitHub. It describes an \"AI-first visual editor for mobile apps\" and the ability to \"Refine your UI using a visual editor,\" which appears quite relevant.\n\n\n",
+        "thought": true
+      }, {
+        "text": "**Connecting the Dots**\n\nI\u0027ve made a crucial connection between `KNodeFlow` and `ComposeFlow` – they\u0027re likely related. The GitHub user `thagikura` appears in both contexts, suggesting `KNodeFlow` may be an earlier name or component within `ComposeFlow`.  `ComposeFlow` looks very promising as a visual node editor for Compose, despite the lack of a mature, standalone library like React Flow. I also discovered `adrielcafe/bonsai`, a multiplatform tree view, but it\u0027s not a graph editor.\n\n\n",
+        "thought": true
+      }, {
+        "text": "**Synthesizing Findings**\n\nI\u0027m solidifying my understanding of the landscape. I\u0027ve pinpointed `ComposeFlow` as the strongest contender for a node editor, even if it\u0027s not a standalone library like React Flow. I\u0027ll clearly distinguish between charts (like `Vico` and `Y-Charts`) and node-based diagrams, pointing to `Bonsai` for hierarchical/tree structures. I\u0027ll also offer guidance on manual implementations leveraging `Canvas` and layout algorithms like Dagre/Elk. I\u0027ll verify one last time if `KNodeFlow` might be the engine.\n\n\n",
+        "thought": true
+      }, {
+        "text": "**Refining Project Search**\n\nI\u0027m now zeroing in on `ComposeFlow` by `thagikura`, which seems to be the key project.  The GitHub description clearly states it\u0027s a visual app builder, while a Reddit post confirms the same author is behind both `KNodeFlow` and `ComposeFlow`.  It looks like `ComposeFlow` is the current, open-sourced iteration.\n\n\n",
+        "thought": true
+      }]
+    }, {
+      "text": "For Kotlin Compose (specifically Jetpack Compose and Compose Multiplatform), libraries for \"box and arrow\" or \"node-based\" diagrams are still in early stages compared to the mature web ecosystem (like React Flow). However, there are a few promising options depending on whether you need a **node editor/diagram** or a **statistical chart**.\n\n### 1. For Node Editors \u0026 Flow Diagrams (\"Box and Arrow\")\nIf you are looking to build a flowchart editor, a node-based visual scripting tool, or a directed graph, there is no single \"standard\" production-ready library yet. The community mostly relies on custom implementations using `Canvas`.\n\n*   **ComposeFlow (Experimental)**:\n    *   **Description**: Created by GitHub user `thagikura`, this is an AI-first visual editor for building Compose apps. It features a **drag-and-drop visual node editor** interface.\n    *   **Status**: Open-source, early stage.\n    *   **Relevance**: While it is a full \"App Builder,\" the core visual editor uses exactly the \"box and arrow\" mechanics you are likely looking for. It is a good reference implementation for how to handle node connections, dragging, and zooming in Compose.\n    *   **Link**: [GitHub - ComposeFlow](https://github.com/ComposeFlow/ComposeFlow) (Related to the \"KNodeFlow\" project mentioned in community discussions).\n\n*   **Bonsai (Tree Views)**:\n    *   **Description**: A multiplatform tree view library for Compose.\n    *   **Relevance**: If your \"graph\" is strictly hierarchical (parent-child), this is a production-ready solution for file-explorer style \"box\" structures, though it lacks \"arrows\" and free-form positioning.\n    *   **Link**: [GitHub - adrielcafe/bonsai](https://github.com/adrielcafe/bonsai)\n\n*   **Build Your Own (Common Approach)**:\n    *   Most developers currently use the standard **`Canvas`** composable.\n    *   **Logic**: You can use a non-UI graph algorithm library (like a Java port of **JGraphT** or **GraphViz**) to calculate X/Y coordinates for your nodes.\n    *   **Drawing**: Pass those coordinates to `Canvas` to draw `drawPath` (cubic bezier curves) for arrows and standard Composables (via `Layout` or `Box`) for the nodes.\n\n### 2. For Statistical Charts (Bar, Line, Pie)\nIf by \"graph\" you meant data visualization, these are the most recommended and maintained libraries:\n\n*   **Vico** (Top Recommendation):\n    *   **Features**: Lightweight, highly customizable, supports Compose Multiplatform (Android, iOS, Desktop). Excellent for line, bar, and stacked charts.\n    *   **Link**: [GitHub - patrykandpatrick/vico](https://github.com/patrykandpatrick/vico)\n\n*   **Y-Charts**:\n    *   **Features**: A pure Jetpack Compose chart library that is easy to use for standard line, bar, and pie charts.\n    *   **Link**: [GitHub - codeangi/YCharts](https://github.com/codeangi/YCharts) (Note: Verify the specific fork/maintainer as several exist).\n\n*   **KoalaPlot**:\n    *   **Features**: Specifically designed for **Compose Multiplatform**. It’s a great choice if you need your charts to work on Desktop/Web/iOS as well as Android.\n    *   **Link**: [GitHub - KoalaPlot](https://github.com/KoalaPlot/koalaplot-core)\n\n### Summary\n*   **For Flowcharts/Nodes**: Check out **ComposeFlow** for reference, but expect to write custom `Canvas` code for a production feature.\n*   **For Data Charts**: Use **Vico**.",
+      "role": "model",
+      "grounding": {
+        "corroborationSegments": [{
+          "index": 564,
+          "uri": "https://www.google.com/url?sa\u003dE\u0026q\u003dhttps%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQEscy3Y0fmo9VzcuoQWzhMNrzpC3JTh1ikfzImbSocRu95FSZXC84yGDg3-MhTNDxm2AP11meS5AOz_cI1DVlf6_ffU0TlSKBLaHOrYWWhmZeYFLYCSjuzhmHbzFgF2wGHMiuUNJLD7M4yrjs3Lu4Aq9Pi1JVSqXcqw3xmIV3u-u6nC9G1tlo0NXgUGW5ZsZrmCCP18lsPP8SFlxOW0gUmxdb-amA%3D%3D",
+          "footnoteNumber": 1
+        }, {
+          "index": 793,
+          "uri": "https://www.google.com/url?sa\u003dE\u0026q\u003dhttps%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQE8z2k5TvSaPYIieA8YNApWxAn66QEHdOAAdZ2wakAYJDRXD-O0D8z-PF52qDsrEmjQaEsw0uAZ4TmwzZM9RMpkz9wKL3kcQVHbK9DIZb9rOFHodsmaj8c5ABBP2xIyzOP_iZ2Ydzw7amSlippAjInSvenzVaDdvc7tW7wMwHzseiLPFN0a8ndyiKmFOzTYzqsASuvBGwgyYmuowg%3D%3D",
+          "footnoteNumber": 2
+        }, {
+          "index": 793,
+          "uri": "https://www.google.com/url?sa\u003dE\u0026q\u003dhttps%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQHaZcrVJ-K2ItLJBOzb-5jB06V-AxFRpUwnJ0FTsL5FWAhauqkQDuG0cyguuSQyfxRntXtA0svXf_z-78IcVKpctALSgiJi0YTTuCtn74EUB-Y2Mb2aoFo7krrZG7YqE1_gG0XUAQXyTXaVdYmQjOZaHu5LvLy1-736oxn4LpJ8GpNaItNLRmRwV5-VrRKxxpLD6FMpHQgL4K1LiaPOLaI%3D",
+          "footnoteNumber": 3
+        }, {
+          "index": 855,
+          "uri": "https://www.google.com/url?sa\u003dE\u0026q\u003dhttps%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQFAoty5p_ygCD4K65eY9e8fZVUSvn7zhrrdxZM3nRg7Y8i4fzw3nV3C7YkiyasjNRI2qh86uihtfViashQZRaP9Bxx8O-XVfzU20V5oiCISYq1xEQ9K2w%3D%3D",
+          "footnoteNumber": 4
+        }, {
+          "index": 901,
+          "uri": "https://www.google.com/url?sa\u003dE\u0026q\u003dhttps%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQE8z2k5TvSaPYIieA8YNApWxAn66QEHdOAAdZ2wakAYJDRXD-O0D8z-PF52qDsrEmjQaEsw0uAZ4TmwzZM9RMpkz9wKL3kcQVHbK9DIZb9rOFHodsmaj8c5ABBP2xIyzOP_iZ2Ydzw7amSlippAjInSvenzVaDdvc7tW7wMwHzseiLPFN0a8ndyiKmFOzTYzqsASuvBGwgyYmuowg%3D%3D",
+          "footnoteNumber": 2
+        }, {
+          "index": 901,
+          "uri": "https://www.google.com/url?sa\u003dE\u0026q\u003dhttps%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQHaZcrVJ-K2ItLJBOzb-5jB06V-AxFRpUwnJ0FTsL5FWAhauqkQDuG0cyguuSQyfxRntXtA0svXf_z-78IcVKpctALSgiJi0YTTuCtn74EUB-Y2Mb2aoFo7krrZG7YqE1_gG0XUAQXyTXaVdYmQjOZaHu5LvLy1-736oxn4LpJ8GpNaItNLRmRwV5-VrRKxxpLD6FMpHQgL4K1LiaPOLaI%3D",
+          "footnoteNumber": 3
+        }, {
+          "index": 901,
+          "uri": "https://www.google.com/url?sa\u003dE\u0026q\u003dhttps%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQFAoty5p_ygCD4K65eY9e8fZVUSvn7zhrrdxZM3nRg7Y8i4fzw3nV3C7YkiyasjNRI2qh86uihtfViashQZRaP9Bxx8O-XVfzU20V5oiCISYq1xEQ9K2w%3D%3D",
+          "footnoteNumber": 4
+        }, {
+          "index": 1160,
+          "uri": "https://www.google.com/url?sa\u003dE\u0026q\u003dhttps%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQEscy3Y0fmo9VzcuoQWzhMNrzpC3JTh1ikfzImbSocRu95FSZXC84yGDg3-MhTNDxm2AP11meS5AOz_cI1DVlf6_ffU0TlSKBLaHOrYWWhmZeYFLYCSjuzhmHbzFgF2wGHMiuUNJLD7M4yrjs3Lu4Aq9Pi1JVSqXcqw3xmIV3u-u6nC9G1tlo0NXgUGW5ZsZrmCCP18lsPP8SFlxOW0gUmxdb-amA%3D%3D",
+          "footnoteNumber": 1
+        }, {
+          "index": 1420,
+          "uri": "https://www.google.com/url?sa\u003dE\u0026q\u003dhttps%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQFsy_GiCxjC9llkCZtUnZz6YrTTHyY0tXgMwnpz4dywYbEIx6qyh_uRC6JrvXO4ZpWnD--Nfv0H_4a4zrampPvv1JaiO2Gw0zXBH1ZV2OtQqex-C4-4bLRJ",
+          "footnoteNumber": 5
+        }, {
+          "index": 1715,
+          "uri": "https://www.google.com/url?sa\u003dE\u0026q\u003dhttps%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQEscy3Y0fmo9VzcuoQWzhMNrzpC3JTh1ikfzImbSocRu95FSZXC84yGDg3-MhTNDxm2AP11meS5AOz_cI1DVlf6_ffU0TlSKBLaHOrYWWhmZeYFLYCSjuzhmHbzFgF2wGHMiuUNJLD7M4yrjs3Lu4Aq9Pi1JVSqXcqw3xmIV3u-u6nC9G1tlo0NXgUGW5ZsZrmCCP18lsPP8SFlxOW0gUmxdb-amA%3D%3D",
+          "footnoteNumber": 1
+        }, {
+          "index": 1993,
+          "uri": "https://www.google.com/url?sa\u003dE\u0026q\u003dhttps%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQEscy3Y0fmo9VzcuoQWzhMNrzpC3JTh1ikfzImbSocRu95FSZXC84yGDg3-MhTNDxm2AP11meS5AOz_cI1DVlf6_ffU0TlSKBLaHOrYWWhmZeYFLYCSjuzhmHbzFgF2wGHMiuUNJLD7M4yrjs3Lu4Aq9Pi1JVSqXcqw3xmIV3u-u6nC9G1tlo0NXgUGW5ZsZrmCCP18lsPP8SFlxOW0gUmxdb-amA%3D%3D",
+          "footnoteNumber": 1
+        }, {
+          "index": 2350,
+          "uri": "https://www.google.com/url?sa\u003dE\u0026q\u003dhttps%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQEscy3Y0fmo9VzcuoQWzhMNrzpC3JTh1ikfzImbSocRu95FSZXC84yGDg3-MhTNDxm2AP11meS5AOz_cI1DVlf6_ffU0TlSKBLaHOrYWWhmZeYFLYCSjuzhmHbzFgF2wGHMiuUNJLD7M4yrjs3Lu4Aq9Pi1JVSqXcqw3xmIV3u-u6nC9G1tlo0NXgUGW5ZsZrmCCP18lsPP8SFlxOW0gUmxdb-amA%3D%3D",
+          "footnoteNumber": 1
+        }, {
+          "index": 2350,
+          "uri": "https://www.google.com/url?sa\u003dE\u0026q\u003dhttps%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQHndnAQ9KIsVr0OvNlk8KCieEAQUUMgpaEDC8uQvxzmAV98db7iYDYrcTwyJjGtHMn-MV2-mKTy1RcpFOM5CPj0I3IvVjlksdYzAeKORVgL7Nd-ze-Dq3zxRaFzDxwM1tH42bLD4_vJSoc4yybq",
+          "footnoteNumber": 6
+        }, {
+          "index": 2462,
+          "uri": "https://www.google.com/url?sa\u003dE\u0026q\u003dhttps%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQEscy3Y0fmo9VzcuoQWzhMNrzpC3JTh1ikfzImbSocRu95FSZXC84yGDg3-MhTNDxm2AP11meS5AOz_cI1DVlf6_ffU0TlSKBLaHOrYWWhmZeYFLYCSjuzhmHbzFgF2wGHMiuUNJLD7M4yrjs3Lu4Aq9Pi1JVSqXcqw3xmIV3u-u6nC9G1tlo0NXgUGW5ZsZrmCCP18lsPP8SFlxOW0gUmxdb-amA%3D%3D",
+          "footnoteNumber": 1
+        }, {
+          "index": 2462,
+          "uri": "https://www.google.com/url?sa\u003dE\u0026q\u003dhttps%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQHElI5-Z-ABKntcYhUGy9_DmhziSZRjEL0xmnnVYPo9WFz7vYpEZCes4ObCQLfAEBVcshmm48jcMMDBG4j2i7hNBzAm56B9uYq-BBPj2aHMLJkG6srY9fY_0Tbi7IqLhWmv",
+          "footnoteNumber": 7
+        }, {
+          "index": 2462,
+          "uri": "https://www.google.com/url?sa\u003dE\u0026q\u003dhttps%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQG8uSfgxr6Q9Esi-mMTlgyPXlK5rCtimWwH3fa16Rm7sEViXfmCfDCcI3WyITl6GmRrjEzkZMkwYtUpiX6myn8PnzhZXMnpVuEuyDzvWC1PXqG54eFxgd2jE_phuiKId29Djr8_Og%3D%3D",
+          "footnoteNumber": 8
+        }, {
+          "index": 2507,
+          "uri": "https://www.google.com/url?sa\u003dE\u0026q\u003dhttps%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQF6SxQPiU7cymgN4hGZRamqJtSBlzBIWTR8lRwRJw_DnWa6rR2W5-hETMjH_r_Q31SEG8yhp5AUvRd-XNAhmAcfeU8qLH9PIJpiwWgVrRpNEYz9U205oa7kxIRilaVc0Ez8UFH2kN56XPz48Ww7Wh0HI9Z0RIJviQfVNeVDf8Ewiy-Fo-77zH6N1Ybu76E2OZfbwfrm",
+          "footnoteNumber": 9
+        }, {
+          "index": 2600,
+          "uri": "https://www.google.com/url?sa\u003dE\u0026q\u003dhttps%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQEscy3Y0fmo9VzcuoQWzhMNrzpC3JTh1ikfzImbSocRu95FSZXC84yGDg3-MhTNDxm2AP11meS5AOz_cI1DVlf6_ffU0TlSKBLaHOrYWWhmZeYFLYCSjuzhmHbzFgF2wGHMiuUNJLD7M4yrjs3Lu4Aq9Pi1JVSqXcqw3xmIV3u-u6nC9G1tlo0NXgUGW5ZsZrmCCP18lsPP8SFlxOW0gUmxdb-amA%3D%3D",
+          "footnoteNumber": 1
+        }, {
+          "index": 2978,
+          "uri": "https://www.google.com/url?sa\u003dE\u0026q\u003dhttps%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQE8z2k5TvSaPYIieA8YNApWxAn66QEHdOAAdZ2wakAYJDRXD-O0D8z-PF52qDsrEmjQaEsw0uAZ4TmwzZM9RMpkz9wKL3kcQVHbK9DIZb9rOFHodsmaj8c5ABBP2xIyzOP_iZ2Ydzw7amSlippAjInSvenzVaDdvc7tW7wMwHzseiLPFN0a8ndyiKmFOzTYzqsASuvBGwgyYmuowg%3D%3D",
+          "footnoteNumber": 2
+        }, {
+          "index": 2978,
+          "uri": "https://www.google.com/url?sa\u003dE\u0026q\u003dhttps%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQHaZcrVJ-K2ItLJBOzb-5jB06V-AxFRpUwnJ0FTsL5FWAhauqkQDuG0cyguuSQyfxRntXtA0svXf_z-78IcVKpctALSgiJi0YTTuCtn74EUB-Y2Mb2aoFo7krrZG7YqE1_gG0XUAQXyTXaVdYmQjOZaHu5LvLy1-736oxn4LpJ8GpNaItNLRmRwV5-VrRKxxpLD6FMpHQgL4K1LiaPOLaI%3D",
+          "footnoteNumber": 3
+        }, {
+          "index": 2978,
+          "uri": "https://www.google.com/url?sa\u003dE\u0026q\u003dhttps%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQG8uSfgxr6Q9Esi-mMTlgyPXlK5rCtimWwH3fa16Rm7sEViXfmCfDCcI3WyITl6GmRrjEzkZMkwYtUpiX6myn8PnzhZXMnpVuEuyDzvWC1PXqG54eFxgd2jE_phuiKId29Djr8_Og%3D%3D",
+          "footnoteNumber": 8
+        }],
+        "webSearchQueries": ["Jetpack Compose node editor library", "Compose Multiplatform graph library", "kotlin compose diagram library github", "kotlin compose library for graph diagrams box and arrow", "Jetpack Compose library for directed graph visualization", "Compose Multiplatform flowchart library github", "Compose-Node-Editor github", "compose-diagrams library", "kotlin compose dagre layout library", "KNodeFlow github", "github ComposeFlow visual editor", "github thagikura ComposeFlow", "github adrielcafe/compose-node-editor", "github KNodeFlow compose"],
+        "groundingSources": [{
+          "referenceNumber": 1,
+          "uri": "https://www.google.com/url?sa\u003dE\u0026q\u003dhttps%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQEscy3Y0fmo9VzcuoQWzhMNrzpC3JTh1ikfzImbSocRu95FSZXC84yGDg3-MhTNDxm2AP11meS5AOz_cI1DVlf6_ffU0TlSKBLaHOrYWWhmZeYFLYCSjuzhmHbzFgF2wGHMiuUNJLD7M4yrjs3Lu4Aq9Pi1JVSqXcqw3xmIV3u-u6nC9G1tlo0NXgUGW5ZsZrmCCP18lsPP8SFlxOW0gUmxdb-amA%3D%3D",
+          "title": "kotlinlang.org"
+        }, {
+          "referenceNumber": 2,
+          "uri": "https://www.google.com/url?sa\u003dE\u0026q\u003dhttps%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQE8z2k5TvSaPYIieA8YNApWxAn66QEHdOAAdZ2wakAYJDRXD-O0D8z-PF52qDsrEmjQaEsw0uAZ4TmwzZM9RMpkz9wKL3kcQVHbK9DIZb9rOFHodsmaj8c5ABBP2xIyzOP_iZ2Ydzw7amSlippAjInSvenzVaDdvc7tW7wMwHzseiLPFN0a8ndyiKmFOzTYzqsASuvBGwgyYmuowg%3D%3D",
+          "title": "reddit.com"
+        }, {
+          "referenceNumber": 3,
+          "uri": "https://www.google.com/url?sa\u003dE\u0026q\u003dhttps%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQHaZcrVJ-K2ItLJBOzb-5jB06V-AxFRpUwnJ0FTsL5FWAhauqkQDuG0cyguuSQyfxRntXtA0svXf_z-78IcVKpctALSgiJi0YTTuCtn74EUB-Y2Mb2aoFo7krrZG7YqE1_gG0XUAQXyTXaVdYmQjOZaHu5LvLy1-736oxn4LpJ8GpNaItNLRmRwV5-VrRKxxpLD6FMpHQgL4K1LiaPOLaI%3D",
+          "title": "reddit.com"
+        }, {
+          "referenceNumber": 4,
+          "uri": "https://www.google.com/url?sa\u003dE\u0026q\u003dhttps%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQFAoty5p_ygCD4K65eY9e8fZVUSvn7zhrrdxZM3nRg7Y8i4fzw3nV3C7YkiyasjNRI2qh86uihtfViashQZRaP9Bxx8O-XVfzU20V5oiCISYq1xEQ9K2w%3D%3D",
+          "title": "composeflow.io"
+        }, {
+          "referenceNumber": 5,
+          "uri": "https://www.google.com/url?sa\u003dE\u0026q\u003dhttps%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQFsy_GiCxjC9llkCZtUnZz6YrTTHyY0tXgMwnpz4dywYbEIx6qyh_uRC6JrvXO4ZpWnD--Nfv0H_4a4zrampPvv1JaiO2Gw0zXBH1ZV2OtQqex-C4-4bLRJ",
+          "title": "github.com"
+        }, {
+          "referenceNumber": 6,
+          "uri": "https://www.google.com/url?sa\u003dE\u0026q\u003dhttps%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQHndnAQ9KIsVr0OvNlk8KCieEAQUUMgpaEDC8uQvxzmAV98db7iYDYrcTwyJjGtHMn-MV2-mKTy1RcpFOM5CPj0I3IvVjlksdYzAeKORVgL7Nd-ze-Dq3zxRaFzDxwM1tH42bLD4_vJSoc4yybq",
+          "title": "zenn.dev"
+        }, {
+          "referenceNumber": 7,
+          "uri": "https://www.google.com/url?sa\u003dE\u0026q\u003dhttps%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQHElI5-Z-ABKntcYhUGy9_DmhziSZRjEL0xmnnVYPo9WFz7vYpEZCes4ObCQLfAEBVcshmm48jcMMDBG4j2i7hNBzAm56B9uYq-BBPj2aHMLJkG6srY9fY_0Tbi7IqLhWmv",
+          "title": "github.com"
+        }, {
+          "referenceNumber": 8,
+          "uri": "https://www.google.com/url?sa\u003dE\u0026q\u003dhttps%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQG8uSfgxr6Q9Esi-mMTlgyPXlK5rCtimWwH3fa16Rm7sEViXfmCfDCcI3WyITl6GmRrjEzkZMkwYtUpiX6myn8PnzhZXMnpVuEuyDzvWC1PXqG54eFxgd2jE_phuiKId29Djr8_Og%3D%3D",
+          "title": "github.com"
+        }, {
+          "referenceNumber": 9,
+          "uri": "https://www.google.com/url?sa\u003dE\u0026q\u003dhttps%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQF6SxQPiU7cymgN4hGZRamqJtSBlzBIWTR8lRwRJw_DnWa6rR2W5-hETMjH_r_Q31SEG8yhp5AUvRd-XNAhmAcfeU8qLH9PIJpiwWgVrRpNEYz9U205oa7kxIRilaVc0Ez8UFH2kN56XPz48Ww7Wh0HI9Z0RIJviQfVNeVDf8Ewiy-Fo-77zH6N1Ybu76E2OZfbwfrm",
+          "title": "reddit.com"
+        }]
+      },
+      "finishReason": "STOP",
+      "tokenCount": 840,
+      "parts": [{
+        "text": "For Kotlin Compose (specifically Jetpack Compose and Compose Multiplatform), libraries for \"box and arrow\" or \"node-based\" diagrams are still in early stages compared to the mature web ecosystem (like React Flow). However, there are"
+      }, {
+        "text": " a few promising options depending on whether you need a **node editor/diagram** or a **statistical chart**.\n\n### "
+      }, {
+        "text": "1. For Node Editors \u0026 Flow Diagrams (\"Box and Arrow\")\nIf you are looking to build a flowchart editor, a node-"
+      }, {
+        "text": "based visual scripting tool, or a directed graph, there is no single \"standard\" production-ready library yet. The community"
+      }, {
+        "text": " mostly relies on custom implementations using `Canvas`.\n\n*   **ComposeFlow (Experimental)**:\n    *   **Description"
+      }, {
+        "text": "**: Created by GitHub user `thagikura`, this is an AI-first visual editor for building Compose apps. It features"
+      }, {
+        "text": " a **drag-and-drop visual node editor** interface.\n    *   **Status**: Open-source, early"
+      }, {
+        "text": " stage.\n    *   **Relevance**: While it is a full \"App Builder,\" the core visual editor uses"
+      }, {
+        "text": " exactly the \"box and arrow\" mechanics you are likely looking for. It is a good reference implementation for how to handle"
+      }, {
+        "text": " node connections, dragging, and zooming in Compose.\n    *   **Link**: [GitHub - ComposeFlow](https://github."
+      }, {
+        "text": "com/ComposeFlow/ComposeFlow) (Related to the \"KNodeFlow\" project mentioned in community discussions).\n\n"
+      }, {
+        "text": "*   **Bonsai (Tree Views)**:\n    *   **Description**: A multiplatform tree view library"
+      }, {
+        "text": " for Compose.\n    *   **Relevance**: If your \"graph\" is strictly hierarchical (parent-child), this"
+      }, {
+        "text": " is a production-ready solution for file-explorer style \"box\" structures, though it lacks \"arrows\" and free"
+      }, {
+        "text": "-form positioning.\n    *   **Link**: [GitHub - adrielcafe/bonsai](https://github.com/"
+      }, {
+        "text": "adrielcafe/bonsai)\n\n*   **Build Your Own (Common Approach)**:\n    *   Most"
+      }, {
+        "text": " developers currently use the standard **`Canvas`** composable.\n    *   **Logic**: You can use a non"
+      }, {
+        "text": "-UI graph algorithm library (like a Java port of **JGraphT** or **GraphViz**) to calculate X"
+      }, {
+        "text": "/Y coordinates for your nodes.\n    *   **Drawing**: Pass those coordinates to `Canvas` to draw `draw"
+      }, {
+        "text": "Path` (cubic bezier curves) for arrows and standard Composables (via `Layout` or `Box`) for the nodes"
+      }, {
+        "text": ".\n\n### 2. For Statistical Charts (Bar, Line, Pie)\nIf by \"graph\" you meant data"
+      }, {
+        "text": " visualization, these are the most recommended and maintained libraries:\n\n*   **Vico** (Top Recommendation):\n    "
+      }, {
+        "text": "*   **Features**: Lightweight, highly customizable, supports Compose Multiplatform (Android, iOS, Desktop). Excellent for line"
+      }, {
+        "text": ", bar, and stacked charts.\n    *   **Link**: [GitHub - patrykandpatrick/vico]("
+      }, {
+        "text": "https://github.com/patrykandpatrick/vico)\n\n*   **Y-Charts**:\n    *   **"
+      }, {
+        "text": "Features**: A pure Jetpack Compose chart library that is easy to use for standard line, bar, and pie charts."
+      }, {
+        "text": "\n    *   **Link**: [GitHub - codeangi/YCharts](https://github.com/codeangi/YCharts"
+      }, {
+        "text": ") (Note: Verify the specific fork/maintainer as several exist).\n\n*   **KoalaPlot**:\n    "
+      }, {
+        "text": "*   **Features**: Specifically designed for **Compose Multiplatform**. It’s a great choice if you need your charts to work"
+      }, {
+        "text": " on Desktop/Web/iOS as well as Android.\n    *   **Link**: [GitHub - KoalaPlot](https://"
+      }, {
+        "text": "github.com/KoalaPlot/koalaplot-core)\n\n### Summary\n*   **For Flow"
+      }, {
+        "text": "charts/Nodes**: Check out **ComposeFlow** for reference, but expect to write custom `Canvas` code for a"
+      }, {
+        "text": " production feature.\n*   **For Data Charts**: Use **Vico**."
+      }, {
+        "text": "",
+        "thoughtSignature": "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"
+      }]
+    }],
+    "pendingInputs": [{
+      "text": "",
+      "role": "user"
+    }]
+  }
+}
